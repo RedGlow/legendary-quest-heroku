@@ -6,4 +6,4 @@ var server = http.createServer(function (req, res) {
     res.writeHead(hello.status);
     res.end(hello.content);
 });
-server.listen(8080);
+server.listen(process.env.PORT || 8080);
