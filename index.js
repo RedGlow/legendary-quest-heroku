@@ -1,7 +1,9 @@
-var http = require('http');
+var http = require('http'),
+    main = require('./main');
 
 var server = http.createServer(function (req, res) {
-    res.writeHead(200);
-    res.end('Hi everybody!');
+    var hello = main.hello();
+    res.writeHead(hello.status);
+    res.end(hello.content);
 });
 server.listen(8080);
