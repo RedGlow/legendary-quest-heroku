@@ -4,12 +4,18 @@ import * as gw2shinies from './gw2shinies';
 import * as Rx from 'rxjs/Rx';
 
 describe('remoteservices/gw2shinies', () => {
-    it('return an observable returning all the data at once', () => {
-        // emulate the data
+    beforeEach(() => {
         setAlternativeGet(url =>
             url === 'https://www.gw2shinies.com/api/json/forge/' || url === 'https://www.gw2shinies.com/api/json/forge' ?
                 Promise.resolve(JSON.stringify(data)) : Promise.reject(`Unknown url ${url}`)
         );
+    })
+    afterEach(() => {
+        setAlternativeGet(null);
+    })
+    it('return an observable returning all the data at once', () => {
+        // emulate the data
+
         var observable = gw2shinies.getRecipes();
         var events: any = [];
         observable.subscribe({
