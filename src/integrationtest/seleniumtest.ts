@@ -15,10 +15,12 @@ test.describe('Home page', () => {
         // If we are using Travis, let's connect to Sauce Labs remote web drivers
         process.env.SELENIUM_REMOTE_URL = `http://localhost:4444`;
 
+        // Build the selenium webdriver
         driver = (new webdriver.Builder()).
             withCapabilities(webdriver.Capabilities.chrome()).
             build();
 
+        // run the server
         return new Promise((resolve, reject) => {
             process.env.MONGODB_URI = process.env.MONGODB_URI ||
                 'mongodb://legendaryquesttest:legendaryquesttest@localhost:27017/legendaryquesttest';
