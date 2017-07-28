@@ -23,5 +23,13 @@ The project uses gulp for compilation:
 # Local testing
 
 The testing is performed through npm (which calls mocha):
-- "npm unittest" runs the unit tests
-- "npm integrationtest" runs the integration tests
+- "npm run unittest" runs the unit tests
+- "npm run integrationtest" runs the integration tests
+
+# Local running
+
+Setup an user on it with a mongo console open like this:
+* use legendaryquest
+* db.createUser({user: "legendaryquest", pwd: "legendaryquest", roles: [{ role: "dbAdmin", db: "legendaryquest"}]})
+
+After this one-time setup, you can run the application with "npm start"
