@@ -5,6 +5,9 @@ node_js:
 branches:
   only:
   - master
+cache:
+  directories:
+  - node_modules
 before_script:
   - phantomjs --webdriver=4444 &
   - npm install -g gulp-cli
