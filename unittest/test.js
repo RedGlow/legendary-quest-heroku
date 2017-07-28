@@ -1,5 +1,5 @@
 var assert = require('assert'),
-    main = require('../main')
+    main = require('../src/main')
     ;
 
 describe('main', function () {

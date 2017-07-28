@@ -2,7 +2,7 @@
 var assert = require('assert')
     , test = require('selenium-webdriver/testing')
     , webdriver = require('selenium-webdriver')
-    , server = require('../server')
+    , server = require('../src/server')
     ;
 
 var port = process.env.PORT || 9999;
