@@ -16,21 +16,29 @@ test.describe('Google search', () => {
 
     test.before(function () {
         // If we are using Travis, let's connect to Sauce Labs remote web drivers
+        console.log("Checking if in Travis.");
         if (process.env.TRAVIS || false) {
+            console.log("In Travis.");
             var username = process.env.SAUCE_USERNAME
                 , accessKey = process.env.SAUCE_ACCESS_KEY
                 ;
             process.env.SELENIUM_REMOTE_URL = `https://${username}:${accessKey}@localhost:4445`;
+            console.log(`Changed SELENIUM_REMOTE_URL to ${process.env.SELENIUM_REMOTE_URL}`);
         }
 
+        console.log("Building driver.");
         driver = (new webdriver.Builder()).
             withCapabilities(webdriver.Capabilities.chrome()).
             build();
 
         if (!process.env.TRAVIS) {
+            console.log("Creating server.");
             return new Promise((resolve, reject) => {
                 s = server.createAndListen(port, resolve);
             });
+        } else {
+            console.log("Return null.");
+            return null;
         }
     });
 
