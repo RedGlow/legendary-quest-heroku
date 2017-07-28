@@ -35,7 +35,7 @@ test.describe('Home page', () => {
         s.close();
     });
 
-    test.it('Should work', function () {
+    test.it('Shows the home', function () {
         console.log("Driver get.");
         driver.get(`http://localhost:${port}/`);
         console.log("Get element.");

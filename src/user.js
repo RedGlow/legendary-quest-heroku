@@ -24,9 +24,10 @@ const connect = () => {
 }
 
 module.exports = {
-    getName: () => {
-        return connect().then(db => {
-            return "RedGlow";
-        });
-    }
-}
+    getName: () =>
+        connect()
+            .then(db => db.collection('users').find({ id: 0 }).limit(1).toArray())
+            .then(arr => arr.length == 1 ?
+                arr[0].name :
+                db.collection('users').insertOne({ id: 0, name: 'RedGlow' }).then(() => 'RedGlow'))
+};
