@@ -3,6 +3,7 @@ import * as test from 'selenium-webdriver/testing';
 import * as webdriver from 'selenium-webdriver';
 import * as server from '../server';
 import { Server } from 'http';
+import { MongoClient, Db } from 'mongodb';
 
 var port = parseInt(process.env.PORT) || 9999;
 
@@ -20,12 +21,23 @@ test.describe('Home page', () => {
             withCapabilities(webdriver.Capabilities.chrome()).
             build();
 
-        // run the server
-        return new Promise((resolve, reject) => {
-            process.env.MONGODB_URI = process.env.MONGODB_URI ||
-                'mongodb://legendaryquesttest:legendaryquesttest@localhost:27017/legendaryquesttest';
-            s = server.createAndListen(port, resolve);
-        });
+        // clean the db
+        process.env.MONGODB_URI = process.env.MONGODB_URI ||
+            'mongodb://legendaryquesttest:legendaryquesttest@localhost:27017/legendaryquesttest';
+        return new Promise<Db>((resolve, reject) => {
+            MongoClient.connect(process.env.MONGODB_URI, (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        })
+            .then(db => db.dropDatabase())
+            .then(() => new Promise((resolve, reject) => {
+                // run the server
+                s = server.createAndListen(port, resolve);
+            }));
     });
 
     test.after(() => {
