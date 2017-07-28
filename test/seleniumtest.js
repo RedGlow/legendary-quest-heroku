@@ -7,7 +7,7 @@ var assert = require('assert')
 
 var port = process.env.PORT || 9999;
 
-test.describe('Google search', () => {
+test.describe('Home page', () => {
     var driver /*= (new webdriver.Builder()).
         withCapabilities(webdriver.Capabilities.chrome()).
         build()*/;
