@@ -33,8 +33,14 @@ export function get(url: string): Promise<string> {
     });
 }
 
+var alternativeGet: (url: string) => Promise<string> = null;
+
 export async function getJSON<T>(url: string): Promise<T> {
-    var str = await get(url);
+    var str = await (alternativeGet || get)(url);
     var result = <T>JSON.parse(str);
     return result;
+}
+
+export function setAlternativeGet(f: (url: string) => Promise<string>) {
+    alternativeGet = f;
 }
