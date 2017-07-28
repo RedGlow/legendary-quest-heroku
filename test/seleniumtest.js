@@ -15,8 +15,6 @@ test.describe('Google search', () => {
     var s;
 
     test.before(function () {
-        this.timeout(10000);
-
         // If we are using Travis, let's connect to Sauce Labs remote web drivers
         if (process.env.TRAVIS || false) {
             var username = process.env.SAUCE_USERNAME
@@ -29,9 +27,11 @@ test.describe('Google search', () => {
             withCapabilities(webdriver.Capabilities.chrome()).
             build();
 
-        return new Promise((resolve, reject) => {
-            s = server.createAndListen(port, resolve);
-        });
+        if (!process.env.TRAVIS) {
+            return new Promise((resolve, reject) => {
+                s = server.createAndListen(port, resolve);
+            });
+        }
     });
 
     test.after(() => {

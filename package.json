@@ -4,7 +4,7 @@
   "description": "Heroku App repository for the Legendary Quest project",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --timeout 10000",
     "start": "node index.js"
   },
   "repository": {
