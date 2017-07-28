@@ -36,7 +36,9 @@ test.describe('Google search', () => {
 
     test.after(() => {
         driver.quit();
-        s.close();
+        if (s) {
+            s.close();
+        }
     });
 
     test.it('Should work', function () {
