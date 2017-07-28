@@ -1,7 +1,5 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongodb_1 = require("mongodb");
-var url = process.env.MONGODB_URI ||
-    'mongodb://legendaryquest:legendaryquest@localhost:27017/legendaryquest';
 var db = null;
 var connect = function () {
     if (db) {
@@ -9,12 +7,17 @@ var connect = function () {
     }
     else {
         return new Promise(function (resolve, reject) {
+            var url = process.env.MONGODB_URI ||
+                'mongodb://legendaryquest:legendaryquest@localhost:27017/legendaryquest';
+            console.log("Using url " + url);
             mongodb_1.MongoClient.connect(url, function (err, result) {
                 if (err) {
+                    console.log("Connection failed.");
                     reject(err);
                     return;
                 }
                 db = result;
+                console.log("Connected.");
                 resolve(db);
             });
         });

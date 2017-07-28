@@ -1,8 +1,5 @@
 import { MongoClient, Db } from 'mongodb';
 
-var url = process.env.MONGODB_URI ||
-    'mongodb://legendaryquest:legendaryquest@localhost:27017/legendaryquest';
-
 var db: Db = null;
 
 const connect = () => {
@@ -10,12 +7,17 @@ const connect = () => {
         return Promise.resolve(db);
     } else {
         return new Promise<Db>((resolve, reject) => {
+            var url = process.env.MONGODB_URI ||
+                'mongodb://legendaryquest:legendaryquest@localhost:27017/legendaryquest';
+            console.log(`Using url ${url}`);
             MongoClient.connect(url, (err, result) => {
                 if (err) {
+                    console.log("Connection failed.");
                     reject(err);
                     return;
                 }
                 db = result;
+                console.log("Connected.");
                 resolve(db);
             });
         })

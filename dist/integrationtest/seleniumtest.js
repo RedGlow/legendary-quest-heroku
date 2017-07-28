@@ -17,6 +17,7 @@ test.describe('Home page', function () {
             build();
         console.log("Creating server.");
         return new Promise(function (resolve, reject) {
+            process.env.MONGODB_URI = 'mongodb://legendaryquesttest:legendaryquesttest@localhost:27017/legendaryquesttest';
             s = server.createAndListen(port, resolve);
         });
     });

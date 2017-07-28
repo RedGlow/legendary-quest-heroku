@@ -8,6 +8,10 @@ export const createAndListen = (port: number, callback: Function) => {
             res.setHeader('Content-Type', hello.contentType);
             res.writeHead(hello.status);
             res.end(hello.content);
+        }, err => {
+            res.setHeader('Content-Type', 'text/plain');
+            res.writeHead(500);
+            res.end(`Error: ${err}`);
         });
     });
     server.listen(port, callback);
