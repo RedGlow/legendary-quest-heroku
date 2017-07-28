@@ -14,14 +14,11 @@ test.describe('Home page', () => {
     test.before(function () {
         // If we are using Travis, let's connect to Sauce Labs remote web drivers
         process.env.SELENIUM_REMOTE_URL = `http://localhost:4444`;
-        console.log(`Changed SELENIUM_REMOTE_URL to ${process.env.SELENIUM_REMOTE_URL}`);
 
-        console.log("Building driver.");
         driver = (new webdriver.Builder()).
             withCapabilities(webdriver.Capabilities.chrome()).
             build();
 
-        console.log("Creating server.");
         return new Promise((resolve, reject) => {
             process.env.MONGODB_URI = process.env.MONGODB_URI ||
                 'mongodb://legendaryquesttest:legendaryquesttest@localhost:27017/legendaryquesttest';
