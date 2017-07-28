@@ -6,7 +6,9 @@ branches:
   - master
 before_script:
   - phantomjs --webdriver=4444 &
+  - npm install -g gulp-cli
 script:
+  - gulp build
   - npm run unittest
   - npm run integrationtest
   - sleep 3

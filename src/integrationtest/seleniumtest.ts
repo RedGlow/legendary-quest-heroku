@@ -1,18 +1,15 @@
-//@ts-check
-var assert = require('assert')
-    , test = require('selenium-webdriver/testing')
-    , webdriver = require('selenium-webdriver')
-    , server = require('../src/server')
-    ;
+import * as assert from 'assert';
+import * as test from 'selenium-webdriver/testing';
+import * as webdriver from 'selenium-webdriver';
+import * as server from '../server';
+import { Server } from 'http';
 
-var port = process.env.PORT || 9999;
+var port = parseInt(process.env.PORT) || 9999;
 
 test.describe('Home page', () => {
-    var driver /*= (new webdriver.Builder()).
-        withCapabilities(webdriver.Capabilities.chrome()).
-        build()*/;
+    var driver: webdriver.ThenableWebDriver;
 
-    var s;
+    var s: Server;
 
     test.before(function () {
         // If we are using Travis, let's connect to Sauce Labs remote web drivers
