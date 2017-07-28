@@ -38,7 +38,7 @@ test.describe('Google search', () => {
             });
         } else {
             console.log("Return null.");
-            return null;
+            return Promise.resolve();
         }
     });
 
@@ -50,7 +50,9 @@ test.describe('Google search', () => {
     });
 
     test.it('Should work', function () {
+        console.log("Driver get.");
         driver.get(`http://localhost:${port}/`);
+        console.log("Get element.");
         return driver.findElement(webdriver.By.tagName('p'))
             .then(el => el.getText())
             .then(text => assert.equal(text, "Hi everybody!"))
