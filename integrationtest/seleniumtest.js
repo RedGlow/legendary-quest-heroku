@@ -41,7 +41,7 @@ test.describe('Home page', () => {
         console.log("Get element.");
         return driver.findElement(webdriver.By.tagName('p'))
             .then(el => el.getText())
-            .then(text => assert.equal(text, "Hi everybody!"))
+            .then(text => assert.equal(text, "Hi everybody from RedGlow!"))
             ;
     });
 });
