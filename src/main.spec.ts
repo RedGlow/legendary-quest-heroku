@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import * as main from '../main';
+import * as main from './main';
 
 describe('main', function () {
     it('should return a greeting', function () {

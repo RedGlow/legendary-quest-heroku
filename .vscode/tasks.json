@@ -9,6 +9,14 @@
             "problemMatcher": [
                 "$gulp-tsc"
             ]
+        },
+        {
+            "type": "gulp",
+            "task": "watch",
+            "problemMatcher": [
+                "$gulp-tsc"
+            ],
+            "isBackground": true
         }
     ]
 }
