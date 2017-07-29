@@ -1,7 +1,8 @@
 import * as assert from 'assert';
+import * as Rx from 'rxjs/Rx';
 import { setAlternativeGet } from '../http';
 import * as gw2shinies from './gw2shinies';
-import * as Rx from 'rxjs/Rx';
+import checkObservable from './helperspec';
 
 describe('remoteservices/gw2shinies', () => {
     beforeEach(() => {
@@ -9,20 +10,14 @@ describe('remoteservices/gw2shinies', () => {
             url === 'https://www.gw2shinies.com/api/json/forge/' || url === 'https://www.gw2shinies.com/api/json/forge' ?
                 Promise.resolve(JSON.stringify(data)) : Promise.reject(`Unknown url ${url}`)
         );
-    })
+    });
     afterEach(() => {
         setAlternativeGet(null);
-    })
+    });
     it('return an observable returning all the data at once', () => {
         // emulate the data
-
         var observable = gw2shinies.getRecipes();
-        var events: any = [];
-        observable.subscribe({
-            next: value => events.push({ event: 'value', value: value }),
-            error: error => events.push({ event: 'error', value: error })
-        });
-        return observable.toPromise().then(() => assert.deepEqual(events, [
+        return checkObservable(observable, [
             {
                 event: 'value',
                 value: [{
@@ -39,7 +34,7 @@ describe('remoteservices/gw2shinies', () => {
                     "average_yield": "1"
                 }]
             }
-        ]));
+        ]);
     });
 });
 

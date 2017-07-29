@@ -1,7 +1,12 @@
 import * as http from 'http';
 import * as https from 'https';
 
+var alternativeGet: (url: string) => Promise<string> = null;
+
 export function get(url: string): Promise<string> {
+    if (alternativeGet) {
+        return alternativeGet(url);
+    }
     var completed = false;
     return new Promise<string>((resolve, reject) => {
         var method = url.startsWith('https:') ? https.request : http.request;
@@ -33,10 +38,8 @@ export function get(url: string): Promise<string> {
     });
 }
 
-var alternativeGet: (url: string) => Promise<string> = null;
-
 export async function getJSON<T>(url: string): Promise<T> {
-    var str = await (alternativeGet || get)(url);
+    var str = await get(url);
     var result = <T>JSON.parse(str);
     return result;
 }
