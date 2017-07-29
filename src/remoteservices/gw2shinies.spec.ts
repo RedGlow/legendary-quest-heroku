@@ -1,55 +1,55 @@
-import * as assert from 'assert';
-import * as Rx from 'rxjs/Rx';
-import { setAlternativeGet } from '../http';
-import * as gw2shinies from './gw2shinies';
-import checkObservable from './helperspec';
+import * as assert from "assert";
+import * as Rx from "rxjs/Rx";
+import { setAlternativeGet } from "../http";
+import * as gw2shinies from "./gw2shinies";
+import checkObservable from "./helperspec";
 
-describe('remoteservices/gw2shinies', () => {
+describe("remoteservices/gw2shinies", () => {
     beforeEach(() => {
-        setAlternativeGet(url =>
-            url === 'https://www.gw2shinies.com/api/json/forge/' || url === 'https://www.gw2shinies.com/api/json/forge' ?
-                Promise.resolve(JSON.stringify(data)) : Promise.reject(`Unknown url ${url}`)
-        );
+        setAlternativeGet((url) =>
+            url === "https://www.gw2shinies.com/api/json/forge/" ||
+                url === "https://www.gw2shinies.com/api/json/forge" ?
+                Promise.resolve(JSON.stringify(data)) : Promise.reject(`Unknown url ${url}`));
     });
     afterEach(() => {
         setAlternativeGet(null);
     });
-    it('return an observable returning all the data at once', () => {
+    it("return an observable returning all the data at once", () => {
         // emulate the data
-        var observable = gw2shinies.getRecipes();
+        const observable = gw2shinies.getRecipes();
         return checkObservable(observable, [
             {
-                event: 'value',
+                event: "value",
                 value: [{
-                    "type": "blueprint",
-                    "target_recipe": "21260",
-                    "recipe_item_1": "21156",
-                    "recipe_item_1_quantity": "2",
-                    "recipe_item_2": "19700",
-                    "recipe_item_2_quantity": "5",
-                    "recipe_item_3": "19722",
-                    "recipe_item_3_quantity": "5",
-                    "recipe_item_4": "20798",
-                    "recipe_item_4_quantity": "1",
-                    "average_yield": "1"
-                }]
-            }
+                    average_yield: "1",
+                    recipe_item_1: "21156",
+                    recipe_item_1_quantity: "2",
+                    recipe_item_2: "19700",
+                    recipe_item_2_quantity: "5",
+                    recipe_item_3: "19722",
+                    recipe_item_3_quantity: "5",
+                    recipe_item_4: "20798",
+                    recipe_item_4_quantity: "1",
+                    target_recipe: "21260",
+                    type: "blueprint",
+                }],
+            },
         ]);
     });
 });
 
 const data = [
     {
-        "type": "blueprint",
-        "target_recipe": "21260",
-        "recipe_item_1": "21156",
-        "recipe_item_1_quantity": "2",
-        "recipe_item_2": "19700",
-        "recipe_item_2_quantity": "5",
-        "recipe_item_3": "19722",
-        "recipe_item_3_quantity": "5",
-        "recipe_item_4": "20798",
-        "recipe_item_4_quantity": "1",
-        "average_yield": "1"
-    }
+        average_yield: "1",
+        recipe_item_1: "21156",
+        recipe_item_1_quantity: "2",
+        recipe_item_2: "19700",
+        recipe_item_2_quantity: "5",
+        recipe_item_3: "19722",
+        recipe_item_3_quantity: "5",
+        recipe_item_4: "20798",
+        recipe_item_4_quantity: "1",
+        target_recipe: "21260",
+        type: "blueprint",
+    },
 ];

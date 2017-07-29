@@ -7,14 +7,16 @@
             "type": "gulp",
             "task": "build",
             "problemMatcher": [
-                "$gulp-tsc"
+                "$gulp-tsc",
+                "$tslint5"
             ]
         },
         {
             "type": "gulp",
             "task": "watch",
             "problemMatcher": [
-                "$gulp-tsc"
+                "$gulp-tsc",
+                "$tslint5"
             ],
             "isBackground": true
         }

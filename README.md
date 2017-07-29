@@ -33,3 +33,8 @@ Setup an user on it with a mongo console open like this:
 * db.createUser({user: "legendaryquest", pwd: "legendaryquest", roles: [{ role: "dbAdmin", db: "legendaryquest"}]})
 
 After this one-time setup, you can run the application with "npm start"
+
+# Using Visual Studio Code
+
+The following extensions are recommended:
+* vscode-tslint

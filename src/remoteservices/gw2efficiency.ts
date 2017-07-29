@@ -1,37 +1,40 @@
-import * as Rx from 'rxjs/Rx';
-import { feedObservable } from './base';
-import { get } from '../http';
+import * as Rx from "rxjs/Rx";
+import { get } from "../http";
+import { feedObservable } from "./base";
 
-interface ModuleClass {
-    exports: { [idx: number]: MyRecipe };
+interface IModuleClass {
+    exports: { [idx: number]: IMyRecipe };
 }
 
 interface InternalRecipe {
     type: string;
     quantity: number;
     cost: number;
-    npcs: NPC[]
+    npcs: INPC[];
 }
 
-interface MyRecipe extends InternalRecipe {
+interface IMyRecipe extends InternalRecipe {
     id: number;
 }
 
-interface NPC {
+interface INPC {
     name: string;
     position: string;
 }
 
-async function getRecipesPromise(observer: Rx.Observer<MyRecipe[]>): Promise<void> {
-    var moduleContent = await get("https://raw.githubusercontent.com/gw2efficiency/recipe-calculation/master/src/static/vendorItems.js");
-    var myModule: ModuleClass = { exports: null };
+async function getRecipesPromise(observer: Rx.Observer<IMyRecipe[]>): Promise<void> {
+    const moduleContent = await get("https://raw.githubusercontent.com/gw2efficiency" +
+        "/recipe-calculation/master/src/static/vendorItems.js");
+    const myModule: IModuleClass = { exports: null };
+    /* tslint:disable:no-eval */
     (eval("(function(module) {\n" + moduleContent.replace("export default ", "module.exports = ") + "})"))(myModule);
-    var recipes = Object
+    /* tslint:enable */
+    const recipes = Object
         .keys(myModule.exports)
-        .map((key: string) => ({ ...myModule.exports[parseInt(key)], id: parseInt(key) }));
+        .map((key: string) => ({ ...myModule.exports[parseInt(key, 10)], id: parseInt(key, 10) }));
     observer.next(recipes);
 }
 
-export function getRecipes(): Rx.Observable<MyRecipe[]> {
+export function getRecipes(): Rx.Observable<IMyRecipe[]> {
     return feedObservable(getRecipesPromise);
 }

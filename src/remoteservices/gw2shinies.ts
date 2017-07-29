@@ -1,8 +1,8 @@
-import * as Rx from 'rxjs/Rx';
-import { feedObservable } from './base';
-import { getJSON } from '../http';
+import * as Rx from "rxjs/Rx";
+import { getJSON } from "../http";
+import { feedObservable } from "./base";
 
-export interface MyRecipe {
+export interface IMyRecipe {
     type: string;
     target_recipe: string;
     recipe_item_1: string;
@@ -16,11 +16,11 @@ export interface MyRecipe {
     average_yield: string;
 }
 
-async function getRecipesPromise(observer: Rx.Observer<MyRecipe[]>): Promise<void> {
-    var rv = await getJSON<MyRecipe[]>('https://www.gw2shinies.com/api/json/forge/');
+async function getRecipesPromise(observer: Rx.Observer<IMyRecipe[]>): Promise<void> {
+    const rv = await getJSON<IMyRecipe[]>("https://www.gw2shinies.com/api/json/forge/");
     observer.next(rv);
 }
 
-export function getRecipes(): Rx.Observable<MyRecipe[]> {
+export function getRecipes(): Rx.Observable<IMyRecipe[]> {
     return feedObservable(getRecipesPromise);
 }
