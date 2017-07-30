@@ -30,4 +30,4 @@ gulp.task('_copy_json', () =>
 
 gulp.task('build', ['_compile', '_copy_json']);
 
-gulp.task('watch', () => gulp.watch('src/**/*.ts', ['build']));
+gulp.task('watch', () => gulp.watch(['src/**/*.ts', 'src/**/*.json'], ['build']));
