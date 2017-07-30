@@ -1,0 +1,17 @@
+{
+    "gw2shiniesdata": [
+        {
+            "average_yield": "1",
+            "recipe_item_1": "21156",
+            "recipe_item_1_quantity": "2",
+            "recipe_item_2": "19700",
+            "recipe_item_2_quantity": "5",
+            "recipe_item_3": "19722",
+            "recipe_item_3_quantity": "5",
+            "recipe_item_4": "20798",
+            "recipe_item_4_quantity": "1",
+            "target_recipe": "21260",
+            "type": "blueprint"
+        }
+    ]
+}
