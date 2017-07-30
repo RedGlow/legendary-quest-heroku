@@ -1,0 +1,31 @@
+{
+    "data": [
+        {
+            "name": "Iron Ore",
+            "type": "CraftingMaterial",
+            "output_item_id": 19699,
+            "output_item_count": 88,
+            "disciplines": [
+                "Mystic Forge"
+            ],
+            "ingredients": [
+                {
+                    "item_id": 19697,
+                    "count": 250
+                },
+                {
+                    "item_id": 19699,
+                    "count": 1
+                },
+                {
+                    "item_id": 24273,
+                    "count": 5
+                },
+                {
+                    "item_id": 20796,
+                    "count": 1
+                }
+            ]
+        }
+    ]
+}
