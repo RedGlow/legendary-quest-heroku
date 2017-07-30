@@ -20,11 +20,11 @@ async function checkRecipesChain<T>(
     assert(result.length > 0, "No result have been returned");
 }
 
-describe("Remote system", () => {
-    it("Can get GW2Shinies recipes", async () => {
+describe("Remote systems:", () => {
+    it("can get GW2Shinies recipes", async () => {
         await checkRecipesChain(getGW2ShiniesRecipes, transformGW2Recipes);
     });
-    it("Can get GW2Efficiency recipes", async () => {
+    it("can get GW2Efficiency recipes", async () => {
         await checkRecipesChain(getGW2EfficiencyRecipes, transformGW2Efficiency);
     });
 });
