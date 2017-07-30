@@ -13,7 +13,7 @@ interface InternalRecipe {
     npcs: INPC[];
 }
 
-interface IMyRecipe extends InternalRecipe {
+export interface IMyRecipe extends InternalRecipe {
     id: number;
 }
 

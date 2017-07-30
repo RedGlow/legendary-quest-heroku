@@ -1,0 +1,196 @@
+{
+    "data": [
+        {
+            "type": "gold",
+            "quantity": 10,
+            "cost": 80,
+            "npcs": [
+                {
+                    "name": "Master Craftsmen",
+                    "position": "Crafting Station"
+                }
+            ],
+            "id": 12136
+        },
+        {
+            "type": "karma",
+            "quantity": 25,
+            "cost": 35,
+            "npcs": [
+                {
+                    "name": "Master Chef",
+                    "position": "Crafting Station"
+                }
+            ],
+            "id": 12137
+        },
+        {
+            "type": "ascalonian-catacombs",
+            "quantity": 1,
+            "cost": 500,
+            "npcs": [
+                {
+                    "name": "Dungeon Armor and Weapons",
+                    "position": "Lions Arch [S]"
+                }
+            ],
+            "id": 19664
+        },
+        {
+            "type": "caudecuss-manor",
+            "quantity": 1,
+            "cost": 500,
+            "npcs": [
+                {
+                    "name": "Dungeon Armor and Weapons",
+                    "position": "Lions Arch [S]"
+                }
+            ],
+            "id": 19665
+        },
+        {
+            "type": "sorrows-embrace",
+            "quantity": 1,
+            "cost": 500,
+            "npcs": [
+                {
+                    "name": "Dungeon Armor and Weapons",
+                    "position": "Lions Arch [S]"
+                }
+            ],
+            "id": 19666
+        },
+        {
+            "type": "twilight-arbor",
+            "quantity": 1,
+            "cost": 500,
+            "npcs": [
+                {
+                    "name": "Dungeon Armor and Weapons",
+                    "position": "Lions Arch [S]"
+                }
+            ],
+            "id": 19667
+        },
+        {
+            "type": "citadel-of-flame",
+            "quantity": 1,
+            "cost": 500,
+            "npcs": [
+                {
+                    "name": "Dungeon Armor and Weapons",
+                    "position": "Lions Arch [S]"
+                }
+            ],
+            "id": 19668
+        },
+        {
+            "type": "the-ruined-city-of-arah",
+            "quantity": 1,
+            "cost": 500,
+            "npcs": [
+                {
+                    "name": "Dungeon Armor and Weapons",
+                    "position": "Lions Arch [S]"
+                }
+            ],
+            "id": 19669
+        },
+        {
+            "type": "honor-of-the-waves",
+            "quantity": 1,
+            "cost": 500,
+            "npcs": [
+                {
+                    "name": "Dungeon Armor and Weapons",
+                    "position": "Lions Arch [S]"
+                }
+            ],
+            "id": 19670
+        },
+        {
+            "type": "crucible-of-eternity",
+            "quantity": 1,
+            "cost": 500,
+            "npcs": [
+                {
+                    "name": "Dungeon Armor and Weapons",
+                    "position": "Lions Arch [S]"
+                }
+            ],
+            "id": 19671
+        },
+        {
+            "type": "spirit-shard",
+            "quantity": 10,
+            "cost": 1,
+            "npcs": [
+                {
+                    "name": "Miyani / Mystic Forge Attendant",
+                    "position": "Mystic Forge"
+                }
+            ],
+            "id": 20796
+        },
+        {
+            "type": "fractal-relic",
+            "quantity": 1,
+            "cost": 1350,
+            "npcs": [
+                {
+                    "name": "BUY-4373",
+                    "position": "Mistlock Observatory"
+                }
+            ],
+            "id": 37050
+        },
+        {
+            "type": "wvw-tournament-claim-ticket",
+            "quantity": 1,
+            "cost": 200,
+            "npcs": [
+                {
+                    "name": "Battle Master",
+                    "position": "Red/Green/Blue Borderlands, Eternal Battlegrounds"
+                }
+            ],
+            "id": 43244
+        },
+        {
+            "type": "geode",
+            "quantity": 1,
+            "cost": 9,
+            "npcs": [
+                {
+                    "name": "Geode merchant (Dusk, Gleam, Kiena, Moonglow)",
+                    "position": "Dry Top"
+                }
+            ],
+            "id": 66902
+        },
+        {
+            "type": "pristine-fractal-relic",
+            "quantity": 1,
+            "cost": 5,
+            "npcs": [
+                {
+                    "name": "BUY-4373",
+                    "position": "Mistlock Observatory"
+                }
+            ],
+            "id": 67007
+        },
+        {
+            "type": "guild-commendation",
+            "quantity": 1,
+            "cost": 1,
+            "npcs": [
+                {
+                    "name": "Guild Trader",
+                    "position": "Guild Hall"
+                }
+            ],
+            "id": 72169
+        }
+    ]
+}
