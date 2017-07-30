@@ -24,21 +24,21 @@ function getCurrencyName(myName: string) {
     }
 }
 
-export const transformRecipes = (recipes: IMyRecipe[]): IRecipe[] =>
-    recipes.map((el) => ({
+export const transformRecipe = (recipe: IMyRecipe): IRecipe =>
+    ({
         _id: null,
         ingredients: [{
-            amount: el.cost,
-            name: getCurrencyName(el.type),
+            amount: recipe.cost,
+            name: getCurrencyName(recipe.type),
         }],
         location: null, // TODO
         prerequisites: [],
         results: [{
-            amount: el.quantity,
-            id: el.id,
+            amount: recipe.quantity,
+            id: recipe.id,
         }],
         source: "GW2Efficiency",
         subtype: null,
         timestamp: null,
         type: "Vendor" as RecipeType,
-    }));
+    });

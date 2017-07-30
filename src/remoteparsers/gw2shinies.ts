@@ -24,21 +24,19 @@ function getConstantType(): RecipeType {
     return "MysticForge";
 }
 
-export function transformRecipes(recipes: IMyRecipe[]): IRecipe[] {
-    return recipes.map((recipe) => ({
-        _id: null,
-        ingredients: [
-            makeElement(recipe.recipe_item_1, recipe.recipe_item_1_quantity),
-            makeElement(recipe.recipe_item_2, recipe.recipe_item_2_quantity),
-            makeElement(recipe.recipe_item_3, recipe.recipe_item_3_quantity),
-            makeElement(recipe.recipe_item_4, recipe.recipe_item_4_quantity),
-        ],
-        location: null,
-        prerequisites: [],
-        results: [makeElement(recipe.target_recipe, recipe.average_yield)],
-        source: "GW2Shinies",
-        subtype: getSubtype(recipe.type),
-        timestamp: null,
-        type: getConstantType(),
-    }));
-}
+export const transformRecipe = (recipe: IMyRecipe): IRecipe => ({
+    _id: null,
+    ingredients: [
+        makeElement(recipe.recipe_item_1, recipe.recipe_item_1_quantity),
+        makeElement(recipe.recipe_item_2, recipe.recipe_item_2_quantity),
+        makeElement(recipe.recipe_item_3, recipe.recipe_item_3_quantity),
+        makeElement(recipe.recipe_item_4, recipe.recipe_item_4_quantity),
+    ],
+    location: null,
+    prerequisites: [],
+    results: [makeElement(recipe.target_recipe, recipe.average_yield)],
+    source: "GW2Shinies",
+    subtype: getSubtype(recipe.type),
+    timestamp: null,
+    type: getConstantType(),
+});

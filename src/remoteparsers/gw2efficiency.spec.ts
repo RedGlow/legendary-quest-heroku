@@ -1,11 +1,11 @@
 import * as assert from "assert";
 import { IRecipe, IRecipeItem, RecipeType } from "../recipe";
-import { transformRecipes } from "./gw2efficiency";
+import { transformRecipe } from "./gw2efficiency";
 import * as data from "./gw2efficiency.spec.data.json";
 
 describe("remoteparsers/gw2efficiency", () => {
     it("can parse recipes", () => {
-        const result = transformRecipes((data as any).data);
+        const result = ((data as any).data).map(transformRecipe);
         assert.deepEqual(result, [
             {
                 _id: null,
