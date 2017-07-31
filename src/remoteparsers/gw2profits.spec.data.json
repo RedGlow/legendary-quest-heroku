@@ -1,0 +1,1158 @@
+{
+    "data": [
+        {
+            "name": "Iron Ore",
+            "type": "CraftingMaterial",
+            "output_item_id": 19699,
+            "output_item_count": 88,
+            "disciplines": [
+                "Mystic Forge"
+            ],
+            "ingredients": [
+                {
+                    "item_id": 19697,
+                    "count": 250
+                },
+                {
+                    "item_id": 19699,
+                    "count": 1
+                },
+                {
+                    "item_id": 24273,
+                    "count": 5
+                },
+                {
+                    "item_id": 20796,
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "name": "Charged Quartz Crystal",
+            "type": "CraftingMaterial",
+            "output_item_id": 43772,
+            "output_item_count": 1,
+            "disciplines": [
+                "Charge"
+            ],
+            "ingredients": [
+                {
+                    "item_id": 43773,
+                    "count": 25
+                }
+            ]
+        },
+        {
+            "name": "Mysterious Seedling",
+            "type": "Gizmo",
+            "output_item_id": 66908,
+            "output_item_count": 1,
+            "disciplines": [
+                "Double Click"
+            ],
+            "ingredients": [
+                {
+                    "item_id": 66912,
+                    "count": 1
+                },
+                {
+                    "item_id": 66909,
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "name": "Spirit of the Tooth of Frostfang Experiment",
+            "type": "CraftingMaterial",
+            "output_item_id": 75534,
+            "output_item_count": 1,
+            "disciplines": [
+                "Salvage"
+            ],
+            "ingredients": [
+                {
+                    "item_id": 76795,
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "name": "Gift of Glory",
+            "type": "CraftingMaterial",
+            "output_item_id": 70528,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": 70820,
+                    "count": 250
+                }
+            ]
+        },
+        {
+            "name": "Druid's Inscription",
+            "type": "Accessory",
+            "output_item_id": 74654,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -1,
+                    "count": 2640
+                },
+                {
+                    "item_id": 46682,
+                    "count": 50
+                }
+            ]
+        },
+        {
+            "name": "Plated Hammer",
+            "type": "Hammer",
+            "output_item_id": 75838,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -19,
+                    "count": 150
+                },
+                {
+                    "item_id": -22,
+                    "count": 150
+                },
+                {
+                    "item_id": -20,
+                    "count": 150
+                },
+                {
+                    "item_id": 74356,
+                    "count": 3
+                }
+            ]
+        },
+        {
+            "name": "Minor Rune of the Monk",
+            "type": "Rune",
+            "output_item_id": 24840,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -5,
+                    "count": 10
+                }
+            ]
+        },
+        {
+            "name": "Powerful Potion of Outlaw Slaying",
+            "type": "Utility",
+            "output_item_id": 8881,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -9,
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "name": "Powerful Potion of Nightmare Court Slaying",
+            "type": "Utility",
+            "output_item_id": 8882,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -11,
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "name": "Powerful Potion of Dredge Slaying",
+            "type": "Utility",
+            "output_item_id": 8892,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -10,
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "name": "Powerful Potion of Flame Legion Slaying",
+            "type": "Utility",
+            "output_item_id": 8879,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -13,
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "name": "Powerful Potion of Sons of Svanir Slaying",
+            "type": "Utility",
+            "output_item_id": 8883,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -12,
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "name": "Powerful Potion of Inquest Slaying",
+            "type": "Utility",
+            "output_item_id": 8887,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -14,
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "name": "Powerful Potion of Undead Slaying",
+            "type": "Utility",
+            "output_item_id": 8893,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -6,
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "name": "Defender of Ascalon",
+            "type": "Trophy",
+            "output_item_id": 70580,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -24,
+                    "count": 20
+                }
+            ]
+        },
+        {
+            "name": "Charr-Nip",
+            "type": "Trophy",
+            "output_item_id": 76329,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -7,
+                    "count": 100
+                },
+                {
+                    "item_id": -1,
+                    "count": 8000
+                }
+            ]
+        },
+        {
+            "name": "Basil Leaf",
+            "type": "CraftingMaterial",
+            "output_item_id": 12245,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -2,
+                    "count": 6
+                }
+            ]
+        },
+        {
+            "name": "Flame Ram Blueprints",
+            "type": "Generic",
+            "output_item_id": 21161,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -15,
+                    "count": 6
+                }
+            ]
+        },
+        {
+            "name": "Bloodstone Shard",
+            "type": "Trophy",
+            "output_item_id": 20797,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -23,
+                    "count": 200
+                }
+            ]
+        },
+        {
+            "name": "Assaulter's Sparking Dagger",
+            "type": "Dagger",
+            "output_item_id": 77344,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -28,
+                    "count": 600
+                },
+                {
+                    "item_id": -1,
+                    "count": 200000
+                }
+            ]
+        },
+        {
+            "name": "Basic Flagpole",
+            "type": "Gizmo",
+            "output_item_id": 74615,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -1,
+                    "count": 5000
+                },
+                {
+                    "item_id": -16,
+                    "count": 1
+                }
+            ]
+        },
+        {
+            "name": "Carapace Headgear Box",
+            "type": "Container",
+            "output_item_id": 68523,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -1,
+                    "count": 10000
+                },
+                {
+                    "item_id": -27,
+                    "count": 1000
+                }
+            ]
+        },
+        {
+            "name": "Zephyrite Lockpick",
+            "type": "Trophy",
+            "output_item_id": 66624,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -1,
+                    "count": 104
+                },
+                {
+                    "item_id": -25,
+                    "count": 13
+                }
+            ]
+        },
+        {
+            "name": "Recipe: Ascended Heavy Boots",
+            "type": "Container",
+            "output_item_id": 49483,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -3,
+                    "count": 5
+                },
+                {
+                    "item_id": -1,
+                    "count": 30000
+                }
+            ]
+        },
+        {
+            "name": "Tribute to Endeavor",
+            "type": "Trophy",
+            "output_item_id": 79453,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -32,
+                    "count": 15
+                }
+            ]
+        },
+        {
+            "name": "Superior Arrow Cart Blueprints",
+            "type": "Generic",
+            "output_item_id": 21260,
+            "output_item_count": 1,
+            "disciplines": [
+                "Merchant"
+            ],
+            "ingredients": [
+                {
+                    "item_id": -31,
+                    "count": 6
+                }
+            ]
+        },
+        {
+            "name": "Offering to Koda",
+            "type": "Food",
+            "output_item_id": 79729,
+            "output_item_count": 1,
+            "disciplines": [
+                "Double click"
+            ],
+            "ingredients": [
+                {
+                    "item_id": 79848,
+                    "count": 1
+                },
+                {
+                    "item_id": 19722,
+                    "count": 25
+                },
+                {
+                    "item_id": 19721,
+                    "count": 50
+                },
+                {
+                    "item_id": 19676,
+                    "count": 10
+                },
+                {
+                    "item_id": 79899,
+                    "count": 5
+                }
+            ]
+        }
+    ],
+    "expected": [
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 250,
+                    "id": 19697
+                },
+                {
+                    "amount": 1,
+                    "id": 19699
+                },
+                {
+                    "amount": 5,
+                    "id": 24273
+                },
+                {
+                    "amount": 1,
+                    "id": 20796
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 88,
+                    "id": 19699
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "CraftingMaterial",
+            "timestamp": null,
+            "type": "MysticForge"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 25,
+                    "id": 43773
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 43772
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "CraftingMaterial",
+            "timestamp": null,
+            "type": "Charge"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 1,
+                    "id": 66912
+                },
+                {
+                    "amount": 1,
+                    "id": 66909
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 66908
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Gizmo",
+            "timestamp": null,
+            "type": "DoubleClick"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 1,
+                    "id": 76795
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 75534
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "CraftingMaterial",
+            "timestamp": null,
+            "type": "Salvage"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 250,
+                    "id": 70820
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 70528
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "CraftingMaterial",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 2640,
+                    "name": "Coin"
+                },
+                {
+                    "amount": 50,
+                    "id": 46682
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 74654
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Accessory",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 150,
+                    "name": "Airship Part"
+                },
+                {
+                    "amount": 150,
+                    "name": "Lump of Aurillium"
+                },
+                {
+                    "amount": 150,
+                    "name": "Ley Line Crystal"
+                },
+                {
+                    "amount": 3,
+                    "id": 74356
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 75838
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Hammer",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 10,
+                    "name": "Ascalonian Tear"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 24840
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Rune",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 1,
+                    "name": "Seal of Beetletun"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 8881
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Utility",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 1,
+                    "name": "Deadly Bloom"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 8882
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Utility",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 1,
+                    "name": "Manifesto of the Moletariate"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 8892
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Utility",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 1,
+                    "name": "Flame Legion Charr Carving"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 8879
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Utility",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 1,
+                    "name": "Symbol of Koda"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 8883
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Utility",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 1,
+                    "name": "Knowledge Crystal"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 8887
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Utility",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 1,
+                    "name": "Shard of Zhaitan"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 8893
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Utility",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 20,
+                    "name": "Pristine Fractal Relic"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 70580
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Trophy",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 100,
+                    "name": "Fractal Relic"
+                },
+                {
+                    "amount": 8000,
+                    "name": "Coin"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 76329
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Trophy",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 6,
+                    "name": "Karma"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 12245
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "CraftingMaterial",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 6,
+                    "name": "Badge of Honor"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 21161
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Generic",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 200,
+                    "name": "Spirit Shard"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 20797
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Trophy",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 600,
+                    "name": "Magnetite Shard"
+                },
+                {
+                    "amount": 200000,
+                    "name": "Coin"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 77344
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Dagger",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 5000,
+                    "name": "Coin"
+                },
+                {
+                    "amount": 1,
+                    "name": "Guild Commendation"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 74615
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Gizmo",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 10000,
+                    "name": "Coin"
+                },
+                {
+                    "amount": 1000,
+                    "name": "Bandit Crest"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 68523
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Container",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 104,
+                    "name": "Coin"
+                },
+                {
+                    "amount": 13,
+                    "name": "Geode"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 66624
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Trophy",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 5,
+                    "name": "Laurel"
+                },
+                {
+                    "amount": 30000,
+                    "name": "Coin"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 49483
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Container",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 15,
+                    "name": "Unbound Magic"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 79453
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Trophy",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 6,
+                    "name": "Proof of Heroics"
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 21260
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Generic",
+            "timestamp": null,
+            "type": "Vendor"
+        },
+        {
+            "_id": null,
+            "ingredients": [
+                {
+                    "amount": 1,
+                    "id": 79848
+                },
+                {
+                    "amount": 25,
+                    "id": 19722
+                },
+                {
+                    "amount": 50,
+                    "id": 19721
+                },
+                {
+                    "amount": 10,
+                    "id": 19676
+                },
+                {
+                    "amount": 5,
+                    "id": 79899
+                }
+            ],
+            "location": null,
+            "prerequisites": [],
+            "results": [
+                {
+                    "amount": 1,
+                    "id": 79729
+                }
+            ],
+            "source": "GW2Profits",
+            "subtype": "Food",
+            "timestamp": null,
+            "type": "DoubleClick"
+        }
+    ]
+}

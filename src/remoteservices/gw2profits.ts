@@ -11,13 +11,14 @@ export interface IMyRecipe {
     ingredients: IMyIngredient[];
 }
 
-interface IMyIngredient {
+export interface IMyIngredient {
     item_id: number;
     count: number;
 }
 
 async function getRecipesPromise(observer: Rx.Observer<IMyRecipe[]>): Promise<void> {
-    const rv = await getJSON<IMyRecipe[]>("http://gw2profits.com/json/v2/forge");
+    const rv = (await getJSON<IMyRecipe[]>("http://gw2profits.com/json/v2/forge"))
+        .filter((recipe) => recipe.disciplines.indexOf("Achievement") === -1);
     observer.next(rv);
 }
 
