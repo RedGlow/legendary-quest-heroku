@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/RedGlow/legendary-quest-heroku#readme",
   "devDependencies": {
+    "@types/isomorphic-fetch": "0.0.34",
+    "@types/lodash": "^4.14.71",
     "@types/mocha": "^2.2.41",
     "@types/mongodb": "^2.2.7",
     "@types/node": "^8.0.17",
@@ -30,12 +32,14 @@
     "gulp-sourcemaps": "^2.6.0",
     "gulp-tslint": "^8.1.1",
     "gulp-typescript": "^3.2.1",
+    "isomorphic-fetch": "^2.2.1",
     "mocha": "^3.4.2",
     "selenium-webdriver": "^3.5.0",
     "tslint": "^5.5.0",
     "typescript": "^2.4.2"
   },
   "dependencies": {
+    "lodash": "^4.17.4",
     "mongodb": "^2.2.30",
     "restify": "^5.0.1",
     "restify-errors": "^4.3.0",

@@ -1,21 +1,28 @@
+import * as rerrors from "restify-errors";
+
 interface IErrorBody {
     shortcode: string;
     message: string;
 }
 
-export class APIError extends Error {
+export class APIError extends rerrors.RestError {
 
     public body: IErrorBody;
 
     constructor(
         public statusCode: number,
-        shortcode: string,
-        description: string) {
-        super(description);
-        this.body = {
-            message: description,
-            shortcode,
-        };
+        private shortcode: string,
+        private description: string) {
+        super({
+            statusCode,
+        });
         Object.setPrototypeOf(this, APIError.prototype);
+    }
+
+    public toJSON() {
+        return {
+            message: this.description,
+            shortcode: this.shortcode,
+        };
     }
 }
