@@ -10,5 +10,5 @@ export const update = async (recipeBlocks: Rx.Observable<IRecipe[]>) => {
         .toArray()
         .toPromise()
         .then((promises) => Promise.all(promises));
-    setTimestamp(timestamp);
+    await setTimestamp(timestamp);
 };
