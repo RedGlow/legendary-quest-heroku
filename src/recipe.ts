@@ -1,7 +1,7 @@
 export type RecipeType = "MysticForge" | "Salvage" | "Vendor" | "Charge" | "DoubleClick" | "Achievement";
 
 export interface IRecipe {
-    // id of the recipe document - see setRecipeId
+    // id of the recipe document - see getRecipeId
     _id: string;
     // The type of this recipe, identifying the way it is executed
     // MysticForge: a recipe produced at the mystic forge
@@ -62,12 +62,12 @@ export interface ILocation {
     label: string;
 }
 
-export function setRecipeId(r: IRecipe) {
+export function getRecipeId(r: IRecipe) {
     // sort elements, since these are sets
     r.results.sort(compareRecipeElements);
     r.ingredients.sort(compareRecipeElements);
     // generate key
-    r._id = generateRecipeElementsSubkey(r.ingredients) + "=" + generateRecipeElementsSubkey(r.results);
+    return generateRecipeElementsSubkey(r.ingredients) + "=" + generateRecipeElementsSubkey(r.results);
 }
 
 export function isRecipeItem(el: IRecipeCurrency | IRecipeItem | IAchievement): el is IRecipeItem {
