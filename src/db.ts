@@ -26,6 +26,8 @@ const connect = () => {
     }
 };
 
+export const close = async (forceClose: boolean = false) => (await connect()).close(forceClose);
+
 const getRecipesCollection = async () => (await connect()).collection("Recipes");
 const getTimestampCollection = async () => (await connect()).collection("Timestamp");
 
