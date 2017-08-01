@@ -14,23 +14,23 @@ test.describe("Home page", () => {
 
     process.env.SELENIUM_REMOTE_URL = `http://localhost:4444`;
 
-    test.before(() => {
+    test.before(async () => {
         // Build the selenium webdriver
         driver = (new webdriver.Builder()).
             withCapabilities(webdriver.Capabilities.chrome()).
             build();
 
         // clean the db
-        dropDb()
-            .then(() => new Promise((resolve, reject) => {
-                // run the server
-                s = server.createAndListen(port, resolve);
-            }));
+        await dropDb();
+        await new Promise((resolve, reject) => {
+            // run the server
+            s = server.createAndListen(port, resolve);
+        });
     });
 
-    test.after(() => {
-        driver.quit();
+    test.after(async () => {
         s.close();
+        await driver.quit();
     });
 
     test.it("Shows the home", () => {
