@@ -5,28 +5,26 @@ interface ITimestamp {
     timestamp: Date;
 }
 
-let dbinstance: Db = null;
+let dbPromise: Promise<Db> = null;
 
-const connect = () => {
-    if (dbinstance) {
-        return Promise.resolve(dbinstance);
-    } else {
-        return new Promise<Db>((resolve, reject) => {
-            const url = process.env.MONGODB_URI ||
-                "mongodb://legendaryquest:legendaryquest@localhost:27017/legendaryquest";
-            MongoClient.connect(url, (err, result) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                dbinstance = result;
-                resolve(dbinstance);
-            });
+const connect = () =>
+    dbPromise || (dbPromise = new Promise<Db>((resolve, reject) => {
+        const url = process.env.MONGODB_URI ||
+            "mongodb://legendaryquest:legendaryquest@localhost:27017/legendaryquest";
+        MongoClient.connect(url, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
         });
-    }
-};
+    }));
 
-export const close = async (forceClose: boolean = false) => (await connect()).close(forceClose);
+export const close = async (forceClose: boolean = false) => {
+    const db = await connect();
+    dbPromise = null;
+    await db.close(forceClose);
+};
 
 const getRecipesCollection = async () => (await connect()).collection("Recipes");
 const getTimestampCollection = async () => (await connect()).collection("Timestamp");
@@ -72,6 +70,16 @@ export const saveRecipes = async (recipes: IRecipe[], timestamp: Date) => {
         () => upsert(timestampedRecipes));
 };
 
+export class NoTimestampError extends Error {
+    constructor() {
+        super("No timestamp found on db.");
+        /* tslint:disable:max-line-length */
+        // see https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work
+        Object.setPrototypeOf(this, NoTimestampError.prototype);
+        /* tslint:enable:max-line-length */
+    }
+}
+
 export const getTimestamp = async () => {
     // get the newest timestamp
     const obj = await (await getTimestampCollection())
@@ -79,6 +87,9 @@ export const getTimestamp = async () => {
         .sort({ timestamp: -1 })
         .limit(1)
         .next();
+    if (obj === null) {
+        throw new NoTimestampError();
+    }
     return (obj as ITimestamp).timestamp;
 };
 
