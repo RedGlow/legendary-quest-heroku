@@ -5,7 +5,7 @@ import * as db from "../db";
 import { IRecipe, isRecipeItem, RecipeType } from "../recipe";
 import { dropDb } from "./helpers";
 
-describe.only("db", () => {
+describe("db", () => {
     beforeEach(() => {
         return dropDb();
     });
