@@ -23,11 +23,11 @@ gulp.task('_compile', () =>
         .pipe(gulp.dest('dist/'))
 );
 
-gulp.task('_copy_json', () =>
-    gulp.src('src/**/*.json')
+gulp.task('_copy_unchanged', () =>
+    gulp.src(['src/**/*.json', 'src/**/*.html'])
         .pipe(gulp.dest('dist/'))
 );
 
-gulp.task('build', ['_compile', '_copy_json']);
+gulp.task('build', ['_compile', '_copy_unchanged']);
 
-gulp.task('watch', () => gulp.watch(['src/**/*.ts', 'src/**/*.json'], ['build']));
+gulp.task('watch', () => gulp.watch(['src/**/*.ts', 'src/**/*.json', 'src/**/*.html'], ['build']));

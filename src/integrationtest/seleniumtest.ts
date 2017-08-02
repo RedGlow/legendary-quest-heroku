@@ -37,7 +37,7 @@ test.describe("Home page", () => {
         driver.get(`http://localhost:${port}/`);
         return driver.findElement(webdriver.By.tagName("p"))
             .then((el) => el.getText())
-            .then((text) => assert.equal(text, "Hi everybody from RedGlow!"))
+            .then((text) => assert.equal(text, "Hi everybody!"))
             ;
     });
 });
