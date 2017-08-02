@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitUseStrict": true,
+        "target": "es5",
+        "module": "umd",
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "lib": [
+            "es6",
+            "dom"
+        ]
+    }
+}
