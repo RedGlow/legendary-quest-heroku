@@ -98,6 +98,51 @@ describe("api", () => {
             assert.equal(r.id, 44);
         }
     });
+
+    it("Returns two recipes on /recipes?resultitemids=44,45 and exclude one that does not match", async () => {
+        const exampleRecipe2 = Object.assign({}, exampleRecipe, {
+            ingredients: [{
+                amount: 5,
+                id: 36,
+            }],
+            results: [{
+                amount: 5,
+                id: 45,
+            }],
+        });
+        const exampleRecipe3 = Object.assign({}, exampleRecipe, {
+            ingredients: [{
+                amount: 5,
+                id: 37,
+            }],
+            results: [{
+                amount: 5,
+                id: 46,
+            }],
+        });
+        const timestamp = new Date();
+        await db.setTimestamp(timestamp);
+        await db.saveRecipes([exampleRecipe, exampleRecipe2, exampleRecipe3], timestamp);
+        const response = await fetch(getURL("/api/recipes?resultitemids=44,45"));
+        assert.equal(response.status, 200);
+        const json: IRecipe[] = await response.json();
+        assert.equal(json.length, 2);
+        const r1 = json[0].results[0];
+        const r2 = json[1].results[0];
+        assert(isRecipeItem(r1));
+        assert(isRecipeItem(r2));
+        if (isRecipeItem(r1) && isRecipeItem(r2)) {
+            const ids = [r1.id, r2.id].sort();
+            assert.deepEqual(ids, [44, 45]);
+        }
+    });
+
+    it("Rejects malformed /recipes?resultitemids=idlist", async () => {
+        const response = await fetch(getURL("/api/recipes?resultitemids=aaa"));
+        assert.equal(response.status, 400);
+        const json = await response.json();
+        assert.equal(json.shortcode, "wrong-resultitemids");
+    });
 });
 
 const exampleRecipe: IRecipe = {
