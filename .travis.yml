@@ -14,6 +14,7 @@ before_script:
 script:
   - gulp build
   - npm run unittest
+  - npm run browsertest
   - npm run integrationtest
   - sleep 3
 deploy:
