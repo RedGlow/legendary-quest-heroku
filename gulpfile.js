@@ -16,6 +16,9 @@ const gulp = require("gulp")
     , browserify = require("browserify")
     , source = require("vinyl-source-stream")
     , glob = require("glob")
+    , envify = require("envify/custom")
+    , uglifyify = require("uglifyify")
+    , bundleCollapser = require("bundle-collapser/plugin")
     ;
 
 
@@ -141,9 +144,9 @@ gulp.task("_compile_client_ts", () => {
 // bundle together all the client TypeScript files with browserify
 const bundleClientJsSources = "./build/js/index.js";
 gulp.task("_bundle_client_js", ["_compile_client_ts"], () => {
-    const b = browserify({ entries: bundleClientJsSources, debug: true });
-    b.paths = ["./node_modules/"];
-    return b.bundle()
+    const bundler = browserify({ entries: bundleClientJsSources, debug: true });
+    bundler.paths = ["./node_modules/"];
+    return bundler.bundle()
         .pipe(source("scripts.js"))
         .pipe(gulp.dest("dist/static/client"))
         ;
@@ -151,11 +154,39 @@ gulp.task("_bundle_client_js", ["_compile_client_ts"], () => {
 
 // produce a minimized version of the javascript for the client
 const minimizeClientJsSources = "dist/static/client/scripts.js";
-gulp.task("_minimize_client_js", ["_bundle_client_js"], () => {
-    return gulp.src(minimizeClientJsSources)
-        .pipe(uglify())
+gulp.task("_minimize_client_js_pre", ["_bundle_client_js"], () => {
+    /*return gulp.src(minimizeClientJsSources)
+        .pipe(uglify({
+            compress: true,
+            mangle: true
+        }))
         .pipe(rename("scripts.min.js"))
-        .pipe(gulp.dest("dist/static/client"));
+        .pipe(gulp.dest("dist/static/client"));*/
+    process.env.NODE_ENV = "production";
+    process.env.BROWSER = "true";
+    const bundler = browserify({ entries: bundleClientJsSources, debug: true });
+    bundler.transform(envify({
+        NODE_ENV: "production",
+        BROWSER: "true"
+    }), {
+            global: true
+        });
+    bundler.plugin(bundleCollapser);
+    bundler.paths = ["./node_modules/"];
+    return bundler.bundle()
+        .pipe(source("scripts.min.js"))
+        .pipe(gulp.dest("build/"))
+        ;
+});
+
+gulp.task("_minimize_client_js", ["_minimize_client_js_pre"], () => {
+    return gulp.src("build/scripts.min.js")
+        .pipe(uglify({
+            compress: true,
+            mangle: true
+        }))
+        .pipe(gulp.dest("dist/static/client"))
+        ;
 });
 
 gulp.task("_watchtsclient", () => gulp.watch(
