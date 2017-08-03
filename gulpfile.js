@@ -56,7 +56,7 @@ gulp.task("_watchts", () => gulp.watch(
 // produce a minimized index.html (called index.min.html)
 gulp.task("_minimize_indexhtml", () =>
     gulp.src("src/static/client/index.html")
-        .pipe(replace(".js\" ></script > ", ".min.js\"></script>"))
+        .pipe(replace(".js\"></script>", ".min.js\"></script>"))
         .pipe(htmlmin({
             caseSensitive: true,
             collapseWhitespace: true
