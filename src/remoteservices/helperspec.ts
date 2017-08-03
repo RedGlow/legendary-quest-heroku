@@ -15,9 +15,15 @@ export type Event = IValueEvent | IErrorEvent;
 
 export default function checkObservable<T>(observable: Rx.Observable<T[]>, expectedEvents: Event[]): Promise<void> {
     const events: Event[] = [];
+    /* tslint:disable:no-console */
     observable.subscribe({
         error: (error) => events.push({ event: "error", value: error }),
         next: (value) => events.push({ event: "value", value }),
     });
-    return observable.toPromise().then(() => assert.deepEqual(events, expectedEvents));
+    /* tslint:enable:no-console */
+    return observable
+        .toPromise()
+        .then(() => {
+            assert.deepEqual(events, expectedEvents);
+        });
 }

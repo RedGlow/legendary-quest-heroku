@@ -1,5 +1,6 @@
 import * as http from "http";
 import * as https from "https";
+import fetch, { Headers } from "node-fetch";
 
 let alternativeGet: (url: string) => Promise<string> = null;
 
@@ -45,4 +46,27 @@ export async function getJSON<T>(url: string): Promise<T> {
 
 export function setAlternativeGet(f: (url: string) => Promise<string>) {
     alternativeGet = f;
+}
+
+export interface IResult<T> {
+    content: T;
+    headers: Headers;
+}
+
+let alternativeFetchJSON: <T>(url: string) => Promise<IResult<T>> = null;
+
+export function setAlternativeFetchJSON(f: <T>(url: string) => Promise<IResult<T>>) {
+    alternativeFetchJSON = f;
+}
+
+export async function fetchJSON<T>(url: string): Promise<IResult<T>> {
+    if (alternativeFetchJSON) {
+        return await alternativeFetchJSON<T>(url);
+    }
+    const response = await fetch(url);
+    const json = await response.json();
+    return {
+        content: json,
+        headers: response.headers,
+    };
 }

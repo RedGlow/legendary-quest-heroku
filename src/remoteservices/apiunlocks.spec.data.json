@@ -1,0 +1,40 @@
+{
+    "page0": {
+        "linkHeader": "</page1>; rel=next, </page2>; rel=last",
+        "content": [
+            {
+                "id": 1,
+                "details": {
+                    "type": "Unlock",
+                    "unlock_type": "CraftingRecipe"
+                }
+            }
+        ]
+    },
+    "page1": {
+        "linkHeader": "</page2>; rel=next, </page2>; rel=last",
+        "content": [
+            {
+                "id": 2
+            },
+            {
+                "id": 3,
+                "details": {
+                    "type": "Unlock",
+                    "unlock_type": "CraftingRecipe"
+                }
+            }
+        ]
+    },
+    "page2": {
+        "linkHeader": "</page2>; rel=last",
+        "content": [
+            {
+                "id": 4
+            },
+            {
+                "id": 5
+            }
+        ]
+    }
+}
