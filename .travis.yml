@@ -16,7 +16,7 @@ script:
   - npm run unittest
   - npm run browsertest
   - npm run integrationtest
-  - sleep 3
+  - killall phantomjs
 deploy:
   provider: heroku
   app: legendary-quest
