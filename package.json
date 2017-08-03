@@ -6,6 +6,7 @@
   "scripts": {
     "unittest": "mocha dist/**/*.spec.js",
     "integrationtest": "mocha dist/integrationtest --timeout 10000",
+    "browsertest": "mocha dist/static/client/testscripts.js",
     "start": "node dist/index.js",
     "updatedb": "node dist/updater/runupdater.js"
   },
@@ -42,7 +43,7 @@
     "gulp-typescript": "^3.2.1",
     "gulp-uglify": "^3.0.0",
     "isomorphic-fetch": "^2.2.1",
-    "mocha": "^3.4.2",
+    "mocha": "^3.5.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "selenium-webdriver": "^3.5.0",

@@ -16,7 +16,8 @@ const gulp = require('gulp')
     , source = require("vinyl-source-stream");
 ;
 
-gulp.task('_compile', () =>
+// lint, compile, and sourcemaps all server TypeScript files
+gulp.task('_compile_server_ts', () =>
     gulp.src(['src/**/*.ts', '!src/static/ts/**/*.ts'])
         .pipe(tslint({
             formatter: "prose"
@@ -34,7 +35,8 @@ gulp.task('_compile', () =>
         .pipe(gulp.dest('dist/'))
 );
 
-gulp.task('_minimized_indexhtml', () =>
+// produce a minimized index.html (called index.min.html)
+gulp.task('_minimize_indexhtml', () =>
     gulp.src('src/static/client/index.html')
         .pipe(replace('.js"></script>', '.min.js"></script>'))
         .pipe(htmlmin({
@@ -45,8 +47,36 @@ gulp.task('_minimized_indexhtml', () =>
         .pipe(gulp.dest('dist/static/client'))
 );
 
+gulp.task('_compile_testclient', () => {
+    return gulp.src(['src/static/ts/**/*.ts'])
+        .pipe(tslint({
+            formatter: "prose"
+        }))
+        .pipe(tslint.report({
+            emitError: false
+        }))
+        .pipe(sourcemaps.init())
+        .pipe(projectClient())
+        .js
+        .pipe(sourcemaps.mapSources(sp =>
+            Array(sp.split('/').length).fill('../').join('') + 'src/' + sp
+        ))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('build/js'))
+        ;
+});
+
+gulp.task('_bundle_testclient', ['_compile_testclient'], () => {
+    const b = browserify({ entries: './build/js/tests.js', debug: true });
+    b.paths = ['./node_modules/'];
+    return b.bundle()
+        .pipe(source('testscripts.js'))
+        .pipe(gulp.dest('dist/static/client'))
+        ;
+});
+
 gulp.task('_compile_client', () => {
-    return gulp.src(['src/static/ts/**/*.ts', 'src/static/ts/**/*.tsx'])
+    return gulp.src(['src/static/ts/**/*.ts', '!src/static/ts/**/*.spec.ts', 'src/static/ts/**/*.tsx'])
         .pipe(tslint({
             formatter: "prose"
         }))
@@ -97,14 +127,14 @@ gulp.task('_copy_unchanged', () =>
         .pipe(gulp.dest('dist/'))
 );
 
-gulp.task('build', ['_compile', '_minimized_client', '_copy_unchanged', '_minimized_indexhtml']);
+gulp.task('build', ['_compile_server_ts', '_minimized_client', '_copy_unchanged', '_minimize_indexhtml']);
 
-gulp.task('_watchts', () => gulp.watch(['src/**/*.ts', '!src/static/ts/**/*.ts'], ['_compile']));
+gulp.task('_watchts', () => gulp.watch(['src/**/*.ts', '!src/static/ts/**/*.ts'], ['_compile_server_ts']));
 
-gulp.task('_watchtsclient', () => gulp.watch(['src/static/ts/**/*.ts', 'src/static/ts/**/*.tsx'], ['_minimized_client']));
+gulp.task('_watchtsclient', () => gulp.watch(['src/static/ts/**/*.ts', 'src/static/ts/**/*.tsx', '!src/static/ts/**/*.spec.ts'], ['_minimized_client']));
 
 gulp.task('_watchunchanged', () => gulp.watch(['src/**/*.json', 'src/**/*.html'], ['_copy_unchanged']));
 
-gulp.task('_watch_indexhtml', () => gulp.watch(['src/static/client/index.html'], ['_minimized_indexhtml']));
+gulp.task('_watch_indexhtml', () => gulp.watch(['src/static/client/index.html'], ['_minimize_indexhtml']));
 
 gulp.task('watch', ['_watchts', '_watchtsclient', '_watchunchanged', '_watch_indexhtml']);
