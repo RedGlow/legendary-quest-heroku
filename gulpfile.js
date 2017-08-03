@@ -1,10 +1,11 @@
-const gulp = require('gulp')
-    , path = require('path')
-    , _ = require('lodash')
-    , ts = require('gulp-typescript')
-    , sourcemaps = require('gulp-sourcemaps')
-    , project = ts.createProject('tsconfig.json')
-    , projectClient = ts.createProject('src/static/ts/tsconfig.json')
+const gulp = require("gulp")
+    , path = require("path")
+    , _ = require("lodash")
+    , ts = require("gulp-typescript")
+    , sourcemaps = require("gulp-sourcemaps")
+    , project = ts.createProject("tsconfig.json")
+    , projectClient = ts.createProject("src/static/ts/tsconfig.json")
+    , projectTestClient = ts.createProject("src/static/ts/tsconfig.json")
     , tslint = require("gulp-tslint")
     , newy = require("gulp-newy")
     , concat = require("gulp-concat")
@@ -13,12 +14,19 @@ const gulp = require('gulp')
     , replace = require("gulp-replace")
     , htmlmin = require("gulp-htmlmin")
     , browserify = require("browserify")
-    , source = require("vinyl-source-stream");
-;
+    , source = require("vinyl-source-stream")
+    , glob = require("glob")
+    ;
+
+
+/**
+ * SERVER TYPESCRIPT FILES
+ */
 
 // lint, compile, and sourcemaps all server TypeScript files
-gulp.task('_compile_server_ts', () =>
-    gulp.src(['src/**/*.ts', '!src/static/ts/**/*.ts'])
+const compileServerTsSources = ["src/**/*.ts", "!src/static/ts/**/*.ts"];
+gulp.task("_compile_server_ts", () =>
+    gulp.src(compileServerTsSources)
         .pipe(tslint({
             formatter: "prose"
         }))
@@ -29,26 +37,90 @@ gulp.task('_compile_server_ts', () =>
         .pipe(project())
         .js
         .pipe(sourcemaps.mapSources(sp =>
-            Array(sp.split('/').length).fill('../').join('') + 'src/' + sp
+            Array(sp.split("/").length).fill("../").join("") + "src/" + sp
         ))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('dist/'))
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("dist/"))
 );
 
+// watch for changes in server TypeScript files
+gulp.task("_watchts", () => gulp.watch(
+    compileServerTsSources,
+    ["_compile_server_ts"]));
+
+
+/**
+ * INDEX.HTML
+ */
+
 // produce a minimized index.html (called index.min.html)
-gulp.task('_minimize_indexhtml', () =>
-    gulp.src('src/static/client/index.html')
-        .pipe(replace('.js"></script>', '.min.js"></script>'))
+gulp.task("_minimize_indexhtml", () =>
+    gulp.src("src/static/client/index.html")
+        .pipe(replace(".js\" ></script > ", ".min.js\"></script>"))
         .pipe(htmlmin({
             caseSensitive: true,
             collapseWhitespace: true
         }))
-        .pipe(rename('index.min.html'))
-        .pipe(gulp.dest('dist/static/client'))
+        .pipe(rename("index.min.html"))
+        .pipe(gulp.dest("dist/static/client"))
 );
 
-gulp.task('_compile_testclient', () => {
-    return gulp.src(['src/static/ts/**/*.ts'])
+// watch for changes in index.html
+gulp.task("_watch_indexhtml", () => gulp.watch(
+    ["src/static/client/index.html"],
+    ["_minimize_indexhtml"]));
+
+
+/**
+ * CLIENT TYPESCRIPT FILES FOR THE TESTS
+ */
+
+// lint, compile and sourcemaps all the client TypeScript files for the tests
+const compileTestclientTsSources = ["src/static/ts/**/*.ts"];
+gulp.task("_compile_testclient_ts", () => {
+    return gulp.src(compileTestclientTsSources)
+        .pipe(tslint({
+            formatter: "prose"
+        }))
+        .pipe(tslint.report({
+            emitError: false
+        }))
+        .pipe(sourcemaps.init())
+        .pipe(projectTestClient())
+        .js
+        .pipe(sourcemaps.mapSources(sp =>
+            Array(sp.split("/").length).fill("../").join("") + "src/" + sp
+        ))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest("build/js"))
+        ;
+});
+
+// bundle together all the TypeScript files for the tests with browserify
+const bundleTestclientJsSources = "./build/js/**/*.spec.js";
+gulp.task("_bundle_testclient_js", ["_compile_testclient_ts"], () => {
+    const files = glob.sync(bundleTestclientJsSources);
+    const b = browserify({ entries: files, debug: true });
+    b.paths = ["./node_modules/"];
+    return b.bundle()
+        .pipe(source("testscripts.js"))
+        .pipe(gulp.dest("dist/static/client"))
+        ;
+});
+
+gulp.task("_watchtstestclient", () => gulp.watch(
+    compileTestclientTsSources,
+    ["_bundle_testclient_js"]));
+
+
+/**
+ * CLIENT TYPESCRIPT FILES
+ */
+
+// lint, compile and sourcemaps all the client TypeScript files
+const compileClientTsSources = ["src/static/ts/**/*.ts", "!src/static/ts/**/*.spec.ts", "src/static/ts/**/*.tsx"];
+gulp.task("_compile_client_ts", () => {
+    return gulp.src(compileClientTsSources)
         .pipe(tslint({
             formatter: "prose"
         }))
@@ -59,82 +131,81 @@ gulp.task('_compile_testclient', () => {
         .pipe(projectClient())
         .js
         .pipe(sourcemaps.mapSources(sp =>
-            Array(sp.split('/').length).fill('../').join('') + 'src/' + sp
+            Array(sp.split("/").length).fill("../").join("") + "src/" + sp
         ))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('build/js'))
+        .pipe(gulp.dest("build/js"))
         ;
 });
 
-gulp.task('_bundle_testclient', ['_compile_testclient'], () => {
-    const b = browserify({ entries: './build/js/tests.js', debug: true });
-    b.paths = ['./node_modules/'];
+// bundle together all the client TypeScript files with browserify
+const bundleClientJsSources = "./build/js/index.js";
+gulp.task("_bundle_client_js", ["_compile_client_ts"], () => {
+    const b = browserify({ entries: bundleClientJsSources, debug: true });
+    b.paths = ["./node_modules/"];
     return b.bundle()
-        .pipe(source('testscripts.js'))
-        .pipe(gulp.dest('dist/static/client'))
+        .pipe(source("scripts.js"))
+        .pipe(gulp.dest("dist/static/client"))
         ;
 });
 
-gulp.task('_compile_client', () => {
-    return gulp.src(['src/static/ts/**/*.ts', '!src/static/ts/**/*.spec.ts', 'src/static/ts/**/*.tsx'])
-        .pipe(tslint({
-            formatter: "prose"
-        }))
-        .pipe(tslint.report({
-            emitError: false
-        }))
-        .pipe(sourcemaps.init())
-        .pipe(projectClient())
-        .js
-        .pipe(sourcemaps.mapSources(sp =>
-            Array(sp.split('/').length).fill('../').join('') + 'src/' + sp
-        ))
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest('build/js'))
-        ;
-});
-
-gulp.task('_bundle_client', ['_compile_client'], () => {
-    const b = browserify({ entries: './build/js/index.js', debug: true });
-    b.paths = ['./node_modules/'];
-    return b.bundle()
-        .pipe(source('scripts.js'))
-        .pipe(gulp.dest('dist/static/client'))
-        ;
-});
-
-gulp.task('_minimized_client', ['_bundle_client'], () => {
-    return gulp.src('dist/static/client/scripts.js')
+// produce a minimized version of the javascript for the client
+const minimizeClientJsSources = "dist/static/client/scripts.js";
+gulp.task("_minimize_client_js", ["_bundle_client_js"], () => {
+    return gulp.src(minimizeClientJsSources)
         .pipe(uglify())
         .pipe(rename("scripts.min.js"))
-        .pipe(gulp.dest('dist/static/client'));
+        .pipe(gulp.dest("dist/static/client"));
 });
 
-gulp.task('_copy_unchanged', () =>
-    gulp.src(['src/**/*.json', 'src/**/*.html'])
+gulp.task("_watchtsclient", () => gulp.watch(
+    compileClientTsSources,
+    ["_minimize_client_js"]));
+
+
+/**
+ * UNCHANGED FILES
+ */
+
+// copy the files that need no transformations
+const copyUnchangedSources = ["src/**/*.json", "!src/**/tsconfig.json", "src/**/*.html"];
+gulp.task("_copy_unchanged", () =>
+    gulp.src(copyUnchangedSources)
         .pipe(newy((pdir, srcfile, abssrcfile) => {
             const relfile = path.join.apply(
                 null,
                 _.drop(
                     _.dropWhile(
                         abssrcfile.split(path.sep),
-                        value => value != 'src'),
+                        value => value != "src"),
                     1)
             );
-            const res = path.join(pdir, 'dist', relfile);
+            const res = path.join(pdir, "dist", relfile);
             return res;
         }))
-        .pipe(gulp.dest('dist/'))
+        .pipe(gulp.dest("dist/"))
 );
 
-gulp.task('build', ['_compile_server_ts', '_minimized_client', '_copy_unchanged', '_minimize_indexhtml']);
+gulp.task("_watchunchanged", () => gulp.watch(
+    copyUnchangedSources
+    ["_copy_unchanged"]));
 
-gulp.task('_watchts', () => gulp.watch(['src/**/*.ts', '!src/static/ts/**/*.ts'], ['_compile_server_ts']));
 
-gulp.task('_watchtsclient', () => gulp.watch(['src/static/ts/**/*.ts', 'src/static/ts/**/*.tsx', '!src/static/ts/**/*.spec.ts'], ['_minimized_client']));
+/**
+ * MAIN TASKS
+ */
 
-gulp.task('_watchunchanged', () => gulp.watch(['src/**/*.json', 'src/**/*.html'], ['_copy_unchanged']));
+// build all: server scripts, client scripts, test scripts, minimized and verbatim contents
+gulp.task("build", [
+    "_compile_server_ts",
+    "_copy_unchanged",
+    "_minimize_client_js",
+    "_bundle_testclient_js",
+    "_minimize_indexhtml"]);
 
-gulp.task('_watch_indexhtml', () => gulp.watch(['src/static/client/index.html'], ['_minimize_indexhtml']));
-
-gulp.task('watch', ['_watchts', '_watchtsclient', '_watchunchanged', '_watch_indexhtml']);
+gulp.task("watch", [
+    "_watchts",
+    "_watchtsclient",
+    "_watchtstestclient",
+    "_watchunchanged",
+    "_watch_indexhtml"]);
