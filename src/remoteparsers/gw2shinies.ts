@@ -1,28 +1,22 @@
+import { switchcase } from "../func";
 import { getJSON } from "../http";
 import { IRecipe, IRecipeItem, RecipeType } from "../recipe";
 import { IMyRecipe } from "../remoteservices/gw2shinies";
 
-function getSubtype(type: string): string {
-    switch (type) {
-        case "promo": return "CraftingMaterial";
-        case "amulet": return "Amulet";
-        case "weapon": return "Weapon";
-        case "recipe": return "Recipe";
-        case "blueprint": return "Blueprint";
-        default: throw new Error(`Unknown type ${type}`);
-    }
-}
+const getSubtype = switchcase({
+    /* tslint:disable:object-literal-key-quotes object-literal-sort-keys */
+    "promo": "CraftingMaterial",
+    "amulet": "Amulet",
+    "weapon": "Weapon",
+    "recipe": "Recipe",
+    "blueprint": "Blueprint",
+    /* tslint:enable:object-literal-key-quotes object-literal-sort-keys */
+})((type) => { throw new Error(`Unknown type ${type}`); });
 
-function makeElement(id: string, amount: string): IRecipeItem {
-    return {
-        amount: parseFloat(amount),
-        id: parseInt(id, 10),
-    };
-}
-
-function getConstantType(): RecipeType {
-    return "MysticForge";
-}
+const makeElement = (id: string, amount: string): IRecipeItem => ({
+    amount: parseFloat(amount),
+    id: parseInt(id, 10),
+});
 
 export const transformRecipe = (recipe: IMyRecipe): IRecipe => ({
     _id: null,
@@ -38,5 +32,5 @@ export const transformRecipe = (recipe: IMyRecipe): IRecipe => ({
     source: "GW2Shinies",
     subtype: getSubtype(recipe.type),
     timestamp: null,
-    type: getConstantType(),
+    type: "MysticForge",
 });
