@@ -46,7 +46,7 @@ const getIngredientSwitchCase = switchcase({
     "-31": "Proof of Heroics",
     "-32": "Unbound Magic",
     /* tslint:enable:object-literal-sort-keys */
-});
+})((itemId) => { throw new Error(`Unknown GW2 Profits id ${itemId}`); });
 const getIngredient = (inputIngredient: IMyIngredient): IRecipeItem | IRecipeCurrency =>
     inputIngredient.item_id > 0 ?
         {
@@ -56,9 +56,7 @@ const getIngredient = (inputIngredient: IMyIngredient): IRecipeItem | IRecipeCur
         :
         {
             amount: inputIngredient.count,
-            name: getIngredientSwitchCase(() => {
-                throw new Error(`Unknown GW2 Profits id ${inputIngredient.item_id}`);
-            })(inputIngredient.item_id.toString()),
+            name: getIngredientSwitchCase(inputIngredient.item_id.toString()),
         };
 
 export const transformRecipe = (recipe: IMyRecipe): IRecipe => ({
