@@ -35,6 +35,4 @@ async function getRecipesPromise(observer: Rx.Observer<IMyRecipe[]>): Promise<vo
     observer.next(recipes);
 }
 
-export function getRecipes(): Rx.Observable<IMyRecipe[]> {
-    return feedObservable(getRecipesPromise);
-}
+export const getRecipes = () => feedObservable(getRecipesPromise);
