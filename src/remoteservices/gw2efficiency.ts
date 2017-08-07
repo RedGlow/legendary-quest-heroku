@@ -1,6 +1,7 @@
+import * as _ from "lodash";
+import fetch, { Request, Response } from "node-fetch";
 import * as Rx from "rxjs/Rx";
-import { get } from "../http";
-import { feedObservable } from "./base";
+import { feedObservable, fetchwrap } from "./base";
 
 interface IModuleClass {
     exports: { [idx: number]: IMyRecipe };
@@ -22,17 +23,28 @@ interface INPC {
     position: string;
 }
 
-async function getRecipesPromise(observer: Rx.Observer<IMyRecipe[]>): Promise<void> {
-    const moduleContent = await get("https://raw.githubusercontent.com/gw2efficiency" +
+export type FetchFunction = (url: string) => Promise<string>;
+
+async function getRecipesPromise(
+    observer: Rx.Observer<IMyRecipe[]>,
+    fetchFunction: FetchFunction): Promise<void> {
+    const moduleContent = await fetchFunction("https://raw.githubusercontent.com/gw2efficiency" +
         "/recipe-calculation/master/src/static/vendorItems.js");
     const myModule: IModuleClass = { exports: null };
+    const exportsModule = "(function(module) {\n" +
+        moduleContent.replace("export default ", "module.exports = ")
+        + "})";
     /* tslint:disable:no-eval */
-    (eval("(function(module) {\n" + moduleContent.replace("export default ", "module.exports = ") + "})"))(myModule);
+    eval(exportsModule)(myModule);
     /* tslint:enable */
     const recipes = Object
         .keys(myModule.exports)
-        .map((key: string) => ({ ...myModule.exports[parseInt(key, 10)], id: parseInt(key, 10) }));
+        .map((key: string) => {
+            const parsedKey = parseInt(key, 10);
+            return { ...myModule.exports[parsedKey], id: parsedKey };
+        });
     observer.next(recipes);
 }
 
-export const getRecipes = () => feedObservable(getRecipesPromise);
+export const getRecipes = (fetchFunction: FetchFunction = fetchwrap<string>(fetch)) =>
+    feedObservable(_.partialRight(getRecipesPromise, fetchFunction));
