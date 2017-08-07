@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import fetch, { Request, Response } from "node-fetch";
 import * as Rx from "rxjs/Rx";
 import { feedObservable, fetchwrap } from "./base";
@@ -26,4 +27,4 @@ async function getRecipesPromise(
 }
 
 export const getRecipes = (fetchFunction: FetchFunction = fetchwrap<IMyRecipe[]>(fetch)) =>
-    feedObservable((observer) => getRecipesPromise(observer, fetchFunction));
+    feedObservable(_.partialRight(getRecipesPromise, fetchFunction));
