@@ -10,8 +10,9 @@ export const loadRoot = (server: restify.Server) => {
                 "there are too many items. Try /recipes?resultitemids=itemids"));
             return;
         }
-        const ids = (req.query.resultitemids as string).split(",").map(
-            _.unary(_.partialRight(parseInt, 10)));
+        const ids = (req.query.resultitemids as string)
+            .split(",")
+            .map(_.unary(_.partialRight(parseInt, 10)));
         if (!_.every(ids, isFinite)) {
             next(new APIError(400, "wrong-resultitemids", "Cannot parse the list of ids from " +
                 "the resultitemids querystring"));
