@@ -1,6 +1,5 @@
 import fetch, { Request, Response } from "node-fetch";
 import * as Rx from "rxjs/Rx";
-import { getJSON } from "../http";
 import { feedObservable } from "./base";
 
 export interface IMyRecipe {
