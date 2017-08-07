@@ -1,6 +1,6 @@
+import fetch, { Request, Response } from "node-fetch";
 import * as Rx from "rxjs/Rx";
-import { getJSON } from "../http";
-import { feedObservable } from "./base";
+import { feedObservable, fetchwrap } from "./base";
 
 export interface IMyRecipe {
     name: string;
@@ -16,10 +16,15 @@ export interface IMyIngredient {
     count: number;
 }
 
-async function getRecipesPromise(observer: Rx.Observer<IMyRecipe[]>): Promise<void> {
-    const rv = (await getJSON<IMyRecipe[]>("http://gw2profits.com/json/v2/forge"))
+export type FetchFunction = (url: string) => Promise<IMyRecipe[]>;
+
+async function getRecipesPromise(
+    observer: Rx.Observer<IMyRecipe[]>,
+    fetchFunction: FetchFunction): Promise<void> {
+    const rv = (await fetchFunction("http://gw2profits.com/json/v2/forge"))
         .filter((recipe) => recipe.disciplines.indexOf("Achievement") === -1);
     observer.next(rv);
 }
 
-export const getRecipes = () => feedObservable(getRecipesPromise);
+export const getRecipes = (fetchFunction: FetchFunction = fetchwrap<IMyRecipe[]>(fetch)) =>
+    feedObservable((observer) => getRecipesPromise(observer, fetchFunction));

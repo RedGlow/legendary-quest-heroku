@@ -1,6 +1,6 @@
 import fetch, { Request, Response } from "node-fetch";
 import * as Rx from "rxjs/Rx";
-import { feedObservable } from "./base";
+import { feedObservable, fetchwrap } from "./base";
 
 export interface IMyRecipe {
     type: string;
@@ -25,11 +25,5 @@ async function getRecipesPromise(
     observer.next(rv);
 }
 
-export const wrap = <T>(f: (url: string | Request, init?: RequestInit) => Promise<Response>) =>
-    (url: string) => f(url).then((response) =>
-        response.status >= 200 && response.status < 300 ?
-            response.json() as Promise<T> :
-            response.text().then((t) => Promise.reject(t)));
-
-export const getRecipes = (fetchFunction: FetchFunction = wrap<IMyRecipe[]>(fetch)) =>
+export const getRecipes = (fetchFunction: FetchFunction = fetchwrap<IMyRecipe[]>(fetch)) =>
     feedObservable((observer) => getRecipesPromise(observer, fetchFunction));
