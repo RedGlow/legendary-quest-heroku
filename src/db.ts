@@ -11,13 +11,8 @@ const connect = () =>
     dbPromise || (dbPromise = new Promise<Db>((resolve, reject) => {
         const url = process.env.MONGODB_URI ||
             "mongodb://legendaryquest:legendaryquest@localhost:27017/legendaryquest";
-        MongoClient.connect(url, (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result);
-            }
-        });
+        MongoClient.connect(url, (err, result) =>
+            err ? reject(err) : resolve(result));
     }));
 
 export const close = async (forceClose: boolean = false) => {
@@ -117,6 +112,8 @@ export const getRecipesForItems = async (...ids: number[]): Promise<IRecipe[]> =
         "results.id": id,
         "timestamp": timestamp,
     }));
-    const recipes = await (await getRecipesCollection()).find({ $or: orCondition }).toArray();
+    const recipes = await (await getRecipesCollection())
+        .find({ $or: orCondition })
+        .toArray();
     return recipes;
 };
