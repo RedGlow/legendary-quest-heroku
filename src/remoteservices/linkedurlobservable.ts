@@ -32,13 +32,13 @@ export const wrap = <T>(f: (url: string | Request, init?: RequestInit) => Promis
         };
     };
 
-export default function getLinkedUrlObservables<T>(
+const getLinkedUrlObservables = <T>(
     url: string,
     fetchFunction = wrap<T>(fetch)):
-    Rx.Observable<T> {
-    return Rx.Observable.create((obs: Rx.Observer<T>) => {
+    Rx.Observable<T> =>
+    Rx.Observable.create((obs: Rx.Observer<T>) =>
         fetcher(url, obs, fetchFunction).then(
             () => obs.complete(),
-            (err) => obs.error(err));
-    });
-}
+            (err) => obs.error(err)));
+
+export default getLinkedUrlObservables;
