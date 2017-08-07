@@ -1,28 +1,28 @@
+import { switchcase } from "../func";
 import { IRecipe, IRecipeItem, RecipeType } from "../recipe";
 import { IMyRecipe } from "../remoteservices/gw2efficiency";
 
-function getCurrencyName(myName: string) {
-    switch (myName) {
-        case "karma": return "Karma";
-        case "spirit-shard": return "Spirit Shard";
-        case "gold": return "Coin";
-        case "badge-of-honor": return "Badge of Honor";
-        case "geode": return "Geode";
-        case "pristine-fractal-relic": return "Pristine Fractal Relic";
-        case "fractal-relic": return "Fractal Relic";
-        case "wvw-tournament-claim-ticket": return "WvW Tournament Claim Ticket";
-        case "ascalonian-catacombs": return "Ascalonian Tear";
-        case "caudecuss-manor": return "Seal of Beetletun";
-        case "twilight-arbor": return "Deadly Bloom";
-        case "sorrows-embrace": return "Manifesto of the Moletariate";
-        case "citadel-of-flame": return "Flame Legion Charr Carving";
-        case "honor-of-the-waves": return "Symbol of Koda";
-        case "crucible-of-eternity": return "Knowledge Crystal";
-        case "the-ruined-city-of-arah": return "Shard of Zhaitan";
-        case "guild-commendation": return "Guild Commendation";
-        default: throw new Error(`Unknown currency name ${myName}`);
-    }
-}
+const getCurrencyName = switchcase({
+    /* tslint:disable:object-literal-sort-keys */
+    "karma": "Karma",
+    "spirit-shard": "Spirit Shard",
+    "gold": "Coin",
+    "badge-of-honor": "Badge of Honor",
+    "geode": "Geode",
+    "pristine-fractal-relic": "Pristine Fractal Relic",
+    "fractal-relic": "Fractal Relic",
+    "wvw-tournament-claim-ticket": "WvW Tournament Claim Ticket",
+    "ascalonian-catacombs": "Ascalonian Tear",
+    "caudecuss-manor": "Seal of Beetletun",
+    "twilight-arbor": "Deadly Bloom",
+    "sorrows-embrace": "Manifesto of the Moletariate",
+    "citadel-of-flame": "Flame Legion Charr Carving",
+    "honor-of-the-waves": "Symbol of Koda",
+    "crucible-of-eternity": "Knowledge Crystal",
+    "the-ruined-city-of-arah": "Shard of Zhaitan",
+    "guild-commendation": "Guild Commendation",
+    /* tslint:enable:object-literal-sort-keys */
+})((myName) => { throw new Error(`Unknown currency name ${myName}`); });
 
 export const transformRecipe = (recipe: IMyRecipe): IRecipe =>
     ({
