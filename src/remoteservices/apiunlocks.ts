@@ -23,11 +23,8 @@ export const getRecipes = (
     getLinkedUrlObservables<IMyRecipeUnlock[]>(
         "https://api.guildwars2.com/v2/items?page_size=200&page=0",
         fetchFunction)
-        .map((data: IMyRecipeUnlock[]) => _.filter(data, (item) => {
-            return !!item.details &&
-                item.details.type === "Unlock" &&
-                item.details.unlock_type === "CraftingRecipe";
-        }))
-        .filter((data) => {
-            return data.length > 0;
-        });
+        .map((data: IMyRecipeUnlock[]) => _.filter(data, (item) =>
+            !!item.details &&
+            item.details.type === "Unlock" &&
+            item.details.unlock_type === "CraftingRecipe"))
+        .filter((data) => data.length > 0);
