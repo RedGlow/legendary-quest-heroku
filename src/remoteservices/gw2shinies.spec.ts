@@ -6,18 +6,14 @@ import * as data from "./gw2shinies.spec.data.json";
 import checkObservable from "./helperspec";
 
 describe("remoteservices/gw2shinies", () => {
-    beforeEach(() => {
-        setAlternativeGet((url) =>
-            url === "https://www.gw2shinies.com/api/json/forge/" ||
-                url === "https://www.gw2shinies.com/api/json/forge" ?
-                Promise.resolve(JSON.stringify((data as any).gw2shiniesdata)) : Promise.reject(`Unknown url ${url}`));
-    });
-    afterEach(() => {
-        setAlternativeGet(null);
-    });
+    const fetchFunction = (url: string) =>
+        url === "https://www.gw2shinies.com/api/json/forge/" ||
+            url === "https://www.gw2shinies.com/api/json/forge" ?
+            Promise.resolve((data as any).gw2shiniesdata as gw2shinies.IMyRecipe[]) :
+            Promise.reject(`Unknown url ${url}`);
     it("return an observable returning all the data at once", () => {
         // emulate the data
-        const observable = gw2shinies.getRecipes();
+        const observable = gw2shinies.getRecipes(fetchFunction);
         return checkObservable(observable, [
             {
                 event: "value",
