@@ -92,17 +92,12 @@ function compareRecipeElements(el1: IRecipeCurrency | IRecipeItem, el2: IRecipeC
 }
 
 // given a list of elements, generate a string key summarizing that list of elements
-function generateRecipeElementsSubkey(elements: Array<IRecipeCurrency | IRecipeItem | IAchievement>): string {
-    return elements.map((element) => {
-        if (isRecipeItem(element)) {
-            return element.id.toString();
-        } else if (isRecipeCurrency(element)) {
-            return element.name;
-        } else {
-            return `~a${element.achievement_id}`;
-        }
-    }).join(",");
-}
+const generateRecipeElementsSubkey = (elements: Array<IRecipeCurrency | IRecipeItem | IAchievement>) =>
+    elements.map((element) =>
+        isRecipeItem(element) ? element.id.toString() :
+            isRecipeCurrency(element) ? element.name :
+                `~a${element.achievement_id}`)
+        .join(",");
 
 /*
 - The official API (the [recipes](https://api.guildwars2.com/v2/recipes) endpoint)
