@@ -10,18 +10,23 @@ import { getRecipes as getGW2EfficiencyRecipes } from "../remoteservices/gw2effi
 import { getRecipes as getGW2ProfitsRecipes } from "../remoteservices/gw2profits";
 import { getRecipes as getGW2ShiniesRecipes } from "../remoteservices/gw2shinies";
 
-import { close, saveRecipes, saveRecipeUnlocks, setTimestamp } from "../db";
+import { cleanRecipes, cleanRecipeUnlocks, close, saveRecipes, saveRecipeUnlocks, setTimestamp } from "../db";
 
 export const produceObservable =
     <T, U>(getter: () => Rx.Observable<T[]>, transformer: ((myRecipe: T) => U)) => {
-        try {
-            return getter().map((x) => x.map(transformer));
-        } catch (e) {
+        const recoverer = (e: Error) => {
             /* tslint:disable:no-console */
             // we log the errors and proceed returning nothing.
             console.error(e);
             return Rx.Observable.from([[]] as U[][]);
             /* tslint:enable:no-console */
+        };
+        try {
+            return getter()
+                .map((x) => x.map(transformer))
+                .catch(recoverer);
+        } catch (e) {
+            return recoverer(e);
         }
     };
 
@@ -53,7 +58,6 @@ export const updateRecipeUnlocks = async (
         .toArray()
         .toPromise()
         .then((promises) => Promise.all(promises));
-    await setTimestamp(timestamp);
 };
 
 export async function doAll() {
@@ -70,6 +74,9 @@ export async function doAll() {
         await updateRecipeUnlocks(observableUnlocks, timestamp);
         console.log("Setting timestamp");
         await setTimestamp(timestamp);
+        console.log("Cleaning old data.");
+        await cleanRecipes(timestamp);
+        await cleanRecipeUnlocks(timestamp);
         console.log("Closing the connection.");
         await close();
         console.log("All done.");

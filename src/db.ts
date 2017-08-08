@@ -8,7 +8,7 @@ interface ITimestamp {
 
 let dbPromise: Promise<Db> = null;
 
-const connect = () =>
+export const connect = () =>
     dbPromise || (dbPromise = new Promise<Db>((resolve, reject) => {
         const url = process.env.MONGODB_URI ||
             "mongodb://legendaryquest:legendaryquest@localhost:27017/legendaryquest";
@@ -29,7 +29,10 @@ const getTimestampCollection = async () => (await connect()).collection("Timesta
 const upsert = async (recipes: IRecipe[]) =>
     await (await getRecipesCollection()).bulkWrite(
         recipes
-            .map((recipe) => ({ ...recipe, _id: getRecipeId(recipe) }))
+            .map((recipe) => ({
+                ...recipe,
+                _id: getRecipeId(recipe) + "-" + recipe.timestamp.getTime().toString(),
+            }))
             .map((recipe) => ({
                 updateOne: {
                     filter: { _id: recipe._id },
@@ -43,7 +46,10 @@ const upsert = async (recipes: IRecipe[]) =>
 
 const upsertUnlocks = async (recipeUnlocks: IRecipeUnlock[]) => {
     const inputData = recipeUnlocks
-        .map((recipeUnlock) => ({ ...recipeUnlock, _id: getRecipeUnlockId(recipeUnlock) }))
+        .map((recipeUnlock) => ({
+            ...recipeUnlock,
+            _id: getRecipeUnlockId(recipeUnlock) + "-" + recipeUnlock.timestamp.getTime().toString(),
+        }))
         .map((recipeUnlock) => ({
             updateOne: {
                 filter: { _id: recipeUnlock._id },
@@ -154,4 +160,24 @@ export const getRecipeUnlocksForIds = async (...ids: number[]): Promise<IRecipeU
         .find({ recipe_id: { $in: ids }, timestamp })
         .toArray();
     return unlocks as IRecipeUnlock[];
+};
+
+export const cleanRecipes = async (timestamp: Date): Promise<void> => {
+    const db = await connect();
+    const recipesCollection = await getRecipesCollection();
+    await recipesCollection.deleteMany({
+        timestamp: {
+            $lt: timestamp,
+        },
+    });
+};
+
+export const cleanRecipeUnlocks = async (timestamp: Date): Promise<void> => {
+    const db = await connect();
+    const recipeUnlocksCollection = await getRecipeUnlocksCollection();
+    await recipeUnlocksCollection.deleteMany({
+        timestamp: {
+            $lt: timestamp,
+        },
+    });
 };

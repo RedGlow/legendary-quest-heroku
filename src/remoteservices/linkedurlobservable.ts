@@ -36,6 +36,10 @@ async function fetcher<T>(
 export const wrap = <T>(f: (url: string | Request, init?: RequestInit) => Promise<Response>) =>
     async (url: string) => {
         const response = await f(url);
+        if (response.status < 200 || response.status >= 300) {
+            const body = await response.text();
+            throw new Error(`Server returned status ${response.status} with body ${body}`);
+        }
         const linkHeader = response.headers.get("Link");
         const content = await response.json() as T;
         return {
@@ -50,7 +54,7 @@ const getLinkedUrlObservables = <T>(
     Rx.Observable<T> =>
     Rx.Observable.create((obs: Rx.Observer<T>) =>
         fetcher(url, obs, fetchFunction, 0).then(
-            () => obs.complete(),
-            (err) => obs.error(err)));
+            obs.complete.bind(obs),
+            obs.error.bind(obs)));
 
 export default getLinkedUrlObservables;

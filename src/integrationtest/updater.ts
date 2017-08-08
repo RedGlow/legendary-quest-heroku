@@ -25,10 +25,20 @@ describe("updater", () => {
         setMaxPages(-1);
     });
 
-    it("can recover from partial errors", async () => {
+    it("can recover from partial errors (getter throwing exception)", async () => {
         const getter: () => Rx.Observable<number[]> = () => {
             throw new Error("This error should appear in console but not cause a test failure.");
         };
+        const transformer = (n: number) => n;
+        const result = await produceObservable(getter, transformer)
+            .toArray()
+            .toPromise();
+        assert.deepEqual(result, [[]]);
+    });
+
+    it("can recover from partial errors (getter returning error)", async () => {
+        const getter: () => Rx.Observable<number[]> = () =>
+            Rx.Observable.throw(new Error("This error should appear in console but not cause a test failure."));
         const transformer = (n: number) => n;
         const result = await produceObservable(getter, transformer)
             .toArray()
