@@ -7,7 +7,7 @@ import { getRecipes as getGW2EfficiencyRecipes } from "../remoteservices/gw2effi
 import { getRecipes as getGW2ProfitsRecipes } from "../remoteservices/gw2profits";
 import { getRecipes as getGW2ShiniesRecipes } from "../remoteservices/gw2shinies";
 
-import { saveRecipes, setTimestamp } from "../db";
+import { close, saveRecipes, setTimestamp } from "../db";
 
 const produceRecipeBlocksObservable =
     <T>(getter: () => Rx.Observable<T[]>, transformer: ((myRecipe: T) => IRecipe)) =>

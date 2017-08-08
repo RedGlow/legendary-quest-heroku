@@ -2,9 +2,13 @@ import * as assert from "assert";
 import * as Rx from "rxjs/Rx";
 import { getRecipesForItems, setTimestamp } from "../db";
 import { RecipeType } from "../recipe";
-import { getRecipeBlocksObservable, update } from "../updater/updater";
+import { doAll, getRecipeBlocksObservable, update } from "../updater/updater";
+import { dropDb } from "./helpers";
 
 describe("updater", () => {
+    beforeEach(async () => {
+        await dropDb();
+    });
     it("can merge together recipes from multiple sources", async () => {
         const recipes = await getRecipeBlocksObservable()
             .mergeMap((arr) => Rx.Observable.from(arr))
@@ -15,7 +19,7 @@ describe("updater", () => {
         assert(recipes.find((recipe) => recipe.source === "GW2Efficiency"));
     });
 
-    it("Can add a single block of recipes", async () => {
+    it("can add a single block of recipes", async () => {
         await setTimestamp(new Date());
         await update(Rx.Observable.from([[{
             _id: null,
@@ -40,5 +44,22 @@ describe("updater", () => {
             amount: 4,
             id: 33,
         }]);
+    });
+
+    it("can do all", async () => {
+        await setTimestamp(new Date());
+        const recipes = await getRecipesForItems(
+            12337, // gw2efficiency
+            29675, // gw2profits
+            21260, // gw2shinies
+        );
+        assert.equal(recipes.length, 0);
+        await doAll();
+        const recipes2 = await getRecipesForItems(
+            12337, // gw2efficiency
+            29675, // gw2profits
+            21260, // gw2shinies
+        );
+        assert(recipes2.length >= 3);
     });
 });
