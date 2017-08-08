@@ -6,6 +6,7 @@ import * as Rx from "rxjs/Rx";
 import * as db from "../db";
 import { getJSON } from "../http";
 import { IRecipe, isRecipeItem, RecipeType } from "../recipe";
+import { IRecipeUnlock } from "../recipeunlock";
 import * as server from "../server";
 import { dropDb } from "./helpers";
 
@@ -35,6 +36,13 @@ describe("api", () => {
         assert.equal(json.shortcode, "too-many");
     });
 
+    it("Returns an error on /recipeunlocks", async () => {
+        const response = await fetch(getURL("/api/recipeunlocks"));
+        assert.equal(response.status, 403);
+        const json = await response.json();
+        assert.equal(json.shortcode, "too-many");
+    });
+
     it("Returns a single recipe on /recipes?resultitemids=44", async () => {
         const timestamp = new Date();
         await db.setTimestamp(timestamp);
@@ -48,6 +56,18 @@ describe("api", () => {
         if (isRecipeItem(r)) {
             assert.equal(r.id, 44);
         }
+    });
+
+    it("Returns a single recipe on /recipeunlocks?recipeids=44", async () => {
+        const timestamp = new Date();
+        await db.setTimestamp(timestamp);
+        await db.saveRecipeUnlocks([exampleRecipeUnlock], timestamp);
+        const response = await fetch(getURL("/api/recipeunlocks?recipeids=44"));
+        assert.equal(response.status, 200);
+        const json: IRecipeUnlock[] = await response.json();
+        assert.equal(json.length, 1);
+        assert.equal(json[0].recipe_id, 44);
+        assert.equal(json[0].recipe_sheet_id, 100);
     });
 
     it("Returns two recipes on /recipes?resultitemids=44", async () => {
@@ -74,6 +94,23 @@ describe("api", () => {
         assert.notDeepEqual(json[0].ingredients, json[1].ingredients);
     });
 
+    it("Returns two recipes on /recipeunlocks?recipeids=44", async () => {
+        const exampleRecipeUnlock2 = Object.assign({}, exampleRecipeUnlock, {
+            recipe_sheet_id: 101,
+        });
+        const timestamp = new Date();
+        await db.setTimestamp(timestamp);
+        await db.saveRecipeUnlocks([exampleRecipeUnlock, exampleRecipeUnlock2], timestamp);
+        const response = await fetch(getURL("/api/recipeunlocks?recipeids=44"));
+        assert.equal(response.status, 200);
+        const json: IRecipeUnlock[] = await response.json();
+        assert.equal(json.length, 2);
+        for (let i = 0; i < 2; i++) {
+            assert.equal(json[i].recipe_id, 44);
+        }
+        assert.notEqual(json[0].recipe_sheet_id, json[1].recipe_sheet_id);
+    });
+
     it("Returns one recipe on /recipes?resultitemids=44 and exclude one that does not match", async () => {
         const exampleRecipe2 = Object.assign({}, exampleRecipe, {
             ingredients: [{
@@ -97,6 +134,22 @@ describe("api", () => {
         if (isRecipeItem(r)) {
             assert.equal(r.id, 44);
         }
+    });
+
+    it("Returns one recipe on /recipeunlocks?recipeids=44 and exclude one that does not match", async () => {
+        const exampleRecipeUnlock2 = Object.assign({}, exampleRecipeUnlock, {
+            recipe_id: 45,
+            recipe_sheet_id: 101,
+        });
+        const timestamp = new Date();
+        await db.setTimestamp(timestamp);
+        await db.saveRecipeUnlocks([exampleRecipeUnlock, exampleRecipeUnlock2], timestamp);
+        const response = await fetch(getURL("/api/recipeunlocks?recipeids=44"));
+        assert.equal(response.status, 200);
+        const json: IRecipeUnlock[] = await response.json();
+        assert.equal(json.length, 1);
+        assert.equal(json[0].recipe_id, 44);
+        assert.equal(json[0].recipe_sheet_id, 100);
     });
 
     it("Returns two recipes on /recipes?resultitemids=44,45 and exclude one that does not match", async () => {
@@ -137,8 +190,39 @@ describe("api", () => {
         }
     });
 
+    it("Returns two recipes on /recipeunlocks?recipeids=44,45 and exclude one that does not match", async () => {
+        const exampleRecipeUnlock2 = Object.assign({}, exampleRecipeUnlock, {
+            recipe_id: 45,
+            recipe_sheet_id: 101,
+        });
+        const exampleRecipeUnlock3 = Object.assign({}, exampleRecipeUnlock, {
+            recipe_id: 46,
+            recipe_sheet_id: 102,
+        });
+        const timestamp = new Date();
+        await db.setTimestamp(timestamp);
+        await db.saveRecipeUnlocks([exampleRecipeUnlock, exampleRecipeUnlock2, exampleRecipeUnlock3], timestamp);
+        const response = await fetch(getURL("/api/recipeunlocks?recipeids=44,45"));
+        assert.equal(response.status, 200);
+        const json: IRecipeUnlock[] = await response.json();
+        assert.equal(json.length, 2);
+        assert.deepEqual(
+            new Set(json.map((el) => el.recipe_id)),
+            new Set([44, 45]));
+        assert.deepEqual(
+            new Set(json.map((el) => el.recipe_sheet_id)),
+            new Set([100, 101]));
+    });
+
     it("Rejects malformed /recipes?resultitemids=idlist", async () => {
         const response = await fetch(getURL("/api/recipes?resultitemids=aaa"));
+        assert.equal(response.status, 400);
+        const json = await response.json();
+        assert.equal(json.shortcode, "wrong-resultitemids");
+    });
+
+    it("Rejects malformed /recipeunlocks?recipeids=idlist", async () => {
+        const response = await fetch(getURL("/api/recipeunlocks?recipeids=aaa"));
         assert.equal(response.status, 400);
         const json = await response.json();
         assert.equal(json.shortcode, "wrong-resultitemids");
@@ -161,4 +245,11 @@ const exampleRecipe: IRecipe = {
     subtype: null,
     timestamp: null,
     type: "Vendor" as RecipeType,
+};
+
+const exampleRecipeUnlock: IRecipeUnlock = {
+    _id: null,
+    recipe_id: 44,
+    recipe_sheet_id: 100,
+    timestamp: null,
 };

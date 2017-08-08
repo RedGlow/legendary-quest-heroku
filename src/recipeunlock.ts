@@ -5,6 +5,9 @@ export interface IRecipeUnlock {
     timestamp: Date;
 }
 
+export const getRecipeUnlockId = (ru: IRecipeUnlock) =>
+    ru.recipe_id.toString() + "=" + ru.recipe_sheet_id.toString();
+
 export function setRecipeUnlockId(recipeUnlock: IRecipeUnlock) {
     recipeUnlock._id = recipeUnlock.recipe_id.toString();
 }

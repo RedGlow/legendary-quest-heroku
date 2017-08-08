@@ -25,13 +25,12 @@ export const getRecipeBlocksObservable = () =>
     ;
 
 const produceRecipeUnlockBlocksObservable =
-    <T>(getter: () => Rx.Observable<T[]>, transformer: ((myRecipe: T) => IRecipeUnlock)) =>
-        getter().map((x) => x.map(transformer))
-    ;
+    <T>(getter: () => Rx.Observable<T[]>, transformer: ((myRecipe: T) => IRecipeUnlock)) => {
+        return getter().map((x) => x.map(transformer));
+    };
 
 export const getRecipeUnlockBlocksObservable = () =>
-    produceRecipeUnlockBlocksObservable(getAPIRecipeUnlocks, transformAPIRecipeUnlock)
-    ;
+    produceRecipeUnlockBlocksObservable(getAPIRecipeUnlocks, transformAPIRecipeUnlock);
 
 export const updateRecipes = async (
     recipeBlocks: Rx.Observable<IRecipe[]>,

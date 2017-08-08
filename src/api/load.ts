@@ -1,9 +1,11 @@
 import * as restify from "restify";
-import * as recipes from "./recipes";
+import { loadRoot as loadRecipesRoot } from "./recipes";
+import { loadRoot as loadRecipeUnlocksRoot } from "./recipeunlocks";
 
 const load = (server: restify.Server) => {
     server.use(restify.plugins.queryParser());
-    recipes.loadRoot(server);
+    loadRecipesRoot(server);
+    loadRecipeUnlocksRoot(server);
 };
 
 export default load;

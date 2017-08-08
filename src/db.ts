@@ -1,6 +1,6 @@
 import { Db, MongoClient } from "mongodb";
 import { getRecipeId, IRecipe } from "./recipe";
-import { IRecipeUnlock } from "./recipeunlock";
+import { getRecipeUnlockId, IRecipeUnlock } from "./recipeunlock";
 
 interface ITimestamp {
     timestamp: Date;
@@ -43,7 +43,7 @@ const upsert = async (recipes: IRecipe[]) =>
 
 const upsertUnlocks = async (recipeUnlocks: IRecipeUnlock[]) => {
     const inputData = recipeUnlocks
-        .map((recipeUnlock) => ({ ...recipeUnlock, _id: recipeUnlock.recipe_id.toString() }))
+        .map((recipeUnlock) => ({ ...recipeUnlock, _id: getRecipeUnlockId(recipeUnlock) }))
         .map((recipeUnlock) => ({
             updateOne: {
                 filter: { _id: recipeUnlock._id },
