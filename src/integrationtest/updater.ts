@@ -30,7 +30,7 @@ describe("updater", () => {
             throw new Error("This error should appear in console but not cause a test failure.");
         };
         const transformer = (n: number) => n;
-        const result = await produceObservable(getter, transformer)
+        const result = await produceObservable(getter, transformer, () => undefined)
             .toArray()
             .toPromise();
         assert.deepEqual(result, [[]]);
@@ -40,14 +40,14 @@ describe("updater", () => {
         const getter: () => Rx.Observable<number[]> = () =>
             Rx.Observable.throw(new Error("This error should appear in console but not cause a test failure."));
         const transformer = (n: number) => n;
-        const result = await produceObservable(getter, transformer)
+        const result = await produceObservable(getter, transformer, () => undefined)
             .toArray()
             .toPromise();
         assert.deepEqual(result, [[]]);
     });
 
     it("can merge together recipes from multiple sources", async () => {
-        const recipes = await getRecipeBlocksObservable()
+        const recipes = await getRecipeBlocksObservable(() => undefined)
             .mergeMap((arr) => Rx.Observable.from(arr))
             .toArray()
             .toPromise();
@@ -69,6 +69,7 @@ describe("updater", () => {
         await setTimestamp(timestamp);
         await updateRecipes(Rx.Observable.from([[{
             _id: null,
+            base_id: null,
             ingredients: [{
                 amount: 4,
                 id: 33,

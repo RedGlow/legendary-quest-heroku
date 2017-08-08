@@ -8,6 +8,7 @@ describe("remoteparsers/gw2shinies", () => {
         assert.deepEqual(result, [
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { id: 21156, amount: 2 },
                     { id: 19700, amount: 5 },
@@ -26,6 +27,7 @@ describe("remoteparsers/gw2shinies", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { id: 23098, amount: 1 },
                     { id: 23097, amount: 1 },
@@ -44,6 +46,7 @@ describe("remoteparsers/gw2shinies", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { id: 24276, amount: 250 },
                     { id: 24277, amount: 1 },
@@ -62,6 +65,7 @@ describe("remoteparsers/gw2shinies", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { id: 19976, amount: 100 },
                     { id: 12976, amount: 250 },
@@ -80,6 +84,7 @@ describe("remoteparsers/gw2shinies", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { id: 19976, amount: 17 },
                     { id: 12196, amount: 1 },

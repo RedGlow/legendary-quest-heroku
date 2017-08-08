@@ -1,19 +1,31 @@
+import * as _ from "lodash";
 import * as Rx from "rxjs/Rx";
+import { cleanRecipes, cleanRecipeUnlocks, close, saveRecipes, saveRecipeUnlocks, setTimestamp } from "../db";
 import { IRecipe } from "../recipe";
 import { IRecipeUnlock } from "../recipeunlock";
 import { transformRecipeUnlock as transformAPIRecipeUnlock } from "../remoteparsers/apiunlocks";
-import { transformRecipe as transformGW2Efficiency } from "../remoteparsers/gw2efficiency";
-import { transformRecipe as transformGW2Profits } from "../remoteparsers/gw2profits";
-import { transformRecipe as transformGW2Shinies } from "../remoteparsers/gw2shinies";
+import {
+    sourceName as GW2EfficiencySourceName,
+    transformRecipe as transformGW2Efficiency,
+} from "../remoteparsers/gw2efficiency";
+import {
+    sourceName as GW2ProfitsSourceName,
+    transformRecipe as transformGW2Profits,
+} from "../remoteparsers/gw2profits";
+import {
+    sourceName as GW2ShiniesSourceName,
+    transformRecipe as transformGW2Shinies,
+} from "../remoteparsers/gw2shinies";
 import { getRecipes as getAPIRecipeUnlocks } from "../remoteservices/apiunlocks";
 import { getRecipes as getGW2EfficiencyRecipes } from "../remoteservices/gw2efficiency";
 import { getRecipes as getGW2ProfitsRecipes } from "../remoteservices/gw2profits";
 import { getRecipes as getGW2ShiniesRecipes } from "../remoteservices/gw2shinies";
 
-import { cleanRecipes, cleanRecipeUnlocks, close, saveRecipes, saveRecipeUnlocks, setTimestamp } from "../db";
-
 export const produceObservable =
-    <T, U>(getter: () => Rx.Observable<T[]>, transformer: ((myRecipe: T) => U)) => {
+    <T, U>(
+        getter: () => Rx.Observable<T[]>,
+        transformer: ((myRecipe: T) => U),
+        errorCallback: (name: string) => void) => {
         const recoverer = (e: Error) => {
             /* tslint:disable:no-console */
             // we log the errors and proceed returning nothing.
@@ -30,15 +42,23 @@ export const produceObservable =
         }
     };
 
-export const getRecipeBlocksObservable = () =>
+export const getRecipeBlocksObservable = (errorCallback: (name: string) => void) =>
     Rx.Observable.merge(
-        produceObservable(getGW2EfficiencyRecipes, transformGW2Efficiency),
-        produceObservable(getGW2ProfitsRecipes, transformGW2Profits),
-        produceObservable(getGW2ShiniesRecipes, transformGW2Shinies))
-    ;
+        produceObservable(
+            getGW2EfficiencyRecipes,
+            transformGW2Efficiency,
+            _.partial(errorCallback, GW2EfficiencySourceName)),
+        produceObservable(
+            getGW2ProfitsRecipes,
+            transformGW2Profits,
+            _.partial(errorCallback, GW2ProfitsSourceName)),
+        produceObservable(
+            getGW2ShiniesRecipes,
+            transformGW2Shinies,
+            _.partial(errorCallback, GW2ShiniesSourceName)));
 
 export const getRecipeUnlockBlocksObservable = () =>
-    produceObservable(getAPIRecipeUnlocks, transformAPIRecipeUnlock);
+    produceObservable(getAPIRecipeUnlocks, transformAPIRecipeUnlock, () => undefined);
 
 export const updateRecipes = async (
     recipeBlocks: Rx.Observable<IRecipe[]>,
@@ -73,7 +93,8 @@ export async function doAll() {
         const timestamp = new Date();
         /* tslint:disable:no-console */
         console.log("Starting the recipe feeder.");
-        const observable = getRecipeBlocksObservable();
+        const errorred: string[] = [];
+        const observable = getRecipeBlocksObservable(errorred.push.bind(errorred));
         console.log("Feeding it to the updater.");
         await updateRecipes(observable, timestamp);
         console.log("Starting the recipe unlock feeder.");
@@ -83,7 +104,10 @@ export async function doAll() {
         console.log("Setting timestamp");
         await setTimestamp(timestamp);
         console.log("Cleaning old data.");
-        await cleanRecipes(timestamp);
+        await Promise.all(
+            [GW2EfficiencySourceName, GW2ProfitsSourceName, GW2ShiniesSourceName]
+                .filter((name) => !_.includes(errorred, name))
+                .map((name) => cleanRecipes(name, timestamp)));
         await cleanRecipeUnlocks(timestamp);
         console.log("Closing the connection.");
         await close();

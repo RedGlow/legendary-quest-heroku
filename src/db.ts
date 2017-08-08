@@ -29,17 +29,21 @@ const getTimestampCollection = async () => (await connect()).collection("Timesta
 const upsert = async (recipes: IRecipe[]) =>
     await (await getRecipesCollection()).bulkWrite(
         recipes
-            .map((recipe) => ({
-                ...recipe,
-                _id: getRecipeId(recipe) + "-" + recipe.timestamp.getTime().toString(),
-            }))
-            .map((recipe) => ({
-                updateOne: {
-                    filter: { _id: recipe._id },
-                    update: recipe,
-                    upsert: true,
-                },
-            })),
+            .map((recipe) => {
+                const recipeId = getRecipeId(recipe);
+                const extendedRecipe = {
+                    ...recipe,
+                    _id: recipeId + "-" + recipe.timestamp.getTime().toString(),
+                    base_id: recipeId,
+                };
+                return {
+                    updateOne: {
+                        filter: { _id: extendedRecipe._id },
+                        update: extendedRecipe,
+                        upsert: true,
+                    },
+                };
+            }),
         {
             ordered: false,
         });
@@ -134,6 +138,10 @@ export const setTimestamp = async (timestamp: Date) => {
     });
 };
 
+interface IWrappedRecipe {
+    element: IRecipe[];
+}
+
 export const getRecipesForItems = async (...ids: number[]): Promise<IRecipe[]> => {
     if (ids.length === 0) {
         return [];
@@ -144,10 +152,20 @@ export const getRecipesForItems = async (...ids: number[]): Promise<IRecipe[]> =
         "results.id": id,
         "timestamp": timestamp,
     }));
-    const recipes = await (await getRecipesCollection())
+    /*const recipes = await (await getRecipesCollection())
         .find({ $or: orCondition })
-        .toArray();
-    return recipes;
+        .toArray();*/
+    /* during updates, we could have more than one item with the same timestamp: here we filter them,
+    taking only the last one */
+    const recipesFromMongodb = (await (await getRecipesCollection())
+        .aggregate([
+            { $match: { $or: orCondition } },
+            { $sort: { timestamp: -1 } },
+            { $group: { _id: "$base_id", element: { $push: "$$ROOT" } } },
+            { $project: { _id: 0, element: { $slice: ["$element", 0, 1] } } },
+        ])
+        .toArray());
+    return recipesFromMongodb.map((el: IWrappedRecipe) => el.element[0]);
 };
 
 export const getRecipeUnlocksForIds = async (...ids: number[]): Promise<IRecipeUnlock[]> => {
@@ -162,10 +180,11 @@ export const getRecipeUnlocksForIds = async (...ids: number[]): Promise<IRecipeU
     return unlocks as IRecipeUnlock[];
 };
 
-export const cleanRecipes = async (timestamp: Date): Promise<void> => {
+export const cleanRecipes = async (source: string, timestamp: Date): Promise<void> => {
     const db = await connect();
     const recipesCollection = await getRecipesCollection();
     await recipesCollection.deleteMany({
+        source,
         timestamp: {
             $lt: timestamp,
         },

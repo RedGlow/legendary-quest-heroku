@@ -1,8 +1,10 @@
 export type RecipeType = "MysticForge" | "Salvage" | "Vendor" | "Charge" | "DoubleClick" | "Achievement";
 
 export interface IRecipe {
-    // id of the recipe document - see getRecipeId
+    // id of the recipe document with timestamp added - see getRecipeId
     _id: string;
+    // id of the recipe document - see getRecipeId
+    base_id: string;
     // The type of this recipe, identifying the way it is executed
     // MysticForge: a recipe produced at the mystic forge
     // Salvage: a recipe produced salvaging the item (only one ingredient allowed)

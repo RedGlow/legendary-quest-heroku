@@ -231,6 +231,7 @@ describe("api", () => {
 
 const exampleRecipe: IRecipe = {
     _id: null,
+    base_id: null,
     ingredients: [{
         amount: 4,
         id: 33,

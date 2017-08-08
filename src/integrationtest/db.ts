@@ -60,7 +60,7 @@ describe("db", () => {
             .count({ "results.id": 44 });
         assert.equal(num, 2);
 
-        await db.cleanRecipes(timestamp2);
+        await db.cleanRecipes("MySource", timestamp2);
         recipes = await db.getRecipesForItems(44);
         assert.equal(recipes.length, 1);
         assert.equal((recipes[0].ingredients[0] as IRecipeItem).amount, 5);
@@ -137,6 +137,7 @@ describe("db", () => {
 
 const exampleRecipe: IRecipe = {
     _id: null,
+    base_id: null,
     ingredients: [{
         amount: 4,
         id: 33,

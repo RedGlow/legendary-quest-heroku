@@ -3,6 +3,8 @@ import { getJSON } from "../http";
 import { IRecipe, IRecipeCurrency, IRecipeItem, RecipeType } from "../recipe";
 import { IMyIngredient, IMyRecipe } from "../remoteservices/gw2profits";
 
+export const sourceName = "GW2Profits";
+
 const recipeDisciplinesToRecipeTypeSwitchCase = switchcase<RecipeType>({
     "Charge": "Charge",
     "Double Click": "DoubleClick",
@@ -61,6 +63,7 @@ const getIngredient = (inputIngredient: IMyIngredient): IRecipeItem | IRecipeCur
 
 export const transformRecipe = (recipe: IMyRecipe): IRecipe => ({
     _id: null,
+    base_id: null,
     ingredients: recipe.ingredients.map(getIngredient),
     location: null,
     prerequisites: [],
@@ -68,7 +71,7 @@ export const transformRecipe = (recipe: IMyRecipe): IRecipe => ({
         amount: recipe.output_item_count,
         id: recipe.output_item_id,
     }],
-    source: "GW2Profits",
+    source: sourceName,
     subtype: recipe.type,
     timestamp: null,
     type: recipeDisciplinesToRecipeType(recipe),

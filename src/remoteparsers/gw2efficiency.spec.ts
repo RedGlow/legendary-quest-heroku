@@ -9,6 +9,7 @@ describe("remoteparsers/gw2efficiency", () => {
         assert.deepEqual(result, [
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Coin", amount: 80 },
                 ],
@@ -24,6 +25,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Karma", amount: 35 },
                 ],
@@ -39,6 +41,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Ascalonian Tear", amount: 500 },
                 ],
@@ -54,6 +57,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Seal of Beetletun", amount: 500 },
                 ],
@@ -69,6 +73,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Manifesto of the Moletariate", amount: 500 },
                 ],
@@ -84,6 +89,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Deadly Bloom", amount: 500 },
                 ],
@@ -99,6 +105,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Flame Legion Charr Carving", amount: 500 },
                 ],
@@ -114,6 +121,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Shard of Zhaitan", amount: 500 },
                 ],
@@ -129,6 +137,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Symbol of Koda", amount: 500 },
                 ],
@@ -144,6 +153,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Knowledge Crystal", amount: 500 },
                 ],
@@ -159,6 +169,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Spirit Shard", amount: 1 },
                 ],
@@ -174,6 +185,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Fractal Relic", amount: 1350 },
                 ],
@@ -189,6 +201,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "WvW Tournament Claim Ticket", amount: 200 },
                 ],
@@ -204,6 +217,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Geode", amount: 9 },
                 ],
@@ -219,6 +233,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Pristine Fractal Relic", amount: 5 },
                 ],
@@ -234,6 +249,7 @@ describe("remoteparsers/gw2efficiency", () => {
             },
             {
                 _id: null,
+                base_id: null,
                 ingredients: [
                     { name: "Guild Commendation", amount: 1 },
                 ],

@@ -2,6 +2,8 @@ import { switchcase } from "../func";
 import { IRecipe, IRecipeItem, RecipeType } from "../recipe";
 import { IMyRecipe } from "../remoteservices/gw2efficiency";
 
+export const sourceName = "GW2Efficiency";
+
 const getCurrencyName = switchcase({
     /* tslint:disable:object-literal-sort-keys */
     "karma": "Karma",
@@ -27,6 +29,7 @@ const getCurrencyName = switchcase({
 export const transformRecipe = (recipe: IMyRecipe): IRecipe =>
     ({
         _id: null,
+        base_id: null,
         ingredients: [{
             amount: recipe.cost,
             name: getCurrencyName(recipe.type),
@@ -37,7 +40,7 @@ export const transformRecipe = (recipe: IMyRecipe): IRecipe =>
             amount: recipe.quantity,
             id: recipe.id,
         }],
-        source: "GW2Efficiency",
+        source: sourceName,
         subtype: null,
         timestamp: null,
         type: "Vendor" as RecipeType,
