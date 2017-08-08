@@ -6,6 +6,12 @@ import { get } from "../http";
 import { feedObservable } from "./base";
 import getLinkedUrlObservables, { FetchFunction } from "./linkedurlobservable";
 
+let startingPage: number = 0;
+
+export function setStartingPage(newStartingPage: number) {
+    startingPage = newStartingPage;
+}
+
 export interface IMyRecipeUnlock {
     id: number;
     details?: IItemDetails;
@@ -21,7 +27,7 @@ export const getRecipes = (
     fetchFunction: FetchFunction<IMyRecipeUnlock[]> = void 0):
     Rx.Observable<IMyRecipeUnlock[]> =>
     getLinkedUrlObservables<IMyRecipeUnlock[]>(
-        "https://api.guildwars2.com/v2/items?page_size=200&page=0",
+        `https://api.guildwars2.com/v2/items?page_size=200&page=${startingPage}`,
         fetchFunction)
         .map((data: IMyRecipeUnlock[]) => _.filter(data, (item) =>
             !!item.details &&

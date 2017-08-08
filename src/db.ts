@@ -1,5 +1,6 @@
 import { Db, MongoClient } from "mongodb";
 import { getRecipeId, IRecipe } from "./recipe";
+import { IRecipeUnlock } from "./recipeunlock";
 
 interface ITimestamp {
     timestamp: Date;
@@ -22,6 +23,7 @@ export const close = async (forceClose: boolean = false) => {
 };
 
 const getRecipesCollection = async () => (await connect()).collection("Recipes");
+const getRecipeUnlocksCollection = async () => (await connect()).collection("RecipeUnlocks");
 const getTimestampCollection = async () => (await connect()).collection("Timestamp");
 
 const upsert = async (recipes: IRecipe[]) =>
@@ -38,6 +40,23 @@ const upsert = async (recipes: IRecipe[]) =>
         {
             ordered: false,
         });
+
+const upsertUnlocks = async (recipeUnlocks: IRecipeUnlock[]) => {
+    const inputData = recipeUnlocks
+        .map((recipeUnlock) => ({ ...recipeUnlock, _id: recipeUnlock.recipe_id.toString() }))
+        .map((recipeUnlock) => ({
+            updateOne: {
+                filter: { _id: recipeUnlock._id },
+                update: recipeUnlock,
+                upsert: true,
+            },
+        }));
+    await (await getRecipeUnlocksCollection()).bulkWrite(
+        inputData,
+        {
+            ordered: false,
+        });
+};
 
 async function retry<T>(numRetry: number, func: () => Promise<T>) {
     // the whole retry cycle is due to: https://jira.mongodb.org/browse/SERVER-14322
@@ -63,6 +82,13 @@ export const saveRecipes = async (recipes: IRecipe[], timestamp: Date) => {
     await retry(
         10,
         () => upsert(timestampedRecipes));
+};
+
+export const saveRecipeUnlocks = async (recipeUnlocks: IRecipeUnlock[], timestamp: Date) => {
+    const timestampedRecipeUnlocks = recipeUnlocks.map((recipeUnlock) => ({ ...recipeUnlock, timestamp }));
+    await retry(
+        10,
+        () => upsertUnlocks(timestampedRecipeUnlocks));
 };
 
 export class NoTimestampError extends Error {
@@ -116,4 +142,16 @@ export const getRecipesForItems = async (...ids: number[]): Promise<IRecipe[]> =
         .find({ $or: orCondition })
         .toArray();
     return recipes;
+};
+
+export const getRecipeUnlocksForIds = async (...ids: number[]): Promise<IRecipeUnlock[]> => {
+    if (ids.length === 0) {
+        return [];
+    }
+    const db = await connect();
+    const timestamp = await getTimestamp();
+    const unlocks = await (await getRecipeUnlocksCollection())
+        .find({ recipe_id: { $in: ids }, timestamp })
+        .toArray();
+    return unlocks as IRecipeUnlock[];
 };

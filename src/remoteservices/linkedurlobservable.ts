@@ -5,7 +5,17 @@ import * as urlmodule from "url";
 
 export type FetchFunction<T> = (url: string) => Promise<{ content: T, linkHeader: string }>;
 
-async function fetcher<T>(url: string, obs: Rx.Observer<T>, fetchFunction: FetchFunction<T>) {
+let maxPages: number = -1;
+
+export function setMaxPages(newMaxPages: number) {
+    maxPages = newMaxPages;
+}
+
+async function fetcher<T>(
+    url: string,
+    obs: Rx.Observer<T>,
+    fetchFunction: FetchFunction<T>,
+    currPage: number) {
     const result = await fetchFunction(url);
     const links = parselinkheader(result.linkHeader);
     const nextUrl = (links.next ? links.next.url : null);
@@ -17,7 +27,12 @@ async function fetcher<T>(url: string, obs: Rx.Observer<T>, fetchFunction: Fetch
             const u = urlmodule.parse(url);
             absoluteNextUrl = u.protocol + "//" + (u.auth ? u.auth + "@" : "") + u.host + absoluteNextUrl;
         }
-        await fetcher(absoluteNextUrl, obs, fetchFunction);
+        if (maxPages < 0 || currPage < maxPages - 1) {
+            /* tslint:disable */
+            console.log(`Current page: ${currPage}`);
+            /* tslint:enable */
+            await fetcher(absoluteNextUrl, obs, fetchFunction, currPage + 1);
+        }
     }
 }
 
@@ -37,7 +52,7 @@ const getLinkedUrlObservables = <T>(
     fetchFunction = wrap<T>(fetch)):
     Rx.Observable<T> =>
     Rx.Observable.create((obs: Rx.Observer<T>) =>
-        fetcher(url, obs, fetchFunction).then(
+        fetcher(url, obs, fetchFunction, 0).then(
             () => obs.complete(),
             (err) => obs.error(err)));
 
