@@ -12,3 +12,9 @@ export const fetchwrap = <T>(f: (url: string | Request, init?: RequestInit) => P
         response.status >= 200 && response.status < 300 ?
             response.json() as Promise<T> :
             response.text().then((t) => Promise.reject(t)));
+
+export const fetchwraptext = (f: (url: string | Request, init?: RequestInit) => Promise<Response>) =>
+    (url: string) => f(url).then((response) =>
+        response.status >= 200 && response.status < 300 ?
+            response.text() :
+            response.text().then((t) => Promise.reject(t)));

@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "details": {
+            "type": "Unlock",
+            "unlock_type": "CraftingRecipe",
+            "recipe_id": 100
+        }
+    },
+    {
+        "id": 2,
+        "details": {
+            "type": "Unlock",
+            "unlock_type": "CraftingRecipe",
+            "recipe_id": 200
+        }
+    }
+]

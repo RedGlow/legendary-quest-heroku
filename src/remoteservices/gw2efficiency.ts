@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import fetch, { Request, Response } from "node-fetch";
 import * as Rx from "rxjs/Rx";
-import { feedObservable, fetchwrap } from "./base";
+import { feedObservable, fetchwraptext } from "./base";
 
 interface IModuleClass {
     exports: { [idx: number]: IMyRecipe };
@@ -46,5 +46,5 @@ async function getRecipesPromise(
     observer.next(recipes);
 }
 
-export const getRecipes = (fetchFunction: FetchFunction = fetchwrap<string>(fetch)) =>
+export const getRecipes = (fetchFunction: FetchFunction = fetchwraptext(fetch)) =>
     feedObservable(_.partialRight(getRecipesPromise, fetchFunction));
