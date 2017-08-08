@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "unittest": "mocha dist/**/*.spec.js",
-    "integrationtest": "mocha dist/integrationtest --timeout 10000",
+    "integrationtest": "mocha dist/integrationtest --timeout 20000",
     "browsertest": "mocha dist/static/client/testscripts.js",
-    "alltests": "mocha dist/**/*.spec.js dist/integrationtest dist/static/client/testscripts.js --timeout 10000",
+    "alltests": "mocha dist/**/*.spec.js dist/integrationtest dist/static/client/testscripts.js --timeout 20000",
     "start": "node dist/index.js",
     "updatedb": "node dist/updater/runupdater.js"
   },
