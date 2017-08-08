@@ -4,7 +4,13 @@ import { getRecipesForItems, getRecipeUnlocksForIds, setTimestamp } from "../db"
 import { RecipeType } from "../recipe";
 import { setStartingPage } from "../remoteservices/apiunlocks";
 import { setMaxPages } from "../remoteservices/linkedurlobservable";
-import { doAll, getRecipeBlocksObservable, getRecipeUnlockBlocksObservable, updateRecipes } from "../updater/updater";
+import {
+    doAll,
+    getRecipeBlocksObservable,
+    getRecipeUnlockBlocksObservable,
+    produceObservable,
+    updateRecipes,
+} from "../updater/updater";
 import { dropDb } from "./helpers";
 
 describe("updater", () => {
@@ -17,6 +23,17 @@ describe("updater", () => {
     afterEach(() => {
         setStartingPage(0);
         setMaxPages(-1);
+    });
+
+    it("can recover from partial errors", async () => {
+        const getter: () => Rx.Observable<number[]> = () => {
+            throw new Error("This error should appear in console but not cause a test failure.");
+        };
+        const transformer = (n: number) => n;
+        const result = await produceObservable(getter, transformer)
+            .toArray()
+            .toPromise();
+        assert.deepEqual(result, [[]]);
     });
 
     it("can merge together recipes from multiple sources", async () => {

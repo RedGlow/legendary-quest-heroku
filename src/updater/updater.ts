@@ -12,25 +12,28 @@ import { getRecipes as getGW2ShiniesRecipes } from "../remoteservices/gw2shinies
 
 import { close, saveRecipes, saveRecipeUnlocks, setTimestamp } from "../db";
 
-const produceRecipeBlocksObservable =
-    <T>(getter: () => Rx.Observable<T[]>, transformer: ((myRecipe: T) => IRecipe)) =>
-        getter().map((x) => x.map(transformer))
-    ;
+export const produceObservable =
+    <T, U>(getter: () => Rx.Observable<T[]>, transformer: ((myRecipe: T) => U)) => {
+        try {
+            return getter().map((x) => x.map(transformer));
+        } catch (e) {
+            /* tslint:disable:no-console */
+            // we log the errors and proceed returning nothing.
+            console.error(e);
+            return Rx.Observable.from([[]] as U[][]);
+            /* tslint:enable:no-console */
+        }
+    };
 
 export const getRecipeBlocksObservable = () =>
     Rx.Observable.merge(
-        produceRecipeBlocksObservable(getGW2EfficiencyRecipes, transformGW2Efficiency),
-        produceRecipeBlocksObservable(getGW2ProfitsRecipes, transformGW2Profits),
-        produceRecipeBlocksObservable(getGW2ShiniesRecipes, transformGW2Shinies))
+        produceObservable(getGW2EfficiencyRecipes, transformGW2Efficiency),
+        produceObservable(getGW2ProfitsRecipes, transformGW2Profits),
+        produceObservable(getGW2ShiniesRecipes, transformGW2Shinies))
     ;
 
-const produceRecipeUnlockBlocksObservable =
-    <T>(getter: () => Rx.Observable<T[]>, transformer: ((myRecipe: T) => IRecipeUnlock)) => {
-        return getter().map((x) => x.map(transformer));
-    };
-
 export const getRecipeUnlockBlocksObservable = () =>
-    produceRecipeUnlockBlocksObservable(getAPIRecipeUnlocks, transformAPIRecipeUnlock);
+    produceObservable(getAPIRecipeUnlocks, transformAPIRecipeUnlock);
 
 export const updateRecipes = async (
     recipeBlocks: Rx.Observable<IRecipe[]>,
