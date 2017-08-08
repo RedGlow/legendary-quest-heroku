@@ -44,7 +44,11 @@ export const updateRecipes = async (
     recipeBlocks: Rx.Observable<IRecipe[]>,
     timestamp: Date) => {
     await recipeBlocks
-        .map((recipeBlock) => saveRecipes(recipeBlock, timestamp))
+        .map(async (recipeBlock) => {
+            if (recipeBlock.length > 0) {
+                await saveRecipes(recipeBlock, timestamp);
+            }
+        })
         .toArray()
         .toPromise()
         .then((promises) => Promise.all(promises));
@@ -54,7 +58,11 @@ export const updateRecipeUnlocks = async (
     recipeUnlockBlocks: Rx.Observable<IRecipeUnlock[]>,
     timestamp: Date) => {
     await recipeUnlockBlocks
-        .map((recipeUnlockBlock) => saveRecipeUnlocks(recipeUnlockBlock, timestamp))
+        .map(async (recipeUnlockBlock) => {
+            if (recipeUnlockBlock.length > 0) {
+                await saveRecipeUnlocks(recipeUnlockBlock, timestamp);
+            }
+        })
         .toArray()
         .toPromise()
         .then((promises) => Promise.all(promises));
