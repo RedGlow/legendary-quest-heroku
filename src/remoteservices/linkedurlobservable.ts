@@ -28,9 +28,6 @@ async function fetcher<T>(
             absoluteNextUrl = u.protocol + "//" + (u.auth ? u.auth + "@" : "") + u.host + absoluteNextUrl;
         }
         if (maxPages < 0 || currPage < maxPages - 1) {
-            /* tslint:disable */
-            console.log(`Current page: ${currPage}`);
-            /* tslint:enable */
             await fetcher(absoluteNextUrl, obs, fetchFunction, currPage + 1);
         }
     }
