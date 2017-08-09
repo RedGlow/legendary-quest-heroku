@@ -45,7 +45,6 @@ describe("api", () => {
 
     it("Returns a single recipe on /recipes?resultitemids=44", async () => {
         const timestamp = new Date();
-        await db.setTimestamp(timestamp);
         await db.saveRecipes([exampleRecipe], timestamp);
         const response = await fetch(getURL("/api/recipes?resultitemids=44"));
         assert.equal(response.status, 200);
@@ -60,7 +59,6 @@ describe("api", () => {
 
     it("Returns a single recipe on /recipeunlocks?recipeids=44", async () => {
         const timestamp = new Date();
-        await db.setTimestamp(timestamp);
         await db.saveRecipeUnlocks([exampleRecipeUnlock], timestamp);
         const response = await fetch(getURL("/api/recipeunlocks?recipeids=44"));
         assert.equal(response.status, 200);
@@ -78,7 +76,6 @@ describe("api", () => {
             }],
         });
         const timestamp = new Date();
-        await db.setTimestamp(timestamp);
         await db.saveRecipes([exampleRecipe, exampleRecipe2], timestamp);
         const response = await fetch(getURL("/api/recipes?resultitemids=44"));
         assert.equal(response.status, 200);
@@ -99,7 +96,6 @@ describe("api", () => {
             recipe_sheet_id: 101,
         });
         const timestamp = new Date();
-        await db.setTimestamp(timestamp);
         await db.saveRecipeUnlocks([exampleRecipeUnlock, exampleRecipeUnlock2], timestamp);
         const response = await fetch(getURL("/api/recipeunlocks?recipeids=44"));
         assert.equal(response.status, 200);
@@ -123,7 +119,6 @@ describe("api", () => {
             }],
         });
         const timestamp = new Date();
-        await db.setTimestamp(timestamp);
         await db.saveRecipes([exampleRecipe, exampleRecipe2], timestamp);
         const response = await fetch(getURL("/api/recipes?resultitemids=44"));
         assert.equal(response.status, 200);
@@ -142,7 +137,6 @@ describe("api", () => {
             recipe_sheet_id: 101,
         });
         const timestamp = new Date();
-        await db.setTimestamp(timestamp);
         await db.saveRecipeUnlocks([exampleRecipeUnlock, exampleRecipeUnlock2], timestamp);
         const response = await fetch(getURL("/api/recipeunlocks?recipeids=44"));
         assert.equal(response.status, 200);
@@ -174,7 +168,6 @@ describe("api", () => {
             }],
         });
         const timestamp = new Date();
-        await db.setTimestamp(timestamp);
         await db.saveRecipes([exampleRecipe, exampleRecipe2, exampleRecipe3], timestamp);
         const response = await fetch(getURL("/api/recipes?resultitemids=44,45"));
         assert.equal(response.status, 200);
@@ -200,7 +193,6 @@ describe("api", () => {
             recipe_sheet_id: 102,
         });
         const timestamp = new Date();
-        await db.setTimestamp(timestamp);
         await db.saveRecipeUnlocks([exampleRecipeUnlock, exampleRecipeUnlock2, exampleRecipeUnlock3], timestamp);
         const response = await fetch(getURL("/api/recipeunlocks?recipeids=44,45"));
         assert.equal(response.status, 200);

@@ -17,7 +17,6 @@ describe("db", () => {
     });
     it("can save a recipe, retrieve it and close", async () => {
         const timestamp = new Date();
-        await db.setTimestamp(timestamp);
         await db.saveRecipes([exampleRecipe], timestamp);
         const recipes = await db.getRecipesForItems(44);
         assert.equal(recipes.length, 1);
@@ -32,7 +31,6 @@ describe("db", () => {
     });
     it("can save a recipe, update it, clean, and only have one recipe on the db", async () => {
         const timestamp = new Date();
-        await db.setTimestamp(timestamp);
         let recipes = await db.getRecipesForItems(44);
         assert.equal(recipes.length, 0);
 
@@ -49,7 +47,6 @@ describe("db", () => {
                 id: 33,
             }],
         };
-        await db.setTimestamp(timestamp2);
         await db.saveRecipes([exampleRecipe2], timestamp2);
         recipes = await db.getRecipesForItems(44);
         assert.equal(recipes.length, 1);
@@ -124,7 +121,6 @@ describe("db", () => {
     });
     it("can save a recipe unlock, update it, clean, and only have one recipe unlock on the db", async () => {
         const timestamp = new Date();
-        await db.setTimestamp(timestamp);
         let recipeUnlocks = await db.getRecipeUnlocksForIds(44);
         assert.equal(recipeUnlocks.length, 0);
 
@@ -135,7 +131,6 @@ describe("db", () => {
         const timestamp2 = new Date(timestamp.getTime() + 1000 * 60);
         assert.notDeepEqual(timestamp, timestamp2);
         assert(timestamp2 > timestamp);
-        await db.setTimestamp(timestamp2);
         await db.saveRecipeUnlocks([exampleRecipeUnlock], timestamp2);
         recipeUnlocks = await db.getRecipeUnlocksForIds(44);
         assert.equal(recipeUnlocks.length, 1);
@@ -154,34 +149,6 @@ describe("db", () => {
             .collection("RecipeUnlocks")
             .count({ recipe_id: 44 });
         assert.equal(num, 1);
-    });
-    it("fails to retrieve a non-existing timestamp", async () => {
-        try {
-            await db.getTimestamp();
-            assert.fail("db.getTimestamp() without a db.setTimestamp should fail.");
-        } catch (e) {
-            const error = e;
-            assert(error instanceof db.NoTimestampError);
-        }
-    });
-    it("correctly retrieves a timestamp", async () => {
-        const timestamp = new Date();
-        await db.setTimestamp(timestamp);
-        const returnedTimestamp = await db.getTimestamp();
-        assert.deepEqual(timestamp, returnedTimestamp);
-    });
-    it("correctly updates a timestamp", async () => {
-        const timestamp = new Date();
-        await db.setTimestamp(timestamp);
-        const timestamp2 = new Date();
-        timestamp2.setDate(timestamp2.getDate() + 1);
-        assert.notEqual(timestamp, timestamp2);
-        await db.setTimestamp(timestamp2);
-        const returnedTimestamp = await db.getTimestamp();
-        assert.deepEqual(timestamp2, returnedTimestamp);
-        // internal check: no old timestamp lying around
-        const timestamps = await (await getDb()).collection("Timestamp").find({}).toArray();
-        assert.equal(timestamps.length, 1);
     });
 });
 

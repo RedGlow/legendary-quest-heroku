@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import * as Rx from "rxjs/Rx";
-import { cleanRecipes, cleanRecipeUnlocks, close, saveRecipes, saveRecipeUnlocks, setTimestamp } from "../db";
+import { cleanRecipes, cleanRecipeUnlocks, close, saveRecipes, saveRecipeUnlocks } from "../db";
 import { IRecipe } from "../recipe";
 import { IRecipeUnlock } from "../recipeunlock";
 import { transformRecipeUnlock as transformAPIRecipeUnlock } from "../remoteparsers/apiunlocks";
@@ -103,10 +103,7 @@ export async function doAll() {
         const observableUnlocks = getRecipeUnlockBlocksObservable(() => { recipeUnlocksErrorred = true; });
         console.log("Feeding it to the updater.");
         await updateRecipeUnlocks(observableUnlocks, timestamp);
-        console.log("Setting timestamp");
-        await setTimestamp(timestamp);
         console.log("Cleaning old data.");
-        console.log("Errored entries:" + errorred.join(", "));
         await Promise.all(
             [GW2EfficiencySourceName, GW2ProfitsSourceName, GW2ShiniesSourceName]
                 .filter((name) => !_.includes(errorred, name))

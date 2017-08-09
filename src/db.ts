@@ -113,33 +113,6 @@ export class NoTimestampError extends Error {
     }
 }
 
-export const getTimestamp = async () => {
-    // get the newest timestamp
-    const obj = await (await getTimestampCollection())
-        .find({})
-        .sort({ timestamp: -1 })
-        .limit(1)
-        .next();
-    if (obj === null) {
-        throw new NoTimestampError();
-    }
-    return (obj as ITimestamp).timestamp;
-};
-
-export const setTimestamp = async (timestamp: Date) => {
-    const db = connect();
-    // add new timestamp
-    await (await getTimestampCollection()).insertOne({
-        timestamp,
-    });
-    // delete older timestamps
-    await (await getTimestampCollection()).deleteMany({
-        timestamp: {
-            $lt: timestamp,
-        },
-    });
-};
-
 interface IWrappedRecipe {
     element: IRecipe[];
 }

@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import * as Rx from "rxjs/Rx";
 import get from "../configuration";
-import { getRecipesForItems, getRecipeUnlocksForIds, setTimestamp } from "../db";
+import { getRecipesForItems, getRecipeUnlocksForIds } from "../db";
 import { RecipeType } from "../recipe";
 import { setStartingPage } from "../remoteservices/apiunlocks";
 import { setMaxPages } from "../remoteservices/linkedurlobservable";
@@ -67,7 +67,6 @@ describe("updater", () => {
 
     it("can add a single block of recipes", async () => {
         const timestamp = new Date();
-        await setTimestamp(timestamp);
         await updateRecipes(Rx.Observable.from([[{
             _id: null,
             base_id: null,
@@ -95,7 +94,6 @@ describe("updater", () => {
     });
 
     it("can do all", async () => {
-        await setTimestamp(new Date());
         const recipes = await getRecipesForItems(
             12337, // gw2efficiency
             29675, // gw2profits
