@@ -1,0 +1,7 @@
+{
+    "remoteServices": {
+        "gw2ShiniesUrl": "https://www.gw2shinies.com/api/json/forge/",
+        "gw2ProfitsUrl": "http://gw2profits.com/json/v2/forge",
+        "gw2EfficiencyUrl": "https://raw.githubusercontent.com/gw2efficiency/recipe-calculation/master/src/static/vendorItems.js"
+    }
+}

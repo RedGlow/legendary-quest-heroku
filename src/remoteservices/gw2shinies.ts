@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import fetch, { Request, Response } from "node-fetch";
 import * as Rx from "rxjs/Rx";
+import get from "../configuration";
 import { feedObservable, fetchwrap } from "./base";
 
 export interface IMyRecipe {
@@ -22,7 +23,7 @@ export type FetchFunction = (url: string) => Promise<IMyRecipe[]>;
 async function getRecipesPromise(
     observer: Rx.Observer<IMyRecipe[]>,
     fetchFunction: FetchFunction): Promise<void> {
-    const rv = await fetchFunction("https://www.gw2shinies.com/api/json/forge/");
+    const rv = await fetchFunction(get().remoteServices.gw2ShiniesUrl);
     observer.next(rv);
 }
 

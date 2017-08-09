@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import fetch, { Request, Response } from "node-fetch";
 import * as Rx from "rxjs/Rx";
+import get from "../configuration";
 import { feedObservable, fetchwraptext } from "./base";
 
 interface IModuleClass {
@@ -28,8 +29,7 @@ export type FetchFunction = (url: string) => Promise<string>;
 async function getRecipesPromise(
     observer: Rx.Observer<IMyRecipe[]>,
     fetchFunction: FetchFunction): Promise<void> {
-    const moduleContent = await fetchFunction("https://raw.githubusercontent.com/gw2efficiency" +
-        "/recipe-calculation/master/src/static/vendorItems.js");
+    const moduleContent = await fetchFunction(get().remoteServices.gw2EfficiencyUrl);
     const myModule: IModuleClass = { exports: null };
     const exportsModule = "(function(module) {\n" +
         moduleContent.replace("export default ", "module.exports = ")
