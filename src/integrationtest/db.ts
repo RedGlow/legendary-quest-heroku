@@ -69,6 +69,59 @@ describe("db", () => {
             .count({ "results.id": 44 });
         assert.equal(num, 1);
     });
+    it("can handle the cleaning mechanism without losing recipes", async () => {
+        // initialize
+        const mongoDb = await db.connect();
+        const timestamp = new Date();
+        const timestamp2 = new Date(timestamp.getTime() + 1000 * 60);
+        const source1 = exampleRecipe.source;
+        const source2 = exampleRecipe.source + "2";
+        // add a new recipe and check the db api and raw database search agree on that
+        await db.saveRecipes([exampleRecipe], timestamp);
+        const recipes1 = await db.getRecipesForItems(44);
+        assert.equal(recipes1.length, 1);
+        const num1 = await mongoDb
+            .collection("Recipes")
+            .count({ "results.id": 44 });
+        assert.equal(num1, 1);
+        // add a recipe from another source for another item
+        const exampleRecipe2 = {
+            ...exampleRecipe,
+            results: [{ ...exampleRecipe.results[0], id: 45 }],
+            source: source2,
+        };
+        await db.saveRecipes([exampleRecipe2], timestamp);
+        const recipes2 = await db.getRecipesForItems(45);
+        assert.equal(recipes2.length, 1);
+        const num2 = await mongoDb
+            .collection("Recipes")
+            .count({ "results.id": 45 });
+        assert.equal(num2, 1);
+        // add a newer recipe to the first id
+        await db.saveRecipes([exampleRecipe], timestamp2);
+        const recipes3 = await db.getRecipesForItems(44);
+        assert.equal(recipes3.length, 1);
+        const num3 = await mongoDb
+            .collection("Recipes")
+            .count({ "results.id": 44 });
+        assert.equal(num3, 2);
+        // clean the old recipes only for one source
+        await db.cleanRecipes(source1, timestamp2);
+        // check that there are two recipes from two different sources and for two different items
+        const recipes4 = await db.getRecipesForItems(45);
+        assert.equal(recipes4.length, 1);
+        assert.equal(recipes4[0].source, source2);
+        const num4 = await mongoDb
+            .collection("Recipes")
+            .count({ "results.id": 45 });
+        assert.equal(num4, 1);
+        const recipes5 = await db.getRecipesForItems(44);
+        assert.equal(recipes5.length, 1);
+        const num5 = await mongoDb
+            .collection("Recipes")
+            .count({ "results.id": 44 });
+        assert.equal(num5, 1);
+    });
     it("can save a recipe unlock, update it, clean, and only have one recipe unlock on the db", async () => {
         const timestamp = new Date();
         await db.setTimestamp(timestamp);
