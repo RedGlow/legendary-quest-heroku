@@ -25,11 +25,12 @@ export const produceObservable =
     <T, U>(
         getter: () => Rx.Observable<T[]>,
         transformer: ((myRecipe: T) => U),
-        errorCallback: (name: string) => void) => {
+        errorCallback: () => void) => {
         const recoverer = (e: Error) => {
             /* tslint:disable:no-console */
             // we log the errors and proceed returning nothing.
             console.error(e);
+            errorCallback();
             return Rx.Observable.from([[]] as U[][]);
             /* tslint:enable:no-console */
         };
@@ -104,6 +105,7 @@ export async function doAll() {
         console.log("Setting timestamp");
         await setTimestamp(timestamp);
         console.log("Cleaning old data.");
+        console.log("Errored entries:" + errorred.join(", "));
         await Promise.all(
             [GW2EfficiencySourceName, GW2ProfitsSourceName, GW2ShiniesSourceName]
                 .filter((name) => !_.includes(errorred, name))

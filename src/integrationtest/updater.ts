@@ -1,5 +1,6 @@
 import * as assert from "assert";
 import * as Rx from "rxjs/Rx";
+import get from "../configuration";
 import { getRecipesForItems, getRecipeUnlocksForIds, setTimestamp } from "../db";
 import { RecipeType } from "../recipe";
 import { setStartingPage } from "../remoteservices/apiunlocks";
@@ -112,5 +113,33 @@ describe("updater", () => {
         const recipeUnlocks2 = await getRecipeUnlocksForIds(2841);
         assert(recipes2.length >= 3);
         assert(recipeUnlocks2.length >= 1);
+    });
+
+    it("can keep old data if a source has errors", async () => {
+        const itemId = 36068;
+        // first fill the DB
+        await doAll();
+        const recipes1 = await getRecipesForItems(itemId);
+        assert.equal(recipes1.length, 1);
+        // change gw2efficiency url
+        const conf = get();
+        const oldUrls = conf.remoteServices;
+        conf.remoteServices = {
+            gw2EfficiencyUrl: "http://www.example.org",
+            gw2ProfitsUrl: "http://www.example.org",
+            gw2ShiniesUrl: "http://www.example.org",
+        };
+        // redo update
+        await doAll();
+        // check the old elements haven't changed
+        const recipes2 = await getRecipesForItems(itemId);
+        assert.equal(recipes1[0].timestamp.getTime(), recipes2[0].timestamp.getTime());
+        // reset gw2efficiency url
+        conf.remoteServices = oldUrls;
+        // re-redo update
+        await doAll();
+        // now the timestamp has been updated
+        const recipes3 = await getRecipesForItems(itemId);
+        assert.notEqual(recipes2[0].timestamp.getTime(), recipes3[0].timestamp.getTime());
     });
 });
