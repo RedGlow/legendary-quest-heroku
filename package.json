@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "unittest": "mocha dist/**/*.spec.js",
-    "integrationtest": "mocha dist/integrationtest --timeout 20000",
+    "integrationtest": "mocha dist/integrationtest --timeout 30000",
     "browsertest": "mocha dist/static/client/testscripts.js",
     "alltests": "mocha dist/**/*.spec.js dist/integrationtest dist/static/client/testscripts.js --timeout 20000",
     "start": "node dist/index.js",
