@@ -58,7 +58,7 @@ describe("updater", () => {
     });
 
     it("can merge together recipe unlocks from multiple sources", async () => {
-        const recipeUnlocks = await getRecipeUnlockBlocksObservable()
+        const recipeUnlocks = await getRecipeUnlockBlocksObservable(() => undefined)
             .mergeMap((arr) => Rx.Observable.from(arr))
             .toArray()
             .toPromise();
@@ -117,14 +117,18 @@ describe("updater", () => {
 
     it("can keep old data if a source has errors", async () => {
         const itemId = 36068;
+        const recipeId = 1118;
         // first fill the DB
         await doAll();
         const recipes1 = await getRecipesForItems(itemId);
+        const recipeUnlocks1 = await getRecipeUnlocksForIds(recipeId);
         assert.equal(recipes1.length, 1);
+        assert.equal(recipeUnlocks1.length, 1);
         // change gw2efficiency url
         const conf = get();
         const oldUrls = conf.remoteServices;
         conf.remoteServices = {
+            apiUrl: "http://www.example.org",
             gw2EfficiencyUrl: "http://www.example.org",
             gw2ProfitsUrl: "http://www.example.org",
             gw2ShiniesUrl: "http://www.example.org",
@@ -133,13 +137,17 @@ describe("updater", () => {
         await doAll();
         // check the old elements haven't changed
         const recipes2 = await getRecipesForItems(itemId);
-        assert.equal(recipes1[0].timestamp.getTime(), recipes2[0].timestamp.getTime());
+        assert.deepEqual(recipes1[0].timestamp, recipes2[0].timestamp);
+        const recipeUnlocks2 = await getRecipeUnlocksForIds(recipeId);
+        assert.deepEqual(recipeUnlocks1[0].timestamp, recipeUnlocks2[0].timestamp);
         // reset gw2efficiency url
         conf.remoteServices = oldUrls;
         // re-redo update
         await doAll();
         // now the timestamp has been updated
         const recipes3 = await getRecipesForItems(itemId);
-        assert.notEqual(recipes2[0].timestamp.getTime(), recipes3[0].timestamp.getTime());
+        assert.notDeepEqual(recipes2[0].timestamp, recipes3[0].timestamp);
+        const recipeUnlocks3 = await getRecipeUnlocksForIds(recipeId);
+        assert.notDeepEqual(recipeUnlocks2[0].timestamp, recipeUnlocks3[0].timestamp);
     });
 });

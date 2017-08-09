@@ -58,8 +58,8 @@ export const getRecipeBlocksObservable = (errorCallback: (name: string) => void)
             transformGW2Shinies,
             _.partial(errorCallback, GW2ShiniesSourceName)));
 
-export const getRecipeUnlockBlocksObservable = () =>
-    produceObservable(getAPIRecipeUnlocks, transformAPIRecipeUnlock, () => undefined);
+export const getRecipeUnlockBlocksObservable = (errorCallback: () => void) =>
+    produceObservable(getAPIRecipeUnlocks, transformAPIRecipeUnlock, errorCallback);
 
 export const updateRecipes = async (
     recipeBlocks: Rx.Observable<IRecipe[]>,
@@ -99,7 +99,8 @@ export async function doAll() {
         console.log("Feeding it to the updater.");
         await updateRecipes(observable, timestamp);
         console.log("Starting the recipe unlock feeder.");
-        const observableUnlocks = getRecipeUnlockBlocksObservable();
+        let recipeUnlocksErrorred = false;
+        const observableUnlocks = getRecipeUnlockBlocksObservable(() => { recipeUnlocksErrorred = true; });
         console.log("Feeding it to the updater.");
         await updateRecipeUnlocks(observableUnlocks, timestamp);
         console.log("Setting timestamp");
@@ -110,7 +111,9 @@ export async function doAll() {
             [GW2EfficiencySourceName, GW2ProfitsSourceName, GW2ShiniesSourceName]
                 .filter((name) => !_.includes(errorred, name))
                 .map((name) => cleanRecipes(name, timestamp)));
-        await cleanRecipeUnlocks(timestamp);
+        if (!recipeUnlocksErrorred) {
+            await cleanRecipeUnlocks(timestamp);
+        }
         console.log("Closing the connection.");
         await close();
         console.log("All done.");

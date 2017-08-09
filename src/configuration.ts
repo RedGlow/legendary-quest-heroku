@@ -7,6 +7,7 @@ export interface IConfiguration {
         gw2ShiniesUrl: string;
         gw2ProfitsUrl: string;
         gw2EfficiencyUrl: string;
+        apiUrl: string;
     };
 }
 

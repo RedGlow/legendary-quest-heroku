@@ -135,14 +135,11 @@ describe("db", () => {
         const timestamp2 = new Date(timestamp.getTime() + 1000 * 60);
         assert.notDeepEqual(timestamp, timestamp2);
         assert(timestamp2 > timestamp);
-        const exampleRecipeUnlock2 = {
-            ...exampleRecipeUnlock, recipe_sheet_id: 101,
-        };
         await db.setTimestamp(timestamp2);
-        await db.saveRecipeUnlocks([exampleRecipeUnlock2], timestamp2);
+        await db.saveRecipeUnlocks([exampleRecipeUnlock], timestamp2);
         recipeUnlocks = await db.getRecipeUnlocksForIds(44);
         assert.equal(recipeUnlocks.length, 1);
-        assert.equal(recipeUnlocks[0].recipe_sheet_id, 101);
+        assert.equal(recipeUnlocks[0].recipe_sheet_id, 100);
         const mongoDb = await db.connect();
         let num = await mongoDb
             .collection("RecipeUnlocks")
@@ -152,7 +149,7 @@ describe("db", () => {
         await db.cleanRecipeUnlocks(timestamp2);
         recipeUnlocks = await db.getRecipeUnlocksForIds(44);
         assert.equal(recipeUnlocks.length, 1);
-        assert.equal(recipeUnlocks[0].recipe_sheet_id, 101);
+        assert.equal(recipeUnlocks[0].recipe_sheet_id, 100);
         num = await mongoDb
             .collection("RecipeUnlocks")
             .count({ recipe_id: 44 });

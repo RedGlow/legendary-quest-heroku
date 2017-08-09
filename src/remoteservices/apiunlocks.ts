@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import fetch from "node-fetch";
 import * as parselinkheader from "parse-link-header";
 import * as Rx from "rxjs/Rx";
-import { get } from "../http";
+import get from "../configuration";
 import { feedObservable } from "./base";
 import getLinkedUrlObservables, { FetchFunction } from "./linkedurlobservable";
 
@@ -27,7 +27,7 @@ export const getRecipes = (
     fetchFunction: FetchFunction<IMyRecipeUnlock[]> = void 0):
     Rx.Observable<IMyRecipeUnlock[]> =>
     getLinkedUrlObservables<IMyRecipeUnlock[]>(
-        `https://api.guildwars2.com/v2/items?page_size=200&page=${startingPage}`,
+        get().remoteServices.apiUrl.replace("${startingPage}", startingPage.toString()),
         fetchFunction)
         .map((data: IMyRecipeUnlock[]) => _.filter(data, (item) =>
             !!item.details &&

@@ -48,25 +48,27 @@ const upsert = async (recipes: IRecipe[]) =>
             ordered: false,
         });
 
-const upsertUnlocks = async (recipeUnlocks: IRecipeUnlock[]) => {
-    const inputData = recipeUnlocks
-        .map((recipeUnlock) => ({
-            ...recipeUnlock,
-            _id: getRecipeUnlockId(recipeUnlock) + "-" + recipeUnlock.timestamp.getTime().toString(),
-        }))
-        .map((recipeUnlock) => ({
-            updateOne: {
-                filter: { _id: recipeUnlock._id },
-                update: recipeUnlock,
-                upsert: true,
-            },
-        }));
+const upsertUnlocks = async (recipeUnlocks: IRecipeUnlock[]) =>
     await (await getRecipeUnlocksCollection()).bulkWrite(
-        inputData,
+        recipeUnlocks
+            .map((recipeUnlock) => {
+                const recipeUnlockId = getRecipeUnlockId(recipeUnlock);
+                const extendedRecipeUnlock = {
+                    ...recipeUnlock,
+                    _id: recipeUnlockId + "-" + recipeUnlock.timestamp.getTime().toString(),
+                    base_id: recipeUnlockId,
+                };
+                return {
+                    updateOne: {
+                        filter: { _id: extendedRecipeUnlock._id },
+                        update: extendedRecipeUnlock,
+                        upsert: true,
+                    },
+                };
+            }),
         {
             ordered: false,
         });
-};
 
 async function retry<T>(numRetry: number, func: () => Promise<T>) {
     // the whole retry cycle is due to: https://jira.mongodb.org/browse/SERVER-14322
@@ -163,16 +165,26 @@ export const getRecipesForItems = async (...ids: number[]): Promise<IRecipe[]> =
     return recipesFromMongodb.map((el: IWrappedRecipe) => el.element[0]);
 };
 
+interface IWrapperRecipeUnlock {
+    element: IRecipeUnlock[];
+}
+
 export const getRecipeUnlocksForIds = async (...ids: number[]): Promise<IRecipeUnlock[]> => {
     if (ids.length === 0) {
         return [];
     }
     const db = await connect();
-    const timestamp = await getTimestamp();
-    const unlocks = await (await getRecipeUnlocksCollection())
-        .find({ recipe_id: { $in: ids }, timestamp })
-        .toArray();
-    return unlocks as IRecipeUnlock[];
+    /* during updates, we could have more than one item with the same timestamp: here we filter them,
+    taking only the last one */
+    const unlocks = (await (await getRecipeUnlocksCollection())
+        .aggregate([
+            { $match: { recipe_id: { $in: ids } } },
+            { $sort: { timestamp: -1 } },
+            { $group: { _id: "$base_id", element: { $push: "$$ROOT" } } },
+            { $project: { _id: 0, element: { $slice: ["$element", 0, 1] } } },
+        ])
+        .toArray());
+    return unlocks.map((el: IWrapperRecipeUnlock) => el.element[0]);
 };
 
 export const cleanRecipes = async (source: string, timestamp: Date): Promise<void> => {
