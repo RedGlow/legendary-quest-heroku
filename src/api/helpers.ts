@@ -3,7 +3,12 @@ import * as restify from "restify";
 import { getRecipesForItems } from "../db";
 import { APIError } from "./error";
 
-export const loadCollectionRoot = <T>(
+interface IBaseT {
+    _id: string;
+    base_id: string;
+}
+
+export const loadCollectionRoot = <T extends IBaseT>(
     path: string,
     queryparametername: string,
     queryFunction: (...ids: number[]) => Promise<T[]>,
@@ -24,7 +29,10 @@ export const loadCollectionRoot = <T>(
             return;
         }
         queryFunction(...ids).then(
-            (items) => { res.send(items); next(); },
+            (items) => {
+                res.send(items.map((item) => { delete item._id; delete item.base_id; return item; }));
+                next();
+            },
             (err) => next(new APIError(500, "internal-error", err)));
     });
 };
