@@ -147,14 +147,9 @@ export const getRecipesForItems = async (...ids: number[]): Promise<IRecipe[]> =
         return [];
     }
     const db = await connect();
-    const timestamp = await getTimestamp();
     const orCondition = ids.map((id: number) => ({
         "results.id": id,
-        "timestamp": timestamp,
     }));
-    /*const recipes = await (await getRecipesCollection())
-        .find({ $or: orCondition })
-        .toArray();*/
     /* during updates, we could have more than one item with the same timestamp: here we filter them,
     taking only the last one */
     const recipesFromMongodb = (await (await getRecipesCollection())
