@@ -19,6 +19,13 @@
                 "$tslint5"
             ],
             "isBackground": true
+        },
+        {
+            "type": "gulp",
+            "task": "_compile_server_ts",
+            "problemMatcher": [
+                "$gulp-tsc"
+            ]
         }
     ]
 }
