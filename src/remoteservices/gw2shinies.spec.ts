@@ -1,6 +1,5 @@
 import * as assert from "assert";
 import * as Rx from "rxjs/Rx";
-import { setAlternativeGet } from "../http";
 import * as gw2shinies from "./gw2shinies";
 import * as data from "./gw2shinies.spec.data.json";
 import checkObservable from "./helperspec";

@@ -4,7 +4,6 @@ import * as fetch from "isomorphic-fetch";
 import { Db, MongoClient } from "mongodb";
 import * as Rx from "rxjs/Rx";
 import * as db from "../db";
-import { getJSON } from "../http";
 import { IRecipe, isRecipeItem, RecipeType } from "../recipe";
 import { IRecipeUnlock } from "../recipeunlock";
 import * as server from "../server";

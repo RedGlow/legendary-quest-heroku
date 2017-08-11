@@ -1,7 +1,6 @@
 import * as assert from "assert";
 import * as Rx from "rxjs/Rx";
 import { switchcase } from "../func";
-import { setAlternativeFetchJSON } from "../http";
 import * as apiunlocks from "./apiunlocks";
 import * as data from "./apiunlocks.spec.data.json";
 import checkObservable from "./helperspec";

@@ -1,5 +1,4 @@
 import { switchcase } from "../func";
-import { getJSON } from "../http";
 import { IRecipe, IRecipeCurrency, IRecipeItem, RecipeType } from "../recipe";
 import { IMyIngredient, IMyRecipe } from "../remoteservices/gw2profits";
 
