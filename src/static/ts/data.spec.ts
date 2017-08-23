@@ -1,5 +1,5 @@
-import * as assert from "assert";
-import * as mocha from "mocha";
+import "mocha";
+import * as assert from "./assert";
 import data from "./data";
 
 describe("data", () => {
