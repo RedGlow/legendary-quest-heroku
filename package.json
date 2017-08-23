@@ -25,7 +25,7 @@
     "@types/assert": "0.0.31",
     "@types/isomorphic-fetch": "0.0.34",
     "@types/lodash": "^4.14.71",
-    "@types/mocha": "^2.2.41",
+    "@types/mocha": "^2.2.42",
     "@types/mongodb": "^2.2.7",
     "@types/node": "^8.0.17",
     "@types/node-fetch": "^1.6.7",
