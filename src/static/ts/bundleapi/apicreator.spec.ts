@@ -4,7 +4,7 @@ import { ITestConfiguration, setTestConfiguration } from "../testconf";
 import create from "./apicreator";
 import { Bucket } from "./bucket";
 
-describe.only("bundleapi/apicreator", () => {
+describe("bundleapi/apicreator", () => {
     let c: ITestConfiguration;
     let b: Bucket;
     let e: (path: string, id: number) => Promise<any>;
