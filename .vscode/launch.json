@@ -31,8 +31,6 @@
             "args": [
                 "-u",
                 "tdd",
-                "--timeout",
-                "999999",
                 "--colors",
                 "${workspaceRoot}/dist/static/client/testscripts.js"
             ],
