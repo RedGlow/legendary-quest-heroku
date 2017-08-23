@@ -18,13 +18,17 @@ In order to do local builds and testing, you need:
 
 The project uses gulp for compilation:
 - "gulp build" will just build the project
-- "gulp watch" will build it and stay on listen for changes
+- "gulp watch" will listen for changes and launch build when needed
 
 # Local testing
 
 The testing is performed through npm (which calls mocha):
 - "npm run unittest" runs the unit tests
 - "npm run integrationtest" runs the integration tests
+- "npm run browsertest" runs the client tests
+
+Or just:
+- "npm run alltests" runs all the available tests
 
 # Local running
 
