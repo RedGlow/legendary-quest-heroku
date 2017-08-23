@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/RedGlow/legendary-quest-heroku#readme",
   "devDependencies": {
+    "@types/assert": "0.0.31",
     "@types/isomorphic-fetch": "0.0.34",
     "@types/lodash": "^4.14.71",
     "@types/mocha": "^2.2.41",
@@ -30,9 +31,11 @@
     "@types/node-fetch": "^1.6.7",
     "@types/react": "^16.0.0",
     "@types/react-dom": "^15.5.1",
+    "@types/reflect-metadata": "0.0.5",
     "@types/restify": "^5.0.1",
     "@types/restify-errors": "^4.3.1",
     "@types/selenium-webdriver": "^3.0.4",
+    "assert": "^1.4.1",
     "browserify": "^14.4.0",
     "bundle-collapser": "^1.2.1",
     "envify": "^4.1.0",
@@ -51,10 +54,12 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "selenium-webdriver": "^3.5.0",
+    "sorcery": "^0.10.0",
     "tslint": "^5.5.0",
     "typescript": "^2.4.2",
     "uglify-js": "^3.0.27",
     "uglifyify": "^4.0.3",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {

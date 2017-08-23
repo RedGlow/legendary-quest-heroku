@@ -15,10 +15,12 @@ const gulp = require("gulp")
     , htmlmin = require("gulp-htmlmin")
     , browserify = require("browserify")
     , source = require("vinyl-source-stream")
+    , buffer = require('vinyl-buffer')
     , glob = require("glob")
     , envify = require("envify/custom")
     , uglifyify = require("uglifyify")
     , bundleCollapser = require("bundle-collapser/plugin")
+    , sorcery = require("sorcery")
     ;
 
 
@@ -92,9 +94,9 @@ gulp.task("_compile_testclient_ts", () => {
         .pipe(projectTestClient())
         .js
         .pipe(sourcemaps.mapSources(sp =>
-            Array(sp.split("/").length).fill("../").join("") + "src/" + sp
+            Array(sp.split("/").length + 1).fill("../").join("") + "src/static/ts/" + sp
         ))
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest("build/js"))
         ;
 });
@@ -103,17 +105,32 @@ gulp.task("_compile_testclient_ts", () => {
 const bundleTestclientJsSources = "./build/js/**/*.spec.js";
 gulp.task("_bundle_testclient_js", ["_compile_testclient_ts"], () => {
     const files = glob.sync(bundleTestclientJsSources);
-    const b = browserify({ entries: files, debug: true });
+    const b = browserify({
+        entries: files,
+        debug: true
+    });
     b.paths = ["./node_modules/"];
     return b.bundle()
-        .pipe(source("testscripts.js"))
+        .pipe(source("testscriptstemp.js"))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(sourcemaps.mapSources(sp =>
+            Array(3).fill("../").join("") + sp
+        ))
+        .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest("dist/static/client"))
         ;
 });
 
+gulp.task("_fix_bundle_testclient_sourcemaps", ["_bundle_testclient_js"], function (done) {
+    sorcery.load("dist/static/client/testscriptstemp.js")
+        .then((chain) => chain.write('dist/static/client/testscripts.js', { includeContent: false }))
+        .then(() => done()).catch((err) => done(err));
+});
+
 gulp.task("_watchtstestclient", () => gulp.watch(
     compileTestclientTsSources,
-    ["_bundle_testclient_js"]));
+    ["_fix_bundle_testclient_sourcemaps"]));
 
 
 /**
@@ -231,7 +248,7 @@ gulp.task("build", [
     "_compile_server_ts",
     "_copy_unchanged",
     "_minimize_client_js",
-    "_bundle_testclient_js",
+    "_fix_bundle_testclient_sourcemaps",
     "_minimize_indexhtml"]);
 
 gulp.task("watch", [
