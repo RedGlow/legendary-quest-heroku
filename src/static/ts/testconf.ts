@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import * as nodeFetch from "node-fetch";
 import { IConfiguration, set } from "./configuration";
 
 // a test configuration allows for extra modifiers
@@ -6,7 +7,7 @@ export interface ITestConfiguration extends IConfiguration {
     setFetchResponse: (url: string, body: string, options: {
         status?: number;
         statusText?: string;
-        headers?: Headers;
+        headers?: nodeFetch.Headers;
     }) => void;
     setTime: (time: number) => Promise<void>;
 }
@@ -53,7 +54,7 @@ export const setTestConfiguration: () => ITestConfiguration = () => {
         body: string;
         status: number;
         statusText: string;
-        headers: Headers;
+        headers: nodeFetch.Headers;
     }
 
     const fetchResponses: { [url: string]: IFetchResponse } = {};
@@ -61,11 +62,11 @@ export const setTestConfiguration: () => ITestConfiguration = () => {
     const setFetchResponse = (url: string, body: string, {
         status = 200,
         statusText = "OK",
-        headers = new Headers(),
+        headers = new nodeFetch.Headers(),
     }: {
             status?: number;
             statusText?: string;
-            headers?: Headers;
+            headers?: nodeFetch.Headers;
         }) => {
         fetchResponses[url] = {
             body,
@@ -79,17 +80,19 @@ export const setTestConfiguration: () => ITestConfiguration = () => {
     const fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response> = (input, init) =>
         typeof input !== "string" ? Promise.reject("RequestInfo is not supported") :
             !!init ? Promise.reject("init is not supported") :
-                !fetchResponses[input] ? Promise.resolve(new Response("Not found", {
-                    headers: new Headers({
-                        "Content-Type": "text/plain",
-                    }),
-                    status: 404,
-                    statusText: "Not found",
-                })) : ((r) => Promise.resolve(new Response(r.body, {
+                !fetchResponses[input] ? (() => {
+                    const headers = new nodeFetch.Headers();
+                    headers.append("Content-Type", "text/plain");
+                    return Promise.resolve(new nodeFetch.Response("Not found", {
+                        headers,
+                        status: 404,
+                        statusText: "Not found",
+                    }) as any as Response);
+                })() : ((r) => Promise.resolve(new nodeFetch.Response(r.body, {
                     headers: r.headers,
                     status: r.status,
                     statusText: r.statusText,
-                })))(fetchResponses[input]);
+                }) as any as Response))(fetchResponses[input]);
 
     const testConfiguration = {
         fetch,

@@ -23,6 +23,7 @@
   "homepage": "https://github.com/RedGlow/legendary-quest-heroku#readme",
   "devDependencies": {
     "@types/assert": "0.0.31",
+    "@types/deep-equal": "^1.0.1",
     "@types/isomorphic-fetch": "0.0.34",
     "@types/lodash": "^4.14.71",
     "@types/mocha": "^2.2.42",
@@ -38,6 +39,7 @@
     "assert": "^1.4.1",
     "browserify": "^14.4.0",
     "bundle-collapser": "^1.2.1",
+    "deep-equal": "^1.0.1",
     "envify": "^4.1.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
