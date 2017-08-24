@@ -15,7 +15,7 @@ const createApi = (
     } = {}) => {
     /**
      * The call queue is structured like this:
-     * - It isa map, whose keys are the paths of the calls yet to perform.
+     * - It is a map, whose keys are the paths of the calls yet to perform.
      * - Each call is a map, whose keys are the ids to interrogate.
      * - To each id corresponds a list of resolve functions for promises.
      */
