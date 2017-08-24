@@ -1,10 +1,18 @@
+import * as _ from "lodash";
 import { get as conf } from "../configuration";
 import { intObjectKeys } from "../func";
 import { Bucket } from "./bucket";
 
 type PromiseCouple = [(result: any) => void];
 
-const createApi = (bucket: Bucket, baseUrl: string, defaultIdQSParameter: string, defaultIdKey: string) => {
+const createApi = (
+    bucket: Bucket,
+    baseUrl: string,
+    defaultIdQSParameter: string,
+    defaultIdKey: string,
+    {
+        nobundlepaths = [] as string[],
+    } = {}) => {
     /**
      * The call queue is structured like this:
      * - It isa map, whose keys are the paths of the calls yet to perform.
@@ -16,6 +24,11 @@ const createApi = (bucket: Bucket, baseUrl: string, defaultIdQSParameter: string
     } = {};
 
     const enqueue = (path: string, id: number) => {
+        // some calls do not allow bundling of requests: just do it immediately
+        if (_.includes(nobundlepaths, path)) {
+            return bucket.getToken().then(() => runRequest(path, [id]));
+        }
+
         // if we don't have this call in queue, we must create a new entry and run it
         if (!queue[path]) {
             bucket.getToken().then(() => runQueueEntry(path));
@@ -32,6 +45,21 @@ const createApi = (bucket: Bucket, baseUrl: string, defaultIdQSParameter: string
         return promise;
     };
 
+    const produceUrl = (path: string, ids: number[] | string[]) =>
+        baseUrl +
+        path +
+        "?" +
+        defaultIdQSParameter +
+        "=" +
+        ids.join(",");
+
+    const runRequest = (path: string, ids: number[] | string[]) =>
+        conf()
+            .fetch(produceUrl(path, ids))
+            .then((resp) => resp.status === 404 ? [] :
+                resp.status > 400 ? produceRejectFromResponse(resp) :
+                    resp.json());
+
     const getId = (obj: any): number => obj[defaultIdKey] as number;
 
     const produceRejectFromResponse = (resp: Response): Promise<{}> =>
@@ -42,17 +70,7 @@ const createApi = (bucket: Bucket, baseUrl: string, defaultIdQSParameter: string
     const runQueueEntry = (path: string) => {
         const queueEntry = queue[path];
         delete queue[path];
-        const url = baseUrl +
-            path +
-            "?" +
-            defaultIdQSParameter +
-            "=" +
-            Object.keys(queueEntry).join(",");
-        conf()
-            .fetch(url)
-            .then((resp) => resp.status === 404 ? [] :
-                resp.status > 400 ? produceRejectFromResponse(resp) :
-                    resp.json())
+        runRequest(path, Object.keys(queueEntry))
             .then((json: any[]) => {
                 const foundIds = json.map((entry) => {
                     const id = getId(entry);
