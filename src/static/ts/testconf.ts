@@ -122,9 +122,18 @@ export const setTestConfiguration: () => ITestConfiguration = () => {
                     statusText: r.statusText,
                 }) as any as Response))(fetchResponses[input]);
 
+    const storageObject = {} as { [key: string]: string };
+
+    const localStorage = {
+        getItem: (key: string): string | null => key in storageObject ? storageObject[key] : null,
+        removeItem: (key: string): void => { delete storageObject[key]; },
+        setItem: (key: string, data: string): void => { storageObject[key] = data; },
+    };
+
     const testConfiguration = {
         fetch,
         getTime,
+        localStorage,
         pauseFetchResolution,
         resumeFetchResolution,
         setFetchResponse,

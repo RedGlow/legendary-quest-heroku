@@ -2,6 +2,11 @@ export interface IConfiguration {
     fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>;
     getTime: () => number;
     waitTime: (time: number) => Promise<void>;
+    localStorage: {
+        getItem: (key: string) => string | null,
+        setItem: (key: string, data: string) => void,
+        removeItem: (key: string) => void,
+    };
 }
 
 let configuration: IConfiguration = null;
