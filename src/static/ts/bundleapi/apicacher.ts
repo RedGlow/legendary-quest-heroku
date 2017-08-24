@@ -2,16 +2,24 @@ import { get as conf } from "../configuration";
 
 let nextId = 0;
 
-const createCacher = (
-    call: (path: string, id: number) => Promise<any>,
-    defaultEndpointTimeout: number,
-    {
-        endpointTimeouts = {} as { [path: string]: number },
-    } = {}) => {
+const createCacher = <TArgs extends any[]>(
+    call: (args: TArgs) => Promise<any>,
+    endpointTimeouts: (args: TArgs) => number) => {
     const myId = nextId;
     nextId++;
 
-    const getKeyName = (path: string, id: number) => "apicacher-" + myId + "-" + path + "-" + id;
+    const toString = (arg: any): string => {
+        const targ = typeof arg;
+        if (targ === "string") {
+            return arg;
+        } else if (targ === "number") {
+            return arg.toString();
+        } else {
+            throw new Error(`Unknown type ${targ}`);
+        }
+    };
+
+    const getKeyName = (args: TArgs) => "apicacher-" + myId + "-" + args.map(toString).join("-");
 
     const getTimeFromValue = (value: string) => parseInt(value.substr(0, value.indexOf(",")), 10);
 
@@ -19,17 +27,17 @@ const createCacher = (
 
     const getValue = (time: number, obj: any) => time.toString() + "," + JSON.stringify(obj);
 
-    const cacheGet = (path: string, id: number): Promise<any> => {
-        const cached = conf().localStorage.getItem(getKeyName(path, id));
+    const cacheGet = (args: TArgs): Promise<any> => {
+        const cached = conf().localStorage.getItem(getKeyName(args));
         if (cached !== null) {
             const time = getTimeFromValue(cached);
-            if (conf().getTime() < time + (endpointTimeouts[path] || defaultEndpointTimeout)) {
+            if (conf().getTime() < time + endpointTimeouts(args)) {
                 return Promise.resolve(getObjectFromValue(cached));
             }
         }
-        return call(path, id).then((result) => {
+        return call(args).then((result) => {
             conf().localStorage.setItem(
-                getKeyName(path, id),
+                getKeyName(args),
                 getValue(conf().getTime(), result));
             return result;
         });
