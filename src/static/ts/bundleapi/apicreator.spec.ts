@@ -144,7 +144,7 @@ describe("bundleapi/apicreator", () => {
         assert.deepEqual(result1, h33);
         assert.deepEqual(result2, h34);
         assert.equal(resolved, false);
-        c.setTime(100);
+        await c.setTime(100);
         const result3 = await promise3;
         assert.deepEqual(result3, h35);
         assert.equal(resolved, true);

@@ -79,6 +79,7 @@ const createApi = (
             queue[path] = _.pickBy(queueEntry, (value, key) => {
                 return _.includes(remainingIds, parseInt(key, 10));
             });
+            bucket.getToken().then(() => runQueueEntry(path));
         }
         runRequest(path, processedIds)
             .then((json: any[]) => {
