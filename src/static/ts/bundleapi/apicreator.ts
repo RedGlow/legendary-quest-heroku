@@ -13,6 +13,7 @@ const createApi = (
     {
         nobundlepaths = [] as string[],
         idQSParameters = {} as { [path: string]: string },
+        maxIds = 200,
     } = {}) => {
     /**
      * The call queue is structured like this:
@@ -46,7 +47,7 @@ const createApi = (
         return promise;
     };
 
-    const produceUrl = (path: string, ids: number[] | string[]) =>
+    const produceUrl = (path: string, ids: number[]) =>
         baseUrl +
         path +
         "?" +
@@ -54,7 +55,7 @@ const createApi = (
         "=" +
         ids.join(",");
 
-    const runRequest = (path: string, ids: number[] | string[]) =>
+    const runRequest = (path: string, ids: number[]) =>
         conf()
             .fetch(produceUrl(path, ids))
             .then((resp) => resp.status === 404 ? [] :
@@ -70,8 +71,16 @@ const createApi = (
 
     const runQueueEntry = (path: string) => {
         const queueEntry = queue[path];
-        delete queue[path];
-        runRequest(path, Object.keys(queueEntry))
+        const remainingIds = intObjectKeys(queueEntry).sort();
+        const processedIds = remainingIds.splice(0, maxIds);
+        if (remainingIds.length === 0) {
+            delete queue[path];
+        } else {
+            queue[path] = _.pickBy(queueEntry, (value, key) => {
+                return _.includes(remainingIds, parseInt(key, 10));
+            });
+        }
+        runRequest(path, processedIds)
             .then((json: any[]) => {
                 const foundIds = json.map((entry) => {
                     const id = getId(path, entry);
@@ -79,12 +88,12 @@ const createApi = (
                     resolutions.forEach((resolutors) => resolutors[0](entry));
                     return id;
                 });
-                intObjectKeys(queueEntry)
+                processedIds
                     .filter((id) => foundIds.indexOf(id) < 0)
                     .forEach((id) => queueEntry[id].forEach((resolutions) => resolutions[0](null)));
             })
             .catch((err) =>
-                intObjectKeys(queueEntry).forEach((id) =>
+                processedIds.forEach((id) =>
                     queueEntry[id].forEach(
                         (resolutions) => resolutions[1](err))));
     };

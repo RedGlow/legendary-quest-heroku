@@ -17,6 +17,7 @@ describe("bundleapi/apicreator", () => {
         b = new Bucket(1, 10, 100);
         e = create(b, "https://api.guildwars2.com", "ids", "id", {
             idQSParameters: { "/v2/recipes/search": "output" },
+            maxIds: 2,
             nobundlepaths: ["/v2/recipessearch"],
         });
     });
@@ -130,5 +131,22 @@ describe("bundleapi/apicreator", () => {
         c.setFetchResponse("https://api.guildwars2.com/v2/recipes/search?output=33", JSON.stringify([h33]), {});
         const result = await e("/v2/recipes/search", 33);
         assert.deepEqual(result, h33);
+    });
+
+    it("Splits requests for more than maxIds items", async () => {
+        c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=33,34", JSON.stringify([h33, h34]), {});
+        c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=35", JSON.stringify([h35]), {});
+        const promise1 = e("/v2/items", 33);
+        const promise2 = e("/v2/items", 34);
+        let resolved = false;
+        const promise3 = e("/v2/items", 35).then((res) => { resolved = true; return res; });
+        const [result1, result2] = await Promise.all([promise1, promise2]);
+        assert.deepEqual(result1, h33);
+        assert.deepEqual(result2, h34);
+        assert.equal(resolved, false);
+        c.setTime(100);
+        const result3 = await promise3;
+        assert.deepEqual(result3, h35);
+        assert.equal(resolved, true);
     });
 });
