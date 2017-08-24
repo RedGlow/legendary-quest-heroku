@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import createCacher from "./bundleapi/apicacher";
 import createApi from "./bundleapi/apicreator";
 import { Bucket } from "./bundleapi/bucket";
@@ -35,7 +36,15 @@ const mysticApiBundle = createApi(
     mysticApiBucket,
     "https://legendary-quest.herokuapp.com/api",
     "resultitemids",
-    "id");
+    "", {
+        getObjectId: (obj: any, idList: number[]) =>
+            _.intersection(
+                idList,
+                (obj as IMysticApiRecipe)
+                    .results
+                    .filter(isRecipeItem)
+                    .map((recipeItem) => recipeItem.id))[0],
+    });
 
 const mysticApiBundleCacher = createCacher<[string, number]>(
     ([path, id]: [string, number]) => mysticApiBundle(path, id),
@@ -144,6 +153,10 @@ export interface IMysticApiRecipe {
     ingredients: Array<IRecipeItem | IRecipeCurrency | IAchievement>;
     results: Array<IRecipeItem | IRecipeCurrency>;
     prerequisites: IAchievementPrerequisite[];
+}
+
+function isRecipeItem(x: IRecipeItem | IRecipeCurrency): x is IRecipeItem {
+    return (x as IRecipeItem).id !== undefined;
 }
 
 export interface IRecipeItem {

@@ -4,7 +4,7 @@ import * as assert from "../assert";
 import { ITestConfiguration, setTestConfiguration } from "../testconf";
 import createCacher from "./apicacher";
 
-describe.only("bundleapi/apicacher", () => {
+describe("bundleapi/apicacher", () => {
     let c: ITestConfiguration;
     let e: ([path, id]: [string, number]) => Promise<any>;
     let e2: ([path, id]: [string, number]) => Promise<any>;

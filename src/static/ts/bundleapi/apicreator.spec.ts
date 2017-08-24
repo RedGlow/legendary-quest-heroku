@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import "mocha";
 import * as assert from "../assert";
 import { ITestConfiguration, setTestConfiguration } from "../testconf";
@@ -8,14 +9,24 @@ describe("bundleapi/apicreator", () => {
     let c: ITestConfiguration;
     let b: Bucket;
     let e: (path: string, id: number) => Promise<any>;
+    let e2: (path: string, id: number) => Promise<any>;
     const h33 = { id: 33 };
     const h34 = { id: 34 };
     const h35 = { id: 35 };
+    const s60 = { ids: [34, 60, 54] };
+    const s61 = { ids: [32, 61, 58] };
 
     beforeEach(() => {
         c = setTestConfiguration();
         b = new Bucket(1, 10, 100);
         e = create(b, "https://api.guildwars2.com", "ids", "id", {
+            idQSParameters: { "/v2/recipes/search": "output" },
+            maxIds: 2,
+            nobundlepaths: ["/v2/recipessearch"],
+        });
+        e2 = create(b, "https://api.guildwars2.com", "ids", "id", {
+            getObjectId: (obj: any, idList: number[]) =>
+                _.intersection(obj.ids as number[], idList)[0],
             idQSParameters: { "/v2/recipes/search": "output" },
             maxIds: 2,
             nobundlepaths: ["/v2/recipessearch"],
@@ -160,5 +171,12 @@ describe("bundleapi/apicreator", () => {
         const [result1, result2] = await Promise.all([promise1, promise2]);
         assert.deepEqual(result1, h33);
         assert.deepEqual(result2, h33);
+    });
+
+    it("Can handle complex objects", async () => {
+        c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=60,61", JSON.stringify([s61, s60]), {});
+        const [result1, result2] = await Promise.all([e2("/v2/items", 60), e2("/v2/items", 61)]);
+        assert.deepEqual(result1, s60);
+        assert.deepEqual(result2, s61);
     });
 });
