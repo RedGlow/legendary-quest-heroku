@@ -149,4 +149,16 @@ describe("bundleapi/apicreator", () => {
         assert.deepEqual(result3, h35);
         assert.equal(resolved, true);
     });
+
+    it("Doesn't perform double calls in case a request is made for a call currently running", async () => {
+        c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=33", JSON.stringify([h33]), {});
+        c.pauseFetchResolution();
+        const promise1 = e("/v2/items", 33);
+        await c.setTime(50);
+        const promise2 = e("/v2/items", 33);
+        c.resumeFetchResolution();
+        const [result1, result2] = await Promise.all([promise1, promise2]);
+        assert.deepEqual(result1, h33);
+        assert.deepEqual(result2, h33);
+    });
 });

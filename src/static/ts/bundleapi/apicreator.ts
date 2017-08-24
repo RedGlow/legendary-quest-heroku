@@ -25,10 +25,26 @@ const createApi = (
         [path: string]: { [id: number]: [PromiseCouple] };
     } = {};
 
+    /**
+     * The queued structure is created just like queue, but it is used to
+     * keep track of calls currently running. This is useful to add extra
+     * promise resolutions asked while an API call was already running.
+     * Entries from queue[id] are moved to queued[id] while running and
+     * deleted afterwards.
+     */
+    const queued: {
+        [path: string]: { [id: number]: [PromiseCouple] };
+    } = {};
+
     const enqueue = (path: string, id: number) => {
         // some calls do not allow bundling of requests: just do it immediately
         if (_.includes(nobundlepaths, path)) {
             return bucket.getToken().then(() => runRequest(path, [id]));
+        }
+
+        // if we have this call for this id already enqueued, use it
+        if (_.has(queued, `[${path}][${id}]`)) {
+            return new Promise((resolve, reject) => queued[path][id].push([resolve, reject]));
         }
 
         // if we don't have this call in queue, we must create a new entry and run it
@@ -81,6 +97,7 @@ const createApi = (
             });
             bucket.getToken().then(() => runQueueEntry(path));
         }
+        queued[path] = queueEntry;
         runRequest(path, processedIds)
             .then((json: any[]) => {
                 const foundIds = json.map((entry) => {
@@ -92,6 +109,7 @@ const createApi = (
                 processedIds
                     .filter((id) => foundIds.indexOf(id) < 0)
                     .forEach((id) => queueEntry[id].forEach((resolutions) => resolutions[0](null)));
+                delete queued[path];
             })
             .catch((err) =>
                 processedIds.forEach((id) =>

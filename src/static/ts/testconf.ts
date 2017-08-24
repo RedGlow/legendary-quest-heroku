@@ -4,6 +4,8 @@ import { IConfiguration, set } from "./configuration";
 
 // a test configuration allows for extra modifiers
 export interface ITestConfiguration extends IConfiguration {
+    pauseFetchResolution: () => void;
+    resumeFetchResolution: () => void;
     setFetchResponse: (url: string, body: string, options: {
         status?: number;
         statusText?: string;
@@ -59,6 +61,10 @@ export const setTestConfiguration: () => ITestConfiguration = () => {
 
     const fetchResponses: { [url: string]: IFetchResponse } = {};
 
+    let fetchResponsesPaused = false;
+
+    const pausedFetchResolvers = [] as [() => void];
+
     const setFetchResponse = (url: string, body: string, {
         status = 200,
         statusText = "OK",
@@ -77,18 +83,40 @@ export const setTestConfiguration: () => ITestConfiguration = () => {
         };
     };
 
+    const pauseFetchResolution = () => {
+        fetchResponsesPaused = true;
+    };
+
+    const resumeFetchResolution = () => {
+        fetchResponsesPaused = false;
+        flushResponses();
+    };
+
+    const flushResponses = () => {
+        if (!fetchResponsesPaused) {
+            pausedFetchResolvers.forEach((r) => r());
+            pausedFetchResolvers.length = 0;
+        }
+    };
+
+    const getFetchPromise = (r: Response): Promise<Response> => {
+        const promise = new Promise<Response>((resolve) => pausedFetchResolvers.push(() => resolve(r)));
+        flushResponses();
+        return promise;
+    };
+
     const fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response> = (input, init) =>
         typeof input !== "string" ? Promise.reject("RequestInfo is not supported") :
             !!init ? Promise.reject("init is not supported") :
                 !fetchResponses[input] ? (() => {
                     const headers = new nodeFetch.Headers();
                     headers.append("Content-Type", "text/plain");
-                    return Promise.resolve(new nodeFetch.Response("Not found", {
+                    return getFetchPromise(new nodeFetch.Response("Not found", {
                         headers,
                         status: 404,
                         statusText: "Not found",
                     }) as any as Response);
-                })() : ((r) => Promise.resolve(new nodeFetch.Response(r.body, {
+                })() : ((r) => getFetchPromise(new nodeFetch.Response(r.body, {
                     headers: r.headers,
                     status: r.status,
                     statusText: r.statusText,
@@ -97,6 +125,8 @@ export const setTestConfiguration: () => ITestConfiguration = () => {
     const testConfiguration = {
         fetch,
         getTime,
+        pauseFetchResolution,
+        resumeFetchResolution,
         setFetchResponse,
         setTime,
         waitTime,
