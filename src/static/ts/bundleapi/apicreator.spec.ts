@@ -15,7 +15,9 @@ describe("bundleapi/apicreator", () => {
     beforeEach(() => {
         c = setTestConfiguration();
         b = new Bucket(1, 10, 100);
-        e = create(b, "https://api.guildwars2.com", "ids", "id");
+        e = create(b, "https://api.guildwars2.com", "ids", "id", {
+            nobundlepaths: ["/v2/recipessearch"],
+        });
     });
 
     it("Can run a simple request", async () => {
@@ -107,5 +109,19 @@ describe("bundleapi/apicreator", () => {
                 errorred = true;
             });
         assert.equal(errorred, true);
+    });
+
+    it("Runs separate requests for nobundle paths", async () => {
+        c.setFetchResponse("https://api.guildwars2.com/v2/recipessearch?ids=33", JSON.stringify([h33]), {});
+        c.setFetchResponse("https://api.guildwars2.com/v2/recipessearch?ids=34", JSON.stringify([h34]), {});
+        let result2arrived = false;
+        const promise1 = e("/v2/recipessearch", 33);
+        const promise2 = e("/v2/recipessearch", 34).then((res) => { result2arrived = true; return res; });
+        const result1 = await promise1;
+        assert.deepEqual(result1, [h33]);
+        assert.equal(result2arrived, false);
+        await c.setTime(100);
+        const result2 = await promise2;
+        assert.deepEqual(result2, [h34]);
     });
 });
