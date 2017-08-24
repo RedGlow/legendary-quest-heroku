@@ -7,6 +7,7 @@ import createCacher from "./apicacher";
 describe.only("bundleapi/apicacher", () => {
     let c: ITestConfiguration;
     let e: (path: string, id: number) => Promise<any>;
+    let e2: (path: string, id: number) => Promise<any>;
 
     const h1 = { id: 1 };
     const h2 = { id: 2 };
@@ -23,6 +24,9 @@ describe.only("bundleapi/apicacher", () => {
     beforeEach(() => {
         c = setTestConfiguration();
         e = createCacher(call, 1000, {
+            endpointTimeouts: { "/v2/stuff": 2000 },
+        });
+        e2 = createCacher(call, 1000, {
             endpointTimeouts: { "/v2/stuff": 2000 },
         });
         calls.length = 0;
@@ -67,7 +71,6 @@ describe.only("bundleapi/apicacher", () => {
         assert.deepEqual(calls, [["/v2/items", 1], ["/v2/items", 1]]);
     });
 
-    // test for special timeouts
     it("Respects special timeouts", async () => {
         await e("/v2/stuff", 1);
         assert.deepEqual(calls, [["/v2/stuff", 1]]);
@@ -76,6 +79,13 @@ describe.only("bundleapi/apicacher", () => {
         assert.deepEqual(calls, [["/v2/stuff", 1]]);
         await c.setTime(2000);
         await e("/v2/stuff", 1);
+        assert.deepEqual(calls, [["/v2/stuff", 1], ["/v2/stuff", 1]]);
+    });
+
+    it("Doesn't overwrite another cacher", async () => {
+        await c.setTime(1000);
+        await e("/v2/stuff", 1);
+        await e2("/v2/stuff", 1);
         assert.deepEqual(calls, [["/v2/stuff", 1], ["/v2/stuff", 1]]);
     });
 });

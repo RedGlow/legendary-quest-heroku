@@ -1,12 +1,17 @@
 import { get as conf } from "../configuration";
 
+let nextId = 0;
+
 const createCacher = (
     call: (path: string, id: number) => Promise<any>,
     defaultEndpointTimeout: number,
     {
         endpointTimeouts = {} as { [path: string]: number },
     } = {}) => {
-    const getKeyName = (path: string, id: number) => "apicacher-" + path + "-" + id.toString();
+    const myId = nextId;
+    nextId++;
+
+    const getKeyName = (path: string, id: number) => "apicacher-" + myId + "-" + path + "-" + id;
 
     const getTimeFromValue = (value: string) => parseInt(value.substr(0, value.indexOf(",")), 10);
 
