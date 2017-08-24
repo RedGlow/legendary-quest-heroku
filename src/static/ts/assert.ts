@@ -12,16 +12,16 @@ export const equal = (actual: any, expected: any, msg: string = "") => {
     }
 };
 
-export const deepEqual = (e1: any, e2: any) => {
-    if (!libraryDeepEqual(e1, e2)) {
-        const j1 = JSON.stringify(e1);
-        const j2 = JSON.stringify(e2);
+export const deepEqual = (actual: any, expected: any) => {
+    if (!libraryDeepEqual(actual, expected)) {
+        const jactual = JSON.stringify(actual);
+        const jexpected = JSON.stringify(expected);
         throw new Error(
             `not deep equal
       expected:
-        ${j1}
+        ${jexpected}
       actual:
-        ${j2}
+        ${jactual}
     `);
     }
 };

@@ -16,6 +16,7 @@ describe("bundleapi/apicreator", () => {
         c = setTestConfiguration();
         b = new Bucket(1, 10, 100);
         e = create(b, "https://api.guildwars2.com", "ids", "id", {
+            idQSParameters: { "/v2/recipes/search": "output" },
             nobundlepaths: ["/v2/recipessearch"],
         });
     });
@@ -123,5 +124,11 @@ describe("bundleapi/apicreator", () => {
         await c.setTime(100);
         const result2 = await promise2;
         assert.deepEqual(result2, [h34]);
+    });
+
+    it("Accepts non-default query parameter ids", async () => {
+        c.setFetchResponse("https://api.guildwars2.com/v2/recipes/search?output=33", JSON.stringify([h33]), {});
+        const result = await e("/v2/recipes/search", 33);
+        assert.deepEqual(result, h33);
     });
 });

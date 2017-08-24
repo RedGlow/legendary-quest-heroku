@@ -12,6 +12,7 @@ const createApi = (
     defaultIdKey: string,
     {
         nobundlepaths = [] as string[],
+        idQSParameters = {} as { [path: string]: string },
     } = {}) => {
     /**
      * The call queue is structured like this:
@@ -49,7 +50,7 @@ const createApi = (
         baseUrl +
         path +
         "?" +
-        defaultIdQSParameter +
+        (idQSParameters[path] || defaultIdQSParameter) +
         "=" +
         ids.join(",");
 
@@ -60,7 +61,7 @@ const createApi = (
                 resp.status > 400 ? produceRejectFromResponse(resp) :
                     resp.json());
 
-    const getId = (obj: any): number => obj[defaultIdKey] as number;
+    const getId = (path: string, obj: any): number => obj[defaultIdKey] as number;
 
     const produceRejectFromResponse = (resp: Response): Promise<{}> =>
         resp
@@ -73,7 +74,7 @@ const createApi = (
         runRequest(path, Object.keys(queueEntry))
             .then((json: any[]) => {
                 const foundIds = json.map((entry) => {
-                    const id = getId(entry);
+                    const id = getId(path, entry);
                     const resolutions = queueEntry[id];
                     resolutions.forEach((resolutors) => resolutors[0](entry));
                     return id;
