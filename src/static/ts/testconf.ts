@@ -63,7 +63,7 @@ export const setTestConfiguration: () => ITestConfiguration = () => {
 
     let fetchResponsesPaused = false;
 
-    const pausedFetchResolvers = [] as [() => void];
+    const pausedFetchResolvers = [] as Array<() => void>;
 
     const setFetchResponse = (url: string, body: string, {
         status = 200,

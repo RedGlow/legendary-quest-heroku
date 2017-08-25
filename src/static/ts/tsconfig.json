@@ -3,7 +3,7 @@
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
-        "noImplicitUseStrict": true,
+        "strict": true,
         "target": "es5",
         "module": "umd",
         "jsx": "react",

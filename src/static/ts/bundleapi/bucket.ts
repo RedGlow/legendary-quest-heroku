@@ -1,4 +1,5 @@
 import { get as conf } from "../configuration";
+import { strictShift } from "../func";
 
 export class Bucket {
     private bucketSize: number;
@@ -44,7 +45,7 @@ export class Bucket {
         this.resolvePendingRequestsTimerRunning = false;
         while (this.bucketSize > 0 && this.pendingRequests.length > 0) {
             this.bucketSize--;
-            this.pendingRequests.shift()();
+            strictShift(this.pendingRequests)();
         }
         if (!this.resolvePendingRequestsTimerRunning &&
             this.bucketSize === 0 &&

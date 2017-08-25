@@ -57,7 +57,7 @@ const createApi = (
         // if we already have this id, we must not create a new list of resolutions
         const resolutions =
             queueEntry[id] =
-            queueEntry[id] || [] as [PromiseCouple];
+            queueEntry[id] || [] as PromiseCouple[];
 
         const promise = new Promise<any[]>((resolve, reject) => resolutions.push([resolve, reject]));
 

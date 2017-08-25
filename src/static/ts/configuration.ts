@@ -9,7 +9,7 @@ export interface IConfiguration {
     };
 }
 
-let configuration: IConfiguration = null;
+let configuration: IConfiguration | null = null;
 
 export const set = (c: IConfiguration) => {
     configuration = c;

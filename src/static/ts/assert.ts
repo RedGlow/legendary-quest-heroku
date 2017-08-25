@@ -25,3 +25,11 @@ export const deepEqual = (actual: any, expected: any) => {
     `);
     }
 };
+
+export function mustNotBeNull<T>(value: T | null): value is T {
+    if (value === null) {
+        throw new Error(`value is null`);
+    } else {
+        return true;
+    }
+}

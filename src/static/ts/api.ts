@@ -207,7 +207,7 @@ const getApi = (): IApi => {
             .text()
             .then((text) => Promise.reject(`API error: status = ${response.status}, text = ${text}`));
 
-    const getOApiUrl = (path: string, accessToken: string = null): [string] =>
+    const getOApiUrl = (path: string, accessToken?: string): [string] =>
         [oapiBase + path + (accessToken ? "?access_token=" + accessToken : "")];
 
     const api = {

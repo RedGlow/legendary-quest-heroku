@@ -12,7 +12,7 @@ describe("bundleapi/apicacher", () => {
     const h1 = { id: 1 };
     const h2 = { id: 2 };
     const s1 = { id: 10 };
-    const calls = [] as [any[]];
+    const calls = [] as Array<[string, number]>;
     const results = {} as { [path: string]: { [id: number]: any } };
     const call = ([path, id]: [string, number]): Promise<any> => {
         calls.push([path, id]);

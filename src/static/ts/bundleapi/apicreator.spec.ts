@@ -56,15 +56,17 @@ describe("bundleapi/apicreator", () => {
         c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=33", JSON.stringify([h33]), {});
         c.setFetchResponse("https://api.guildwars2.com/v2/stuff?ids=34", JSON.stringify([h34]), {});
         const promise1 = e("/v2/items", 33);
-        let result2 = null as any[];
+        let result2 = null as any[] | null;
         const promise2 = e("/v2/stuff", 34).then((r) => { result2 = r; });
         const result = await promise1;
         assert.equal(result.length, 1);
         assert.deepEqual(result[0], h33);
         assert.deepEqual(result2, null);
         await c.setTime(100);
-        assert.equal(result2.length, 1);
-        assert.deepEqual(result2[0], h34);
+        if (assert.mustNotBeNull(result2)) {
+            assert.equal(result2.length, 1);
+            assert.deepEqual(result2[0], h34);
+        }
     });
 
     it("Can enqueue multiple requests for the same item", async () => {
@@ -81,21 +83,27 @@ describe("bundleapi/apicreator", () => {
     it("Can resolve a later request if a previous one on the same endpoint was always enqueued", async () => {
         c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=33,34", JSON.stringify([h33, h34]), {});
         c.setFetchResponse("https://api.guildwars2.com/v2/stuff?ids=35", JSON.stringify([h35]), {});
-        let result1 = null as any[];
+        let result1 = null as any[] | null;
         const promise1 = e("/v2/items", 33).then((r) => { result1 = r; });
-        let result2 = null as any[];
+        let result2 = null as any[] | null;
         const promise2 = e("/v2/stuff", 35).then((r) => { result2 = r; });
-        let result3 = null as any[];
+        let result3 = null as any[] | null;
         const promise3 = e("/v2/items", 34).then((r) => { result3 = r; });
         await Promise.all([promise1, promise3]);
-        assert.equal(result1.length, 1);
-        assert.deepEqual(result1[0], h33);
+        if (assert.mustNotBeNull(result1)) {
+            assert.equal(result1.length, 1);
+            assert.deepEqual(result1[0], h33);
+        }
         assert.deepEqual(result2, null);
-        assert.equal(result3.length, 1);
-        assert.deepEqual(result3[0], h34);
+        if (assert.mustNotBeNull(result3)) {
+            assert.equal(result3.length, 1);
+            assert.deepEqual(result3[0], h34);
+        }
         await c.setTime(100);
-        assert.equal(result2.length, 1);
-        assert.deepEqual(result2[0], h35);
+        if (assert.mustNotBeNull(result2)) {
+            assert.equal(result2.length, 1);
+            assert.deepEqual(result2[0], h35);
+        }
     });
 
     it("Resolve to [] if an entry is not found", async () => {
