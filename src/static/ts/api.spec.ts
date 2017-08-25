@@ -172,11 +172,11 @@ describe("api", () => {
         ]);
     });
 
-    const checkCall = async (url: string, method: () => Promise<any>) => {
-        c.setFetchResponse(url, JSON.stringify("value"), {});
+    const checkCall = async (url: string, method: () => Promise<any>, value: any = "value") => {
+        c.setFetchResponse(url, JSON.stringify(value), {});
         c.setTime(100);
         const result = await method();
-        assert.equal(result, "value");
+        assert.deepEqual(result, value);
     };
 
     it("Calls the correct API when accessing the bank", () =>
@@ -194,6 +194,37 @@ describe("api", () => {
     it("Calls the correct API when accessing the character list", () =>
         checkCall("https://api.guildwars2.com/v2/characters?access_token=a",
             () => api.getAccountCharacters("a")));
+
+    it("Calls the correct API when accessing the account materials", () =>
+        checkCall("https://api.guildwars2.com/v2/account/materials?access_token=a",
+            () => api.getAccountMaterials("a")));
+
+    it("Calls the correct API when accessing the account wallet", () =>
+        checkCall("https://api.guildwars2.com/v2/account/wallet?access_token=a",
+            () => api.getAccountWallet("a")));
+
+    it("Calls the correct API when accessing the prices", () =>
+        checkCall("https://api.guildwars2.com/v2/commerce/prices?ids=10",
+            () => api.getCommercePrice(10),
+            [{ id: 10 }]));
+
+    it("Calls the correct API when accessing the currency list", () =>
+        checkCall("https://api.guildwars2.com/v2/currencies",
+            () => api.getCurrenciesIds()));
+
+    it("Calls the correct API when accessing a currency", () =>
+        checkCall("https://api.guildwars2.com/v2/currencies?ids=10",
+            () => api.getCurrency(10),
+            [{ id: 10 }]));
+
+    it("Calls the correct API when getting an item", () =>
+        checkCall("https://api.guildwars2.com/v2/items?ids=10",
+            () => api.getItem(10),
+            [{ id: 10 }]));
+
+    it("Calls the correct API when getting a token info", () =>
+        checkCall("https://api.guildwars2.com/v2/tokeninfo?access_token=a",
+            () => api.getTokenInfo("a")));
 });
 
 /* tslint:disable:object-literal-key-quotes object-literal-sort-keys trailing-comma */
