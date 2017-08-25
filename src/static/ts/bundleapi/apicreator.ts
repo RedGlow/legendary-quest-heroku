@@ -89,7 +89,7 @@ const createApi = (
 
     const runQueueEntry = (path: string) => {
         const queueEntry = queue[path];
-        const remainingIds = intObjectKeys(queueEntry).sort();
+        const remainingIds = intObjectKeys(queueEntry).sort((a, b) => a - b);
         const processedIds = remainingIds.splice(0, maxIds);
         if (remainingIds.length === 0) {
             delete queue[path];
