@@ -111,7 +111,7 @@ export const setTestConfiguration: () => ITestConfiguration = () => {
                 !fetchResponses[input] ? (() => {
                     const headers = new nodeFetch.Headers();
                     headers.append("Content-Type", "text/plain");
-                    return getFetchPromise(new nodeFetch.Response("Not found", {
+                    return getFetchPromise(new nodeFetch.Response(`Not found: ${input.toString()}`, {
                         headers,
                         status: 404,
                         statusText: "Not found",
