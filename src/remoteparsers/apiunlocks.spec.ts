@@ -8,16 +8,16 @@ describe("remoteparsers/apiunlocks", () => {
         const result: IRecipeUnlock[] = (data as any).map(transformRecipeUnlock);
         assert.deepEqual(result, [
             {
-                _id: null,
+                _id: "",
                 recipe_id: 100,
                 recipe_sheet_id: 1,
-                timestamp: null,
+                timestamp: new Date(0),
             },
             {
-                _id: null,
+                _id: "",
                 recipe_id: 200,
                 recipe_sheet_id: 2,
-                timestamp: null,
+                timestamp: new Date(0),
             },
         ]);
     });

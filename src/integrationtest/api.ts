@@ -9,7 +9,7 @@ import { IRecipeUnlock } from "../recipeunlock";
 import * as server from "../server";
 import { dropDb } from "./helpers";
 
-const port = parseInt(process.env.PORT, 10) || 9999;
+const port = parseInt(process.env.PORT || "9999", 10);
 
 describe("api", () => {
     let s: Server;
@@ -221,8 +221,8 @@ describe("api", () => {
 });
 
 const exampleRecipe: IRecipe = {
-    _id: null,
-    base_id: null,
+    _id: "",
+    base_id: "",
     ingredients: [{
         amount: 4,
         id: 33,
@@ -235,13 +235,13 @@ const exampleRecipe: IRecipe = {
     }],
     source: "MySource",
     subtype: null,
-    timestamp: null,
+    timestamp: new Date(),
     type: "Vendor" as RecipeType,
 };
 
 const exampleRecipeUnlock: IRecipeUnlock = {
-    _id: null,
+    _id: "",
     recipe_id: 44,
     recipe_sheet_id: 100,
-    timestamp: null,
+    timestamp: new Date(),
 };

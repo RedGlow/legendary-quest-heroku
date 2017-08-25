@@ -30,7 +30,7 @@ async function getRecipesPromise(
     observer: Rx.Observer<IMyRecipe[]>,
     fetchFunction: FetchFunction): Promise<void> {
     const moduleContent = await fetchFunction(get().remoteServices.gw2EfficiencyUrl);
-    const myModule: IModuleClass = { exports: null };
+    const myModule: IModuleClass = { exports: {} };
     const exportsModule = "(function(module) {\n" +
         moduleContent.replace("export default ", "module.exports = ")
         + "})";

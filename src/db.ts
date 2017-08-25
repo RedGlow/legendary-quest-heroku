@@ -6,7 +6,7 @@ interface ITimestamp {
     timestamp: Date;
 }
 
-let dbPromise: Promise<Db> = null;
+let dbPromise: Promise<Db> | null = null;
 
 export const connect = () =>
     dbPromise || (dbPromise = new Promise<Db>((resolve, reject) => {

@@ -68,8 +68,8 @@ describe("updater", () => {
     it("can add a single block of recipes", async () => {
         const timestamp = new Date();
         await updateRecipes(Rx.Observable.from([[{
-            _id: null,
-            base_id: null,
+            _id: "",
+            base_id: "",
             ingredients: [{
                 amount: 4,
                 id: 33,
@@ -82,7 +82,7 @@ describe("updater", () => {
             }],
             source: "MySource",
             subtype: null,
-            timestamp: null,
+            timestamp: new Date(0),
             type: "Vendor" as RecipeType,
         }]]), timestamp);
         const recipes = await getRecipesForItems(44);

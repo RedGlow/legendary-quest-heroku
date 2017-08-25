@@ -153,8 +153,8 @@ describe("db", () => {
 });
 
 const exampleRecipe: IRecipe = {
-    _id: null,
-    base_id: null,
+    _id: "",
+    base_id: "",
     ingredients: [{
         amount: 4,
         id: 33,
@@ -167,15 +167,15 @@ const exampleRecipe: IRecipe = {
     }],
     source: "MySource",
     subtype: null,
-    timestamp: null,
+    timestamp: new Date(0),
     type: "Vendor" as RecipeType,
 };
 
 const exampleRecipeUnlock: IRecipeUnlock = {
-    _id: null,
+    _id: "",
     recipe_id: 44,
     recipe_sheet_id: 100,
-    timestamp: null,
+    timestamp: new Date(0),
 };
 
 const getDb = () => {

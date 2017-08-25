@@ -24,7 +24,7 @@ interface IItemDetails {
 }
 
 export const getRecipes = (
-    fetchFunction: FetchFunction<IMyRecipeUnlock[]> = void 0):
+    fetchFunction?: FetchFunction<IMyRecipeUnlock[]>):
     Rx.Observable<IMyRecipeUnlock[]> =>
     getLinkedUrlObservables<IMyRecipeUnlock[]>(
         get().remoteServices.apiUrl.replace("${startingPage}", startingPage.toString()),

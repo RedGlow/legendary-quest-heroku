@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import { switchcase, switchcaseC } from "./func";
+import { extract, switchcase, switchcaseC } from "./func";
 
 describe("func", () => {
     it("can switchcaseC without cases", () => {
@@ -37,5 +37,9 @@ describe("func", () => {
         assert.equal(calls, 0);
         assert.equal(s("hello"), 33);
         assert.equal(calls, 1);
+    });
+    it("can check an undefined value", () => {
+        assert.deepEqual(extract(33), 33);
+        assert.throws(() => extract(undefined));
     });
 });

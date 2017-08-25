@@ -7,8 +7,8 @@ describe("remoteparsers/gw2shinies", () => {
         const result = example1.map(transformRecipe);
         assert.deepEqual(result, [
             {
-                _id: null,
-                base_id: null,
+                _id: "",
+                base_id: "",
                 ingredients: [
                     { id: 21156, amount: 2 },
                     { id: 19700, amount: 5 },
@@ -22,12 +22,12 @@ describe("remoteparsers/gw2shinies", () => {
                 ],
                 source: "GW2Shinies",
                 subtype: "Blueprint",
-                timestamp: null,
+                timestamp: new Date(0),
                 type: "MysticForge",
             },
             {
-                _id: null,
-                base_id: null,
+                _id: "",
+                base_id: "",
                 ingredients: [
                     { id: 23098, amount: 1 },
                     { id: 23097, amount: 1 },
@@ -41,12 +41,12 @@ describe("remoteparsers/gw2shinies", () => {
                 ],
                 source: "GW2Shinies",
                 subtype: "Amulet",
-                timestamp: null,
+                timestamp: new Date(0),
                 type: "MysticForge",
             },
             {
-                _id: null,
-                base_id: null,
+                _id: "",
+                base_id: "",
                 ingredients: [
                     { id: 24276, amount: 250 },
                     { id: 24277, amount: 1 },
@@ -60,12 +60,12 @@ describe("remoteparsers/gw2shinies", () => {
                 ],
                 source: "GW2Shinies",
                 subtype: "CraftingMaterial",
-                timestamp: null,
+                timestamp: new Date(0),
                 type: "MysticForge",
             },
             {
-                _id: null,
-                base_id: null,
+                _id: "",
+                base_id: "",
                 ingredients: [
                     { id: 19976, amount: 100 },
                     { id: 12976, amount: 250 },
@@ -79,12 +79,12 @@ describe("remoteparsers/gw2shinies", () => {
                 ],
                 source: "GW2Shinies",
                 subtype: "Weapon",
-                timestamp: null,
+                timestamp: new Date(0),
                 type: "MysticForge",
             },
             {
-                _id: null,
-                base_id: null,
+                _id: "",
+                base_id: "",
                 ingredients: [
                     { id: 19976, amount: 17 },
                     { id: 12196, amount: 1 },
@@ -98,7 +98,7 @@ describe("remoteparsers/gw2shinies", () => {
                 ],
                 source: "GW2Shinies",
                 subtype: "Recipe",
-                timestamp: null,
+                timestamp: new Date(0),
                 type: "MysticForge",
             },
         ]);

@@ -15,7 +15,7 @@ export interface IRecipe {
     //   has an implicit prerequisites that the achievement isn't obtained yet
     type: RecipeType;
     // The subtype of this recipe, dependent on the main type
-    subtype: string;
+    subtype: string | null;
     // The ingredient(s) of this recipe
     ingredients: Array<IRecipeItem | IRecipeCurrency | IAchievement>;
     // The result(s) of this recipe
@@ -23,7 +23,7 @@ export interface IRecipe {
     // List of special prerequisites for using this recipe (e.g.: completing an achievement to unlock a vendor)
     prerequisites: IAchievementPrerequisite[];
     // Location where this recipe can be performed, if specific (e.g.: not mystic forge)
-    location: ILocation;
+    location: ILocation | null;
     // Source from where this recipe was obtained
     source: string;
     // timestamp

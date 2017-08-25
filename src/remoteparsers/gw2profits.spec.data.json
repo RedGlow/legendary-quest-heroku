@@ -495,8 +495,8 @@
     ],
     "expected": [
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 250,
@@ -529,8 +529,8 @@
             "type": "MysticForge"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 25,
@@ -551,8 +551,8 @@
             "type": "Charge"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 1,
@@ -577,8 +577,8 @@
             "type": "DoubleClick"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 1,
@@ -599,8 +599,8 @@
             "type": "Salvage"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 250,
@@ -621,8 +621,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 2640,
@@ -647,8 +647,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 150,
@@ -681,8 +681,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 10,
@@ -703,8 +703,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 1,
@@ -725,8 +725,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 1,
@@ -747,8 +747,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 1,
@@ -769,8 +769,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 1,
@@ -791,8 +791,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 1,
@@ -813,8 +813,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 1,
@@ -835,8 +835,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 1,
@@ -857,8 +857,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 20,
@@ -879,8 +879,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 100,
@@ -905,8 +905,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 6,
@@ -927,8 +927,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 6,
@@ -949,8 +949,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 200,
@@ -971,8 +971,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 600,
@@ -997,8 +997,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 5000,
@@ -1023,8 +1023,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 10000,
@@ -1049,8 +1049,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 104,
@@ -1075,8 +1075,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 5,
@@ -1101,8 +1101,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 15,
@@ -1123,8 +1123,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 6,
@@ -1145,8 +1145,8 @@
             "type": "Vendor"
         },
         {
-            "_id": null,
-            "base_id": null,
+            "_id": "",
+            "base_id": "",
             "ingredients": [
                 {
                     "amount": 1,

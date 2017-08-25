@@ -61,8 +61,8 @@ const getIngredient = (inputIngredient: IMyIngredient): IRecipeItem | IRecipeCur
         };
 
 export const transformRecipe = (recipe: IMyRecipe): IRecipe => ({
-    _id: null,
-    base_id: null,
+    _id: "",
+    base_id: "",
     ingredients: recipe.ingredients.map(getIngredient),
     location: null,
     prerequisites: [],
@@ -72,6 +72,6 @@ export const transformRecipe = (recipe: IMyRecipe): IRecipe => ({
     }],
     source: sourceName,
     subtype: recipe.type,
-    timestamp: null,
+    timestamp: new Date(0),
     type: recipeDisciplinesToRecipeType(recipe),
 });

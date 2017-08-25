@@ -28,8 +28,8 @@ const getCurrencyName = switchcase({
 
 export const transformRecipe = (recipe: IMyRecipe): IRecipe =>
     ({
-        _id: null,
-        base_id: null,
+        _id: "",
+        base_id: "",
         ingredients: [{
             amount: recipe.cost,
             name: getCurrencyName(recipe.type),
@@ -42,6 +42,6 @@ export const transformRecipe = (recipe: IMyRecipe): IRecipe =>
         }],
         source: sourceName,
         subtype: null,
-        timestamp: null,
+        timestamp: new Date(0),
         type: "Vendor" as RecipeType,
     });

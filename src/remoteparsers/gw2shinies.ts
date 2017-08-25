@@ -20,8 +20,8 @@ const makeElement = (id: string, amount: string): IRecipeItem => ({
 });
 
 export const transformRecipe = (recipe: IMyRecipe): IRecipe => ({
-    _id: null,
-    base_id: null,
+    _id: "",
+    base_id: "",
     ingredients: [
         makeElement(recipe.recipe_item_1, recipe.recipe_item_1_quantity),
         makeElement(recipe.recipe_item_2, recipe.recipe_item_2_quantity),
@@ -33,6 +33,6 @@ export const transformRecipe = (recipe: IMyRecipe): IRecipe => ({
     results: [makeElement(recipe.target_recipe, recipe.average_yield)],
     source: sourceName,
     subtype: getSubtype(recipe.type),
-    timestamp: null,
+    timestamp: new Date(0),
     type: "MysticForge",
 });

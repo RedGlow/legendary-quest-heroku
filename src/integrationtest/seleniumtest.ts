@@ -6,7 +6,7 @@ import * as test from "selenium-webdriver/testing";
 import * as server from "../server";
 import { dropDb } from "./helpers";
 
-const port = parseInt(process.env.PORT, 10) || 9999;
+const port = parseInt(process.env.PORT || "9999", 10);
 
 test.describe("Home page", () => {
     let driver: webdriver.ThenableWebDriver;

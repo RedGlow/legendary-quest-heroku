@@ -16,3 +16,11 @@ export const switchcase: <T>(cases: { [id: string]: T | ((key: string) => T) }) 
   (cases) => (defaultCase) => (key) =>
     executeIfFunction(switchcaseC(cases)(defaultCase)(key), key)
   ;
+
+export const extract = <T>(value: T | undefined) => {
+  if (value === undefined) {
+    throw new Error("Cannot be undefined");
+  } else {
+    return value;
+  }
+};
