@@ -208,7 +208,7 @@ const getApi = (): IApi => {
             .then((text) => Promise.reject(`API error: status = ${response.status}, text = ${text}`));
 
     const getOApiUrl = (path: string, accessToken: string = null): [string] =>
-        [oapiBase + path + (accessToken ? "?access_token" + accessToken : "")];
+        [oapiBase + path + (accessToken ? "?access_token=" + accessToken : "")];
 
     const api = {
         getAccountBank: (accessToken: string): Promise<Array<IBankEntry | null>> =>
