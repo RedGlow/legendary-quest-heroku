@@ -182,6 +182,18 @@ describe("api", () => {
     it("Calls the correct API when accessing the bank", () =>
         checkCall("https://api.guildwars2.com/v2/account/bank?access_token=a",
             () => api.getAccountBank("a")));
+
+    it("Calls the correct API when accessing the character equipment", () =>
+        checkCall("https://api.guildwars2.com/v2/characters/Pluto/equipment?access_token=a",
+            () => api.getAccountCharacterEquipment("a", "Pluto")));
+
+    it("Calls the correct API when accessing the character inventory", () =>
+        checkCall("https://api.guildwars2.com/v2/characters/Pluto/inventory?access_token=a",
+            () => api.getAccountCharacterInventory("a", "Pluto")));
+
+    it("Calls the correct API when accessing the character list", () =>
+        checkCall("https://api.guildwars2.com/v2/characters?access_token=a",
+            () => api.getAccountCharacters("a")));
 });
 
 /* tslint:disable:object-literal-key-quotes object-literal-sort-keys trailing-comma */
