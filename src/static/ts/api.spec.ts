@@ -171,6 +171,17 @@ describe("api", () => {
             },
         ]);
     });
+
+    const checkCall = async (url: string, method: () => Promise<any>) => {
+        c.setFetchResponse(url, JSON.stringify("value"), {});
+        c.setTime(100);
+        const result = await method();
+        assert.equal(result, "value");
+    };
+
+    it("Calls the correct API when accessing the bank", () =>
+        checkCall("https://api.guildwars2.com/v2/account/bank?access_token=a",
+            () => api.getAccountBank("a")));
 });
 
 /* tslint:disable:object-literal-key-quotes object-literal-sort-keys trailing-comma */
