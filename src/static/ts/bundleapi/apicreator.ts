@@ -3,7 +3,7 @@ import { get as conf } from "../configuration";
 import { intObjectKeys } from "../func";
 import { Bucket } from "./bucket";
 
-type PromiseCouple = [(result: any) => void];
+type PromiseCouple = [(result: any[]) => void, (err: any) => void];
 
 const createApi = (
     bucket: Bucket,
@@ -37,7 +37,7 @@ const createApi = (
         [path: string]: { [id: number]: [PromiseCouple] };
     } = {};
 
-    const enqueue = (path: string, id: number) => {
+    const enqueue = (path: string, id: number): Promise<any[]> => {
         // some calls do not allow bundling of requests: just do it immediately
         if (_.includes(nobundlepaths, path)) {
             return bucket.getToken().then(() => runRequest(path, [id]));
@@ -59,7 +59,7 @@ const createApi = (
             queueEntry[id] =
             queueEntry[id] || [] as [PromiseCouple];
 
-        const promise = new Promise((resolve, reject) => resolutions.push([resolve, reject]));
+        const promise = new Promise<any[]>((resolve, reject) => resolutions.push([resolve, reject]));
 
         return promise;
     };
@@ -102,15 +102,15 @@ const createApi = (
         queued[path] = queueEntry;
         runRequest(path, processedIds)
             .then((json: any[]) => {
-                const foundIds = json.map((entry) => {
-                    const id = getId(path, processedIds, entry);
+                const entriesById = _.groupBy(json, _.partial(getId, path, processedIds));
+                const foundIds = intObjectKeys(entriesById);
+                foundIds.forEach((id) => {
                     const resolutions = queueEntry[id];
-                    resolutions.forEach((resolutors) => resolutors[0](entry));
-                    return id;
+                    resolutions.forEach((resolutors) => resolutors[0](entriesById[id]));
                 });
                 processedIds
                     .filter((id) => foundIds.indexOf(id) < 0)
-                    .forEach((id) => queueEntry[id].forEach((resolutions) => resolutions[0](null)));
+                    .forEach((id) => queueEntry[id].forEach((resolutions) => resolutions[0]([])));
                 delete queued[path];
             })
             .catch((err) =>

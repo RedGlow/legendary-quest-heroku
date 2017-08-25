@@ -182,7 +182,7 @@ const getApi = (): IApi => {
         ([url]: [string]) => officialApiRaw(url),
         ([url]: [string]) => 24 * 60 * 60 * 1000);
 
-    const mysticApiBucket = new Bucket(0, 1, 100);
+    const mysticApiBucket = new Bucket(0, 10, 100);
 
     const mysticApiBundle = createApi(
         mysticApiBucket,
@@ -236,8 +236,8 @@ const getApi = (): IApi => {
                 .then((ids: number[]) =>
                     ids && ids.length > 0 ?
                         Promise.all(ids.map((id) =>
-                            (officialApiBundleCacher(["/recipes", id]) as Promise<IOfficialApiRecipe>)
-                                .then(officialApiRecipeConverter))) :
+                            (officialApiBundleCacher(["/recipes", id]) as Promise<IOfficialApiRecipe[]>)
+                                .then((recipes) => officialApiRecipeConverter(recipes[0])))) :
                         (mysticApiBundleCacher(["/recipes", outputId]) as Promise<IMysticApiRecipe[]>)
                             .then((recipes) => recipes.map(mysticApiRecipeConverter))),
         getTokenInfo: (accessToken: string): Promise<TokenInfoPermission> =>

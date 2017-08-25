@@ -117,6 +117,60 @@ describe("api", () => {
             type: "Crafting",
         });
     });
+
+    it("Can get recipes from the mystic api", async () => {
+        c.setFetchResponse("https://api.guildwars2.com/v2/recipes/search?output=68063",
+            JSON.stringify([]), {});
+        c.setFetchResponse("https://legendary-quest.herokuapp.com/api/recipes?resultitemids=68063",
+            JSON.stringify(mysticRecipe68063), {});
+        c.setTime(200);
+        const results = await api.getRecipesFromOutput(68063);
+        assert.equal(results.length, 2);
+        assert.deepEqual(results, [
+            {
+                ingredients: [{
+                    amount: 1,
+                    id: 24277,
+                }, {
+                    amount: 3,
+                    id: 24518,
+                }, {
+                    amount: 3,
+                    id: 24533,
+                }, {
+                    amount: 3,
+                    id: 72315,
+                }],
+                prerequisites: [],
+                results: [{
+                    amount: 1,
+                    id: 68063,
+                }],
+                type: "MysticForge",
+            },
+            {
+                ingredients: [{
+                    amount: 5,
+                    id: 19721,
+                }, {
+                    amount: 25,
+                    id: 24502,
+                }, {
+                    amount: 25,
+                    id: 24520,
+                }, {
+                    amount: 25,
+                    id: 72315,
+                }],
+                prerequisites: [],
+                results: [{
+                    amount: 11.5,
+                    id: 68063,
+                }],
+                type: "MysticForge",
+            },
+        ]);
+    });
 });
 
 /* tslint:disable:object-literal-key-quotes object-literal-sort-keys trailing-comma */
@@ -184,4 +238,71 @@ const recipe12053 = {
     "id": 12053,
     "chat_link": "[&CRUvAAA=]"
 };
+
+const mysticRecipe68063 = [
+    {
+        "ingredients": [
+            {
+                "amount": 1,
+                "id": 24277
+            },
+            {
+                "amount": 3,
+                "id": 24518
+            },
+            {
+                "amount": 3,
+                "id": 24533
+            },
+            {
+                "amount": 3,
+                "id": 72315
+            }
+        ],
+        "location": null as any,
+        "prerequisites": [] as any[],
+        "results": [
+            {
+                "amount": 1,
+                "id": 68063
+            }
+        ],
+        "source": "GW2Profits",
+        "subtype": "Trophy",
+        "timestamp": "2017-08-25T07:20:29.257Z",
+        "type": "MysticForge"
+    },
+    {
+        "ingredients": [
+            {
+                "amount": 5,
+                "id": 19721
+            },
+            {
+                "amount": 25,
+                "id": 24502
+            },
+            {
+                "amount": 25,
+                "id": 24520
+            },
+            {
+                "amount": 25,
+                "id": 72315
+            }
+        ],
+        "location": null,
+        "prerequisites": [],
+        "results": [
+            {
+                "amount": 11.5,
+                "id": 68063
+            }
+        ],
+        "source": "GW2Profits",
+        "subtype": "Trophy",
+        "timestamp": "2017-08-25T07:20:29.257Z",
+        "type": "MysticForge"
+    }
+];
 /* tslint:enable:object-literal-key-quotes object-literal-sort-keys trailing-comma */

@@ -8,8 +8,8 @@ import { Bucket } from "./bucket";
 describe("bundleapi/apicreator", () => {
     let c: ITestConfiguration;
     let b: Bucket;
-    let e: (path: string, id: number) => Promise<any>;
-    let e2: (path: string, id: number) => Promise<any>;
+    let e: (path: string, id: number) => Promise<any[]>;
+    let e2: (path: string, id: number) => Promise<any[]>;
     const h33 = { id: 33 };
     const h34 = { id: 34 };
     const h35 = { id: 35 };
@@ -36,63 +36,74 @@ describe("bundleapi/apicreator", () => {
     it("Can run a simple request", async () => {
         c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=33", JSON.stringify([h33]), {});
         const result = await e("/v2/items", 33);
-        assert.deepEqual(result, h33);
+        assert.equal(result.length, 1);
+        assert.deepEqual(result[0], h33);
     });
 
     it("Can run two simple requests", async () => {
         c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=33,34", JSON.stringify([h33, h34]), {});
-        const results = await Promise.all([
+        const [result1, result2] = await Promise.all([
             e("/v2/items", 33),
             e("/v2/items", 34),
         ]);
-        assert.deepEqual(results[0], h33);
-        assert.deepEqual(results[1], h34);
+        assert.equal(result1.length, 1);
+        assert.deepEqual(result1[0], h33);
+        assert.equal(result2.length, 1);
+        assert.deepEqual(result2[0], h34);
     });
 
     it("Runs a single request, but then must wait for a slot for a second one", async () => {
         c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=33", JSON.stringify([h33]), {});
         c.setFetchResponse("https://api.guildwars2.com/v2/stuff?ids=34", JSON.stringify([h34]), {});
         const promise1 = e("/v2/items", 33);
-        let result2 = null;
+        let result2 = null as any[];
         const promise2 = e("/v2/stuff", 34).then((r) => { result2 = r; });
         const result = await promise1;
-        assert.deepEqual(result, h33);
+        assert.equal(result.length, 1);
+        assert.deepEqual(result[0], h33);
         assert.deepEqual(result2, null);
         await c.setTime(100);
-        assert.deepEqual(result2, h34);
+        assert.equal(result2.length, 1);
+        assert.deepEqual(result2[0], h34);
     });
 
     it("Can enqueue multiple requests for the same item", async () => {
         c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=33", JSON.stringify([h33]), {});
         const promise1 = e("/v2/items", 33);
         const promise2 = e("/v2/items", 33);
-        const results = await Promise.all([promise1, promise2]);
-        assert.deepEqual(results[0], h33);
-        assert.deepEqual(results[1], h33);
+        const [result1, result2] = await Promise.all([promise1, promise2]);
+        assert.equal(result1.length, 1);
+        assert.deepEqual(result1[0], h33);
+        assert.equal(result2.length, 1);
+        assert.deepEqual(result2[0], h33);
     });
 
     it("Can resolve a later request if a previous one on the same endpoint was always enqueued", async () => {
         c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=33,34", JSON.stringify([h33, h34]), {});
         c.setFetchResponse("https://api.guildwars2.com/v2/stuff?ids=35", JSON.stringify([h35]), {});
-        let result1 = null;
+        let result1 = null as any[];
         const promise1 = e("/v2/items", 33).then((r) => { result1 = r; });
-        let result2 = null;
+        let result2 = null as any[];
         const promise2 = e("/v2/stuff", 35).then((r) => { result2 = r; });
-        let result3 = null;
+        let result3 = null as any[];
         const promise3 = e("/v2/items", 34).then((r) => { result3 = r; });
         await Promise.all([promise1, promise3]);
-        assert.deepEqual(result1, h33);
+        assert.equal(result1.length, 1);
+        assert.deepEqual(result1[0], h33);
         assert.deepEqual(result2, null);
-        assert.deepEqual(result3, h34);
+        assert.equal(result3.length, 1);
+        assert.deepEqual(result3[0], h34);
         await c.setTime(100);
-        assert.deepEqual(result2, h35);
+        assert.equal(result2.length, 1);
+        assert.deepEqual(result2[0], h35);
     });
 
-    it("Resolve to null if an entry is not found", async () => {
+    it("Resolve to [] if an entry is not found", async () => {
         c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=33,34", JSON.stringify([h34]), {});
-        const results = await Promise.all([e("/v2/items", 33), e("/v2/items", 34)]);
-        assert.deepEqual(results[0], null);
-        assert.deepEqual(results[1], h34);
+        const [result1, result2] = await Promise.all([e("/v2/items", 33), e("/v2/items", 34)]);
+        assert.equal(result1.length, 0);
+        assert.equal(result2.length, 1);
+        assert.deepEqual(result2[0], h34);
     });
 
     it("Accepts a 404 when no entries are found", async () => {
@@ -103,7 +114,7 @@ describe("bundleapi/apicreator", () => {
                 statusText: "Not found",
             });
         const result = await e("/v2/items", 33);
-        assert.equal(result, null);
+        assert.equal(result.length, 0);
     });
 
     it("Returns error in case an error status is returned", async () => {
@@ -141,7 +152,8 @@ describe("bundleapi/apicreator", () => {
     it("Accepts non-default query parameter ids", async () => {
         c.setFetchResponse("https://api.guildwars2.com/v2/recipes/search?output=33", JSON.stringify([h33]), {});
         const result = await e("/v2/recipes/search", 33);
-        assert.deepEqual(result, h33);
+        assert.equal(result.length, 1);
+        assert.deepEqual(result[0], h33);
     });
 
     it("Splits requests for more than maxIds items", async () => {
@@ -152,12 +164,15 @@ describe("bundleapi/apicreator", () => {
         let resolved = false;
         const promise3 = e("/v2/items", 35).then((res) => { resolved = true; return res; });
         const [result1, result2] = await Promise.all([promise1, promise2]);
-        assert.deepEqual(result1, h33);
-        assert.deepEqual(result2, h34);
+        assert.equal(result1.length, 1);
+        assert.deepEqual(result1[0], h33);
+        assert.equal(result2.length, 1);
+        assert.deepEqual(result2[0], h34);
         assert.equal(resolved, false);
         await c.setTime(100);
         const result3 = await promise3;
-        assert.deepEqual(result3, h35);
+        assert.equal(result3.length, 1);
+        assert.deepEqual(result3[0], h35);
         assert.equal(resolved, true);
     });
 
@@ -169,14 +184,18 @@ describe("bundleapi/apicreator", () => {
         const promise2 = e("/v2/items", 33);
         c.resumeFetchResolution();
         const [result1, result2] = await Promise.all([promise1, promise2]);
-        assert.deepEqual(result1, h33);
-        assert.deepEqual(result2, h33);
+        assert.equal(result1.length, 1);
+        assert.deepEqual(result1[0], h33);
+        assert.equal(result2.length, 1);
+        assert.deepEqual(result2[0], h33);
     });
 
     it("Can handle complex objects", async () => {
         c.setFetchResponse("https://api.guildwars2.com/v2/items?ids=60,61", JSON.stringify([s61, s60]), {});
         const [result1, result2] = await Promise.all([e2("/v2/items", 60), e2("/v2/items", 61)]);
-        assert.deepEqual(result1, s60);
-        assert.deepEqual(result2, s61);
+        assert.equal(result1.length, 1);
+        assert.deepEqual(result1[0], s60);
+        assert.equal(result2.length, 1);
+        assert.deepEqual(result2[0], s61);
     });
 });
