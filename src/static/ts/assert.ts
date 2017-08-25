@@ -33,3 +33,12 @@ export function mustNotBeNull<T>(value: T | null): value is T {
         return true;
     }
 }
+
+export const throws = (f: () => void) => {
+    try {
+        f();
+    } catch (e) {
+        return;
+    }
+    throw new Error("Function hasn't thrown an error");
+};
